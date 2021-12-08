@@ -1,14 +1,15 @@
-use crate::domain::{NaivePosition, Position, SubmarineCommand};
-use crate::utils::{get_input, PuzzlePart};
+use crate::domain::{SubmarineCommand, NaivePosition, Position};
+use crate::utils::get_input;
 
-pub fn solve(part: PuzzlePart) -> i64 {
-    println!("Puzzle day 02 - {:?}", part);
-    let input = get_input("src/input02.txt");
 
-    match part {
-        PuzzlePart::Part1 => calculate_naive_position(input),
-        PuzzlePart::Part2 => calculate_position(input),
-    }
+pub fn solve_1(filename: String) -> String {
+    let input = get_input(filename);
+    calculate_naive_position(input).to_string()
+}
+
+pub fn solve_2(filename: String) -> String {
+    let input = get_input(filename);
+    calculate_position(input).to_string()
 }
 
 fn calculate_naive_position(commands: Vec<SubmarineCommand>) -> i64 {
