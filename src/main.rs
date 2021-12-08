@@ -1,11 +1,11 @@
 mod utils;
 mod day01;
+mod day02;
+mod domain;
 
-use crate::utils::read_all;
-use crate::day01::solve_day01;
-use crate::utils::PuzzlePart::Part2;
+use crate::utils::PuzzlePart;
 
 fn main() {
     println!("Solving Advent of Code");
-    println!("{}", solve_day01(Part2));
+    println!("{}", day02::solve(PuzzlePart::Part2));
 }
