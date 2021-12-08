@@ -1,23 +1,8 @@
 
 use std::collections::HashMap;
 
-use crate::utils::{get_input, PuzzlePart};
+use crate::utils::get_input;
 use itertools::Itertools;
-
-#[allow(dead_code)]
-pub fn solve(part: PuzzlePart) -> u64 {
-    println!("Puzzle day 08 - {:?}", part);
-
-    let input = get_input("src/input08.txt");
-    let input2 = get_input("src/input08.txt");
-    let (_, displays) = parse_input(input);
-    let signals = parse_input2(input2);
-
-    match part {
-        PuzzlePart::Part1 => solve_part_1(displays) as u64,
-        PuzzlePart::Part2 => solve_part_2(signals) as u64,
-    }
-}
 
 fn parse_input(input: Vec<String>) -> (Vec<String>, Vec<String>) {
     let mut signals = vec![];
@@ -58,10 +43,12 @@ fn parse_input2(input: Vec<String>) -> Vec<(Vec<String>, Vec<String>)> {
     signals
 }
 
-fn solve_part_1(display: Vec<String>) -> i64 {
-    
+pub fn solve_1(filename: String) -> String {
 
-    display
+    let input = get_input(filename);
+    let (_, displays) = parse_input(input);
+
+    displays
         .into_iter()
         .inspect(|s| println!("{:?}", s))
         .map(|segment| {
@@ -76,10 +63,14 @@ fn solve_part_1(display: Vec<String>) -> i64 {
                 })
                 .sum::<i64>()
         })
-        .sum::<i64>()
+        .sum::<i64>().to_string()
 }
 
-fn solve_part_2(signals: Vec<(Vec<String>, Vec<String>)>) -> i64 {
+pub fn solve_2(filename: String) -> String {
+
+    let input = get_input(filename);
+    let signals = parse_input2(input);
+
     let mut sum = 0;
 
     for (signal, display) in signals {
@@ -97,21 +88,8 @@ fn solve_part_2(signals: Vec<(Vec<String>, Vec<String>)>) -> i64 {
         }
     }
 
-    sum as i64
+    sum.to_string()
 }
-
-/*
-fn insert(decoding: &mut HashMap<&str, u8>, encoding: &mut HashMap<u8, &str>, signal: &str, value: u8) {
-
-    let mut chars: Vec<char> = signal.chars().collect();
-    chars.sort_by(|a, b| b.cmp(a));
-    let s = String::from_iter(chars);
-
-    (&decoding).insert(signal, value);
-    (&encoding).insert(value, signal);
-}
-
- */
 
 fn is_superset(signal: &String, encoding: &String) -> bool {
     encoding.chars().all(|c| signal.contains(c))
@@ -184,43 +162,4 @@ fn decode(signals: &Vec<String>) -> HashMap<&String, u8> {
     println!("Decoding: {:?}", decoding);
     println!("Encoding: {:?}", encoding);
     decoding
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-    
-
-    #[test]
-    fn test_solve_part_1() {
-        let input = get_input("src/input08_test2.txt");
-        let (_, displays) = parse_input(input);
-
-        let expected = 26;
-
-        let result = solve_part_1(displays);
-        assert_eq!(result, expected);
-    }
-
-    #[test]
-    fn test_solve_part_2_1() {
-        let input = get_input("src/input08_test1.txt");
-        let signals = parse_input2(input);
-
-        let expected = 5353;
-
-        let result = solve_part_2(signals);
-        assert_eq!(result, expected)
-    }
-
-    #[test]
-    fn test_solve_part_2_2() {
-        let input = get_input("src/input08_test2.txt");
-        let signals = parse_input2(input);
-
-        let expected = 61229;
-
-        let result = solve_part_2(signals);
-        assert_eq!(result, expected)
-    }
 }
