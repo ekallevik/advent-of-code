@@ -1,7 +1,6 @@
-use crate::domain::{SubmarineCommand, NaivePosition, Position};
+use crate::domain::{NaivePosition, Position, SubmarineCommand};
 use crate::utils::{get_input, PuzzlePart};
 
-#[warn(dead_code)]
 pub fn solve(part: PuzzlePart) -> i64 {
     println!("Puzzle day 02 - {:?}", part);
     let input = get_input("src/input02.txt");
@@ -13,25 +12,21 @@ pub fn solve(part: PuzzlePart) -> i64 {
 }
 
 fn calculate_naive_position(commands: Vec<SubmarineCommand>) -> i64 {
-
     let pos = commands
         .iter()
-        .fold(
-            NaivePosition { x: 0, y: 0 },
-            |p, command| command.naive_apply_from(p)
-        );
+        .fold(NaivePosition { x: 0, y: 0 }, |p, command| {
+            command.naive_apply_from(p)
+        });
 
     (pos.x * pos.y).abs()
 }
 
 fn calculate_position(commands: Vec<SubmarineCommand>) -> i64 {
-
     let pos = commands
         .iter()
-        .fold(
-            Position { x: 0, y: 0, aim: 0 },
-            |p, command| command.apply_from(p)
-        );
+        .fold(Position { x: 0, y: 0, aim: 0 }, |p, command| {
+            command.apply_from(p)
+        });
 
     (pos.x * pos.y).abs()
 }
