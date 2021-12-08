@@ -1,17 +1,16 @@
-use crate::utils::{PuzzlePart};
+
 use vectrix::Matrix;
 
 type Board = Matrix<(i64, bool), 5, 5>;
 
-pub fn solve(part: PuzzlePart) -> i64 {
-    println!("Puzzle day 04 - {:?}", part);
-    let input = include_str!("input04.txt");
-    let (draws, boards) = parse_input(input);
+pub fn solve_1(filename: String) -> String {
+    let (draws, boards) = parse_input(filename);
+    solve_part_1(boards, draws).to_string()
+}
 
-    match part {
-        PuzzlePart::Part1 => solve_part_1(boards, draws),
-        PuzzlePart::Part2 => solve_part_2(boards, draws),
-    }
+pub fn solve_2(filename: String) -> String {
+    let (draws, boards) = parse_input(filename);
+    solve_part_2(boards, draws).to_string()
 }
 
 fn update(board: Board, draw: i64) -> Board {
@@ -67,7 +66,7 @@ fn solve_part_2(mut boards: Vec<Board>, draws: Vec<i64>) -> i64 {
     unreachable!()
 }
 
-fn parse_input(input: &str) -> (Vec<i64>, Vec<Board>) {
+fn parse_input(input: String) -> (Vec<i64>, Vec<Board>) {
     let (draws, boards) = input.split_once("\n\n").unwrap();
     let draws = draws
         .split(',')
@@ -89,32 +88,4 @@ fn parse_input(input: &str) -> (Vec<i64>, Vec<Board>) {
         })
         .collect();
     (draws, boards)
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-    
-
-    #[test]
-    fn test_solve_part_1() {
-        let input = include_str!("input04_test.txt");
-        let (draws, boards) = parse_input(input);
-
-        let expected = 4512;
-
-        let result = solve_part_1(boards, draws);
-        assert_eq!(result, expected);
-    }
-
-    #[test]
-    fn test_solve_part_2() {
-        let input = include_str!("input04_test.txt");
-        let (draws, boards) = parse_input(input);
-
-        let expected = 1924;
-
-        let result = solve_part_2(boards, draws);
-        assert_eq!(result, expected)
-    }
 }
