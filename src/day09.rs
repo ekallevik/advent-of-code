@@ -1,19 +1,10 @@
 use std::collections::HashSet;
 
-use crate::utils::{get_input_array, PuzzlePart};
+use crate::utils::get_input_array;
 
-pub fn solve(part: PuzzlePart) -> u64 {
-    println!("Puzzle day 09 - {:?}", part);
-    let input = get_input_array::<u64>("src/input09.txt");
-
-    match part {
-        PuzzlePart::Part1 => solve_1(input),
-        PuzzlePart::Part2 => solve_2(input),
-    }
-}
-
-fn solve_1(depths: Vec<Vec<u64>>) -> u64 {
-    find_low_points(&depths).iter().map(|&point| point.2 + 1).sum()
+pub fn solve_1(filename: String) -> String {
+    let input = get_input_array::<u64>(filename);
+    find_low_points(&input).iter().map(|&point| point.2 + 1).sum::<u64>().to_string()
 }
 
 fn find_low_points(depths: &Vec<Vec<u64>>) -> Vec<(i32, i32, u64)> {
@@ -77,8 +68,9 @@ fn generate_neighbors(x: i32, y: i32, x_size: i32, y_size: i32) -> Vec<(i32, i32
     res
 }
 
-fn solve_2(depths: Vec<Vec<u64>>) -> u64 {
+pub fn solve_2(filename: String) -> String {
 
+    let depths = get_input_array::<u64>(filename);
     let origins = find_low_points(&depths);
 
     let x_size = (&depths).len() as i32;
@@ -118,26 +110,5 @@ fn solve_2(depths: Vec<Vec<u64>>) -> u64 {
     sorted.sort_unstable();
     sorted.reverse();
 
-    (sorted[0] * sorted[1] * sorted[2]) as u64
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn test_solve_1() {
-        let input = get_input_array::<u64>("src/input09_test.txt");
-
-        let result = solve_1(input);
-        assert_eq!(result, 15)
-    }
-
-    #[test]
-    fn test_solve_2() {
-        let input = get_input_array::<u64>("src/input09_test.txt");
-
-        let result = solve_2(input);
-        assert_eq!(result, 1134)
-    }
+    (sorted[0] * sorted[1] * sorted[2]).to_string()
 }
