@@ -11,10 +11,11 @@ mod day08;
 mod day09;
 
 use argh::FromArgs;
+use chrono::Datelike;
 use paris::{error, info};
 
-fn default_day() -> usize {
-    1
+fn default_day() -> u32 {
+    chrono::offset::Local::now().day()
 }
 
 type SolverFn = fn(String) -> String;
@@ -24,7 +25,7 @@ type SolverFn = fn(String) -> String;
 struct InitialArgs {
     #[argh(option, default = "default_day()")]
     /// which day to solve
-    day: usize,
+    day: u32,
 }
 
 
@@ -34,7 +35,6 @@ fn main() {
     println!();
     info!("<green><u>⭐ ️Advent of Code 2021 ⭐️");
     info!("Solving day {:?}", args.day);
-
 
     let (first, second): (SolverFn, SolverFn) = match args.day {
         1 => (day01::solve_1, day01::solve_2),
@@ -49,7 +49,6 @@ fn main() {
         _ => return
     };
 
-
     let is_solved = solve_problem_set(first, args.day);
 
     if !is_solved {
@@ -62,7 +61,7 @@ fn main() {
 
 }
 
-fn solve_problem_set(solver: SolverFn, day: usize) -> bool {
+fn solve_problem_set(solver: SolverFn, day: u32) -> bool {
 
     let test_solution = solve_problem(solver, day, false);
 
@@ -73,7 +72,7 @@ fn solve_problem_set(solver: SolverFn, day: usize) -> bool {
     solve_problem(solver, day, true)
 }
 
-fn solve_problem(solver: SolverFn, day: usize, real: bool) -> bool {
+fn solve_problem(solver: SolverFn, day: u32, real: bool) -> bool {
 
     let suffix = if real { "" } else { "_test" };
     let filename = format!("src/input0{}{}.txt", day, suffix);
