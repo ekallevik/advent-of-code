@@ -1,5 +1,3 @@
-mod utils;
-mod domain;
 mod day01;
 mod day02;
 mod day03;
@@ -9,10 +7,18 @@ mod day06;
 mod day07;
 mod day08;
 mod day09;
+mod day10;
+mod day11;
+mod domain;
+mod solution;
+mod utils;
 
+use crate::solution::Solution;
+use crate::utils::PuzzlePart;
 use argh::FromArgs;
 use chrono::Datelike;
-use paris::{error, info};
+use paris::{info};
+use strum::IntoEnumIterator;
 
 fn default_day() -> u32 {
     chrono::offset::Local::now().day()
@@ -28,15 +34,16 @@ struct InitialArgs {
     day: u32,
 }
 
-
-fn main() {
+fn main() -> Result<(), std::io::Error> {
     let args: InitialArgs = argh::from_env();
+    let day = args.day;
 
     println!();
     info!("<green><u>⭐ ️Advent of Code 2021 ⭐️");
-    info!("Solving day {:?}", args.day);
+    info!("Solving day {:?}", day);
+    let mut solution = Solution::load_or_create(day);
 
-    let (first, second): (SolverFn, SolverFn) = match args.day {
+    let (first, second): (SolverFn, SolverFn) = match day {
         1 => (day01::solve_1, day01::solve_2),
         2 => (day02::solve_1, day02::solve_2),
         3 => (day03::solve_1, day03::solve_2),
@@ -46,49 +53,32 @@ fn main() {
         7 => (day07::solve_1, day07::solve_2),
         8 => (day08::solve_1, day08::solve_2),
         9 => (day09::solve_1, day09::solve_2),
-        _ => return
+        10 => (day10::solve_1, day10::solve_2),
+        11 => (day11::solve_1, day11::solve_2),
+        _ => {
+            println!("Did not find any matching days");
+            std::process::exit(1);
+        }
     };
 
-    let is_solved = solve_problem_set(first, args.day);
+    let test_input = format!("src/input{:02}_test.txt", day);
+    let real_input = format!("src/input{:02}.txt", day);
 
-    if !is_solved {
-        error!("Did not solve problems\n");
-        return;
+    for part in PuzzlePart::iter() {
+        let result = match part {
+            PuzzlePart::FirstTest => first(test_input),
+            PuzzlePart::FirstReal => first(real_input),
+            PuzzlePart::SecondTest => second(test_input),
+            PuzzlePart::SecondReal => second(real_input),
+        };
+
+        let is_solved = solution.verify_or_update(part, result);
+        if !is_solved {
+            std::process::exit(1);
+        }
     }
 
-    solve_problem_set(second, args.day);
+    solution.save();
     info!("<green><u>Hurray, you are one day closer to finding the sleigh keys 🎉\n");
-
-}
-
-fn solve_problem_set(solver: SolverFn, day: u32) -> bool {
-
-    let test_solution = solve_problem(solver, day, false);
-
-    if !test_solution {
-        return false
-    }
-
-    solve_problem(solver, day, true)
-}
-
-fn solve_problem(solver: SolverFn, day: u32, real: bool) -> bool {
-
-    let suffix = if real { "" } else { "_test" };
-    let filename = format!("src/input0{}{}.txt", day, suffix);
-
-    let answer = solver(filename);
-    info!("Answer for {} problem = {}\n", if real {"real"} else {"test"}, answer);
-
-    let mut is_correct = String::new();
-    println!("Is it correct?");
-    std::io::stdin().read_line(&mut is_correct).unwrap();
-
-    if is_correct.trim() == "y" {
-        info!("\n{} problem completed. Continuing...\n", if real {"real"} else {"test"});
-        true
-    } else {
-        error!("\nbut it's wrong\n");
-        false
-    }
+    std::process::exit(0);
 }
