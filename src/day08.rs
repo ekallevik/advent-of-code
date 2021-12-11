@@ -1,4 +1,3 @@
-
 use std::collections::HashMap;
 
 use crate::utils::get_input;
@@ -43,8 +42,7 @@ fn parse_input2(input: Vec<String>) -> Vec<(Vec<String>, Vec<String>)> {
     signals
 }
 
-pub fn solve_1(filename: String) -> String {
-
+pub fn solve_1(filename: &String) -> String {
     let input = get_input(filename);
     let (_, displays) = parse_input(input);
 
@@ -63,11 +61,11 @@ pub fn solve_1(filename: String) -> String {
                 })
                 .sum::<i64>()
         })
-        .sum::<i64>().to_string()
+        .sum::<i64>()
+        .to_string()
 }
 
-pub fn solve_2(filename: String) -> String {
-
+pub fn solve_2(filename: &String) -> String {
     let input = get_input(filename);
     let signals = parse_input2(input);
 

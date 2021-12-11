@@ -1,12 +1,11 @@
-
 use crate::utils::get_input;
 
-pub fn solve_1(filename: String) -> String {
+pub fn solve_1(filename: &String) -> String {
     let input = get_input(filename);
     count_depth_increases(input).to_string()
 }
 
-pub fn solve_2(filename: String) -> String {
+pub fn solve_2(filename: &String) -> String {
     let input = get_input(filename);
     count_sliding_depth_increases(input).to_string()
 }
@@ -14,20 +13,14 @@ pub fn solve_2(filename: String) -> String {
 fn count_depth_increases(depths: Vec<u64>) -> u64 {
     depths
         .windows(2)
-        .map(|x| if x[0] < x[1] { 1 } else { 0 } )
+        .map(|x| if x[0] < x[1] { 1 } else { 0 })
         .sum()
 }
 
 fn count_sliding_depth_increases(depths: Vec<u64>) -> u64 {
     depths
         .windows(4)
-        .map(|x| {
-            if x[0] < x[3] {
-                1
-            } else {
-                0
-            }
-        })
+        .map(|x| if x[0] < x[3] { 1 } else { 0 })
         .sum()
 }
 

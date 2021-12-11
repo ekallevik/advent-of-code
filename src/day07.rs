@@ -1,5 +1,4 @@
-
-pub fn solve_1(_filename: String) -> String {
+pub fn solve_1(_filename: &String) -> String {
     let input = vec![
         1101, 1, 29, 67, 1102, 0, 1, 65, 1008, 65, 35, 66, 1005, 66, 28, 1, 67, 65, 20, 4, 0, 1001,
         65, 1, 65, 1106, 0, 8, 99, 35, 67, 101, 99, 105, 32, 110, 39, 101, 115, 116, 32, 112, 97,
@@ -63,7 +62,10 @@ pub fn solve_1(_filename: String) -> String {
     let &max = input.iter().max().unwrap();
 
     for position in min..=max {
-        let sum: i64 = input.iter().map(|&crab| ((position - crab) as i64).abs()).sum();
+        let sum: i64 = input
+            .iter()
+            .map(|&crab| ((position - crab) as i64).abs())
+            .sum();
         consumption = i64::min(sum as i64, consumption);
         println!("Pos: {:?} consumption: {:?}", position, consumption);
     }
@@ -75,7 +77,7 @@ fn sum_to_n(n: i64) -> i64 {
     n * (n + 1) / 2
 }
 
-pub fn solve_2(_filename: String) -> String {
+pub fn solve_2(_filename: &String) -> String {
     let input = vec![
         1101, 1, 29, 67, 1102, 0, 1, 65, 1008, 65, 35, 66, 1005, 66, 28, 1, 67, 65, 20, 4, 0, 1001,
         65, 1, 65, 1106, 0, 8, 99, 35, 67, 101, 99, 105, 32, 110, 39, 101, 115, 116, 32, 112, 97,

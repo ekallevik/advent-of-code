@@ -1,6 +1,6 @@
 use crate::utils::{get_input, get_input_array};
 
-pub fn solve_1(filename: String) -> String {
+pub fn solve_1(filename: &String) -> String {
     let input = get_input_array(filename);
 
     let size = input.len();
@@ -15,9 +15,9 @@ pub fn solve_1(filename: String) -> String {
     (epsilon * gamma).to_string()
 }
 
-pub fn solve_2(filename: String) -> String {
-    let input_a: Vec<Vec<u8>> = get_input_array(filename.clone());
-    let input2 = get_input(filename.clone());
+pub fn solve_2(filename: &String) -> String {
+    let input_a: Vec<Vec<u8>> = get_input_array(filename);
+    let input2 = get_input(filename);
     let input: Vec<String> = get_input(filename);
 
     let length = input.first().unwrap().len();
@@ -149,7 +149,6 @@ fn calculate_gamma2(frequencies: Vec<u8>, size: usize, length: usize) -> i64 {
     println!("res: {}", res);
     res
 }
-
 
 fn find_most_common_bit_from_char(lines: &Vec<Vec<char>>, i: usize) -> char {
     let zeros = lines.iter().filter(|&x| x[i] == '0').count();

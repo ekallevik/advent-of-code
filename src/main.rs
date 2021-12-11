@@ -24,7 +24,7 @@ fn default_day() -> u32 {
     chrono::offset::Local::now().day()
 }
 
-type SolverFn = fn(String) -> String;
+type SolverFn = fn(&String) -> String;
 
 #[derive(FromArgs)]
 /// Reach new heights.
@@ -61,15 +61,15 @@ fn main() -> Result<(), std::io::Error> {
         }
     };
 
-    let test_input = format!("src/input{:02}_test.txt", day);
-    let real_input = format!("src/input{:02}.txt", day);
+    let test_input =  format!("src/input{:02}_test.txt", day);
+    let real_input =  format!("src/input{:02}.txt", day);
 
     for part in PuzzlePart::iter() {
         let result = match part {
-            PuzzlePart::FirstTest => first(test_input),
-            PuzzlePart::FirstReal => first(real_input),
-            PuzzlePart::SecondTest => second(test_input),
-            PuzzlePart::SecondReal => second(real_input),
+            PuzzlePart::FirstTest => first(&test_input),
+            PuzzlePart::FirstReal => first(&real_input),
+            PuzzlePart::SecondTest => second(&test_input),
+            PuzzlePart::SecondReal => second(&real_input),
         };
 
         let is_solved = solution.verify_or_update(part, result);

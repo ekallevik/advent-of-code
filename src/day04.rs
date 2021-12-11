@@ -1,14 +1,13 @@
-
 use vectrix::Matrix;
 
 type Board = Matrix<(i64, bool), 5, 5>;
 
-pub fn solve_1(filename: String) -> String {
+pub fn solve_1(filename: &String) -> String {
     let (draws, boards) = parse_input(filename);
     solve_part_1(boards, draws).to_string()
 }
 
-pub fn solve_2(filename: String) -> String {
+pub fn solve_2(filename: &String) -> String {
     let (draws, boards) = parse_input(filename);
     solve_part_2(boards, draws).to_string()
 }
@@ -66,7 +65,7 @@ fn solve_part_2(mut boards: Vec<Board>, draws: Vec<i64>) -> i64 {
     unreachable!()
 }
 
-fn parse_input(input: String) -> (Vec<i64>, Vec<Board>) {
+fn parse_input(input: &String) -> (Vec<i64>, Vec<Board>) {
     let (draws, boards) = input.split_once("\n\n").unwrap();
     let draws = draws
         .split(',')

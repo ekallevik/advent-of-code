@@ -1,15 +1,12 @@
-
-
-pub fn solve_1(_filename: String) -> String {
+pub fn solve_1(_filename: &String) -> String {
     solve(_filename, 80)
 }
 
-pub fn solve_2(_filename: String) -> String {
+pub fn solve_2(_filename: &String) -> String {
     solve(_filename, 256)
 }
 
-fn solve(_filename: String, days: u16) -> String {
-
+fn solve(_filename: &String, days: u16) -> String {
     let input = vec![
         4, 1, 4, 1, 3, 3, 1, 4, 3, 3, 2, 1, 1, 3, 5, 1, 3, 5, 2, 5, 1, 5, 5, 1, 3, 2, 5, 3, 1, 3,
         4, 2, 3, 2, 3, 3, 2, 1, 5, 4, 1, 1, 1, 2, 1, 4, 4, 4, 2, 1, 2, 1, 5, 1, 5, 1, 2, 1, 4, 4,

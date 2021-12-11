@@ -3,7 +3,7 @@ use paris::{info, warn};
 
 use crate::utils::{get_input_array};
 
-pub fn solve_1(filename: String) -> String {
+pub fn solve_1(filename: &String) -> String {
     let input = get_input_array::<char>(filename);
 
     let opening_def = vec!['(', '[', '{', '<'];
@@ -66,7 +66,7 @@ pub fn solve_1(filename: String) -> String {
         .to_string()
 }
 
-pub fn solve_2(filename: String) -> String {
+pub fn solve_2(filename: &String) -> String {
     let input = get_input_array::<char>(filename);
 
     let opening_def = vec!['(', '[', '{', '<'];
