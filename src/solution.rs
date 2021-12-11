@@ -34,7 +34,7 @@ impl Solution {
     }
 
     pub fn save(&self) {
-        let filename = format!("src/solution{}.json", self.day);
+        let filename = format!("src/solution{:02}.json", self.day);
         let path = std::path::Path::new(&filename);
         let data = serde_json::to_string(&self).unwrap();
         fs::write(path, data).expect("Unable to write file");
