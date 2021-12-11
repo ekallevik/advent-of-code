@@ -1,11 +1,14 @@
 use std::fmt::Debug;
 use std::str::FromStr;
 
-#[allow(dead_code)]
-#[derive(Debug)]
+use strum_macros::EnumIter;
+
+#[derive(Debug, EnumIter)]
 pub enum PuzzlePart {
-    Part1,
-    Part2,
+    FirstTest,
+    FirstReal,
+    SecondTest,
+    SecondReal,
 }
 
 pub fn get_input<T: FromStr>(file_name: String) -> Vec<T>
