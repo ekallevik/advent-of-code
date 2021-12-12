@@ -1,5 +1,7 @@
 use crate::utils::get_input;
+use itertools::Itertools;
 use paris::{info, warn};
+use std::collections::HashSet;
 
 type Connection = (String, String);
 type Path = Vec<String>;
@@ -15,190 +17,101 @@ fn parse_input(filename: &String) -> Vec<Connection> {
         })
         .collect::<Vec<(String, String)>>()
 }
-/*
-pub fn solve_1_old(filename: &String) -> String {
-    let input: Vec<Connection> = parse_input(filename);
-    let starts: Vec<&Connection> = input.iter().filter(|&con| con.0 == "start").collect();
-
-    let paths: Paths = starts
-        .iter()
-        .flat_map(|&start| find_paths_from_start(start, &input))
-        .collect();
-
-    warn!("{:?}", paths);
-    paths.len().to_string()
-}
-
- */
 
 pub fn solve_1(filename: &String) -> String {
     let input: Vec<Connection> = parse_input(filename);
-
     let path: Path = vec!["start".to_string()];
 
-    let paths: Paths = search(path, &input);
-
-    warn!("{:?}", paths);
-    paths.len().to_string()
+    search(path, &input, &None).len().to_string()
 }
 
-fn search(path: Path, input: &Vec<Connection>) -> Vec<Path> {
+pub fn solve_2(filename: &String) -> String {
+    let input: Vec<Connection> = parse_input(filename);
+    let path: Path = vec!["start".to_string()];
 
-    let current = path.last().unwrap();
-
-    println!("Searching from: {}", current);
-
-    if *current == "end" {
-        return vec![path];
-    }
-
-    let neighbors: Vec<String> = input
+    let small_caves: Vec<&String> = input
         .iter()
-        .filter(|&next| can_use_connection(current.clone(), next.clone(), &path))
-        .map(|next| get_next_node(current.clone(), next.clone()))
-        .inspect(|next| println!("next: {:?}", next))
+        .flat_map(|conn| vec![&(*conn).0, &(*conn).1])
+        .filter(|&cave| is_small_cave(cave))
+        .filter(|&cave| *cave != "start" && *cave != "end")
+        .unique()
         .collect();
 
-    if neighbors.len() == 0 {
-        return vec![];
+    let paths: Paths = small_caves
+        .iter()
+        .flat_map(|&cave| search(path.clone(), &input, &Some(cave)))
+        .collect();
+
+    // need to filter because special cave might be used 0, 1 or 2 times.
+    paths.iter().unique().count().to_string()
+}
+
+
+fn search(path: Path, input: &Vec<Connection>, special_cave: &Option<&String>) -> Vec<Path> {
+    let current = path.last().unwrap();
+
+    if *current == "end" {
+        return vec![path]
     }
 
     input
         .iter()
-        .filter(|&next| can_use_connection(current.clone(), next.clone(), &path))
-        .map(|next| get_next_node(current.clone(), next.clone()))
-        .inspect(|next| println!("next: {:?}", next))
-        .flat_map(|next| {
-            let mut new_path = path.clone();
-            new_path.push(next);
-            search(new_path, input)
-        })
+        .filter(|&next| can_use_connection(current, next, &path, special_cave))
+        .map(|next| get_next_node(current, next))
+        .map(|node| extend_path(&path, node))
+        .flat_map(|path| search(path, input, special_cave))
         .collect()
 }
 
-fn get_next_node(node: String, next: Connection) -> String {
-    if node == next.0 {next.1} else {next.0}
+fn extend_path(path: &Path, node: String) -> Path {
+    let mut new_path = path.clone();
+    new_path.push(node);
+    new_path
 }
 
-fn can_use_connection(current_node: String, next: Connection, path: &Path) -> bool {
-    if current_node == next.0 {
-        is_available_cave(next.1, path)
-    } else if current_node == next.1 {
-        is_available_cave(next.0, path)
+fn can_use_connection(
+    node: &String,
+    next: &Connection,
+    path: &Path,
+    special_cave: &Option<&String>,
+) -> bool {
+    if *node == (*next).0 {
+        is_available_cave(&(*next).1, path, special_cave)
+    } else if *node == next.1 {
+        is_available_cave(&(*next).0, path, special_cave)
     } else {
         false
     }
 }
 
-fn is_small_cave(name: String) -> bool {
-    name.chars().all(|c| c.is_lowercase())
+fn get_next_node(node: &String, next: &Connection) -> String {
+    let clone = next.clone();
+    if *node == (*next).0 {
+        clone.1
+    } else {
+        clone.0
+    }
 }
 
-fn is_available_cave(name: String, path: &Vec<String>) -> bool {
-    let visit_count = path.iter().filter(|&con| con.clone() == name).count();
+fn is_available_cave(name: &String, path: &Vec<String>, special_cave: &Option<&String>) -> bool {
+    let visit_count = path.iter().filter(|&node| *node == *name).count();
 
-    match is_small_cave(name) {
+    match is_small_cave(&name) {
         false => true,
-        true => visit_count < 1,
-    }
-}
-
-/*
-fn find_paths_from_start(start: &Connection, input: &Vec<Connection>) -> Vec<Vec<String>> {
-    let clone = start.clone();
-    let current_path = vec![clone.0, clone.1];
-
-    let node = start.clone().1;
-
-    info!("Current path: {:?}", current_path);
-    println!("Searching from: {:?}", node);
-
-    let neighbors: Vec<&Connection> = input
-        .iter()
-        .filter(|con| is_possible(node.clone(), (*con).clone(), &current_path))
-        .collect();
-
-    println!("Neighbors: {:?}", neighbors);
-
-    neighbors
-        .iter()
-        .flat_map(|&neighbor| {
-            let clone = neighbor.clone();
-            let n = if start == clone.0 {clone.1} else {clone.0} ;
-            let mut temp_path = current_path.clone();
-            temp_path.push(n);
-            find_paths(temp_path, input)
-        })
-        .collect()
-}
-
-
-
-fn is_possible(from: String, to: Connection, path: &Path) -> bool {
-    if from == to.0 {
-        is_available_cave(to.1, path)
-    } else if from == to.1 {
-        is_available_cave(to.0, path)
-    } else {
-        false
-    }
-}
-
-fn find_paths(
-    current_path: Vec<String>,
-    input: &Vec<Connection>,
-) -> Vec<Vec<String>> {
-
-    let node = current_path.last().unwrap();
-
-    if node == "end" {
-        let mut updated_path = current_path.clone();
-        updated_path.push(node.clone());
-        return vec![updated_path];
-    }
-
-    let neighbors: Vec<String> = input
-        .iter()
-        .filter(|&con|
-                    {
-                        let clone = con.clone();
-                        let n = if node == clone.0 {clone.1} else {clone.0} ;
-                        let mut temp_path = current_path.clone();
-                        temp_path.push(n);
-                        is_possible(node.clone(), con.clone(), &temp_path)
-
-                    }
-        )
-        .map(|connection| {
-            let conn = connection.clone();
-            if node == connection.0 {
-                conn.1
+        true => {
+            if let Some(special_name) = *special_cave {
+                if *special_name == *name {
+                    visit_count < 2
+                } else {
+                    visit_count < 1
+                }
             } else {
-                conn.0
+                visit_count < 1
             }
-        })
-        .collect();
-
-    info!("Current path: {:?}", current_path);
-    println!("Searching from {:?}", node);
-    println!("Neighbors: {:?}", neighbors);
-
-    let res = neighbors
-        .iter()
-        .flat_map(|neighbor| {
-            let mut new_path = current_path.clone();
-            new_path.push(node.clone());
-            find_paths(neighbor.clone(), new_path, input)
         }
-        )
-        .collect();
-
-    warn!("{:?}", res);
-    res
+    }
 }
 
-
- */
-pub fn solve_2(filename: &String) -> String {
-    filename.to_string()
+fn is_small_cave(name: &String) -> bool {
+    name.chars().all(|c| c.is_lowercase())
 }

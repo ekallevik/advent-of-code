@@ -9,6 +9,7 @@ mod day08;
 mod day09;
 mod day10;
 mod day11;
+mod day12;
 mod domain;
 mod solution;
 mod utils;
@@ -17,7 +18,7 @@ use crate::solution::Solution;
 use crate::utils::PuzzlePart;
 use argh::FromArgs;
 use chrono::Datelike;
-use paris::{info};
+use paris::info;
 use strum::IntoEnumIterator;
 
 fn default_day() -> u32 {
@@ -55,14 +56,15 @@ fn main() -> Result<(), std::io::Error> {
         9 => (day09::solve_1, day09::solve_2),
         10 => (day10::solve_1, day10::solve_2),
         11 => (day11::solve_1, day11::solve_2),
+        12 => (day12::solve_1, day12::solve_2),
         _ => {
             println!("Did not find any matching days");
             std::process::exit(1);
         }
     };
 
-    let test_input =  format!("src/input{:02}_test.txt", day);
-    let real_input =  format!("src/input{:02}.txt", day);
+    let test_input = format!("src/input{:02}_test.txt", day);
+    let real_input = format!("src/input{:02}.txt", day);
 
     for part in PuzzlePart::iter() {
         let result = match part {
