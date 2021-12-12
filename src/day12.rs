@@ -1,7 +1,4 @@
-use crate::utils::get_input;
 use itertools::Itertools;
-use paris::{info, warn};
-use std::collections::HashSet;
 
 type Connection = (String, String);
 type Path = Vec<String>;
@@ -96,7 +93,7 @@ fn get_next_node(node: &String, next: &Connection) -> String {
 fn is_available_cave(name: &String, path: &Vec<String>, special_cave: &Option<&String>) -> bool {
     let visit_count = path.iter().filter(|&node| *node == *name).count();
 
-    match is_small_cave(&name) {
+    match is_small_cave(name) {
         false => true,
         true => {
             if let Some(special_name) = *special_cave {
