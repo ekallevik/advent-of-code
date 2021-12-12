@@ -22,6 +22,17 @@ where
         .collect()
 }
 
+pub fn get_comma_seperated_input<T: FromStr>(file_name: &String) -> Vec<T>
+    where
+        <T as FromStr>::Err: Debug,
+{
+    std::fs::read_to_string(file_name)
+        .expect("file not found!")
+        .split(',')
+        .map(|x| x.trim().parse().unwrap())
+        .collect()
+}
+
 pub fn get_input_array<T: FromStr>(file_name: &String) -> Vec<Vec<T>>
 where
     <T as FromStr>::Err: Debug,
