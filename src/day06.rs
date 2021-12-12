@@ -1,24 +1,16 @@
-pub fn solve_1(_filename: &String) -> String {
-    solve(_filename, 80)
+use crate::utils::get_comma_seperated_input;
+
+pub fn solve_1(filename: &String) -> String {
+    solve(filename, 80)
 }
 
-pub fn solve_2(_filename: &String) -> String {
-    solve(_filename, 256)
+pub fn solve_2(filename: &String) -> String {
+    solve(filename, 256)
 }
 
-fn solve(_filename: &String, days: u16) -> String {
-    let input = vec![
-        4, 1, 4, 1, 3, 3, 1, 4, 3, 3, 2, 1, 1, 3, 5, 1, 3, 5, 2, 5, 1, 5, 5, 1, 3, 2, 5, 3, 1, 3,
-        4, 2, 3, 2, 3, 3, 2, 1, 5, 4, 1, 1, 1, 2, 1, 4, 4, 4, 2, 1, 2, 1, 5, 1, 5, 1, 2, 1, 4, 4,
-        5, 3, 3, 4, 1, 4, 4, 2, 1, 4, 4, 3, 5, 2, 5, 4, 1, 5, 1, 1, 1, 4, 5, 3, 4, 3, 4, 2, 2, 2,
-        2, 4, 5, 3, 5, 2, 4, 2, 3, 4, 1, 4, 4, 1, 4, 5, 3, 4, 2, 2, 2, 4, 3, 3, 3, 3, 4, 2, 1, 2,
-        5, 5, 3, 2, 3, 5, 5, 5, 4, 4, 5, 5, 4, 3, 4, 1, 5, 1, 3, 4, 4, 1, 3, 1, 3, 1, 1, 2, 4, 5,
-        3, 1, 2, 4, 3, 3, 5, 4, 4, 5, 4, 1, 3, 1, 1, 4, 4, 4, 4, 3, 4, 3, 1, 4, 5, 1, 2, 4, 3, 5,
-        1, 1, 2, 1, 1, 5, 4, 2, 1, 5, 4, 5, 2, 4, 4, 1, 5, 2, 2, 5, 3, 3, 2, 3, 1, 5, 5, 5, 4, 3,
-        1, 1, 5, 1, 4, 5, 2, 1, 3, 1, 2, 4, 4, 1, 1, 2, 5, 3, 1, 5, 2, 4, 5, 1, 2, 3, 1, 2, 2, 1,
-        2, 2, 1, 4, 1, 3, 4, 2, 1, 1, 5, 4, 1, 5, 4, 4, 3, 1, 3, 3, 1, 1, 3, 3, 4, 2, 3, 4, 2, 3,
-        1, 4, 1, 5, 3, 1, 1, 5, 3, 2, 3, 5, 1, 3, 1, 1, 3, 5, 1, 5, 1, 1, 3, 1, 1, 1, 1, 3, 3, 1,
-    ];
+fn solve(filename: &String, days: u16) -> String {
+
+    let input: Vec<u32> = get_comma_seperated_input(filename);
 
     let mut count = (0..=8)
         .map(|i| input.iter().filter(|&fish| *fish == i).count() as u64)
