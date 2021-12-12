@@ -76,9 +76,9 @@ fn main() -> Result<(), std::io::Error> {
         if !is_solved {
             std::process::exit(1);
         }
+        solution.save();
     }
 
-    solution.save();
     info!("<green><u>Hurray, you are one day closer to finding the sleigh keys 🎉\n");
     std::process::exit(0);
 }
