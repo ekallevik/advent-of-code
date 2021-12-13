@@ -10,6 +10,7 @@ mod day09;
 mod day10;
 mod day11;
 mod day12;
+mod day13;
 mod domain;
 mod solution;
 mod utils;
@@ -20,6 +21,10 @@ use argh::FromArgs;
 use chrono::Datelike;
 use paris::info;
 use strum::IntoEnumIterator;
+
+pub fn hello_to_binary() -> String {
+    String::from("Hello")
+}
 
 fn default_day() -> u32 {
     chrono::offset::Local::now().day()
@@ -57,6 +62,7 @@ fn main() -> Result<(), std::io::Error> {
         10 => (day10::solve_1, day10::solve_2),
         11 => (day11::solve_1, day11::solve_2),
         12 => (day12::solve_1, day12::solve_2),
+        13 => (day13::solve_1, day13::solve_2),
         _ => {
             println!("Did not find any matching days");
             std::process::exit(1);

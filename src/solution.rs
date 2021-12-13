@@ -57,7 +57,7 @@ impl Solution {
             None => {
                 let mut is_correct = String::new();
                 println!("{}", result);
-                println!("Is it correct?... ");
+                println!("Is it correct for {:?}?... ", part);
                 std::io::stdin().read_line(&mut is_correct).unwrap();
                 if is_correct.trim() == "y" {
                     println!("correct");
