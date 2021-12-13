@@ -1,8 +1,4 @@
-use crate::domain::NaivePosition;
-use crate::utils::get_input;
-use itertools::Itertools;
-use paris::{info, warn};
-use std::cmp::min;
+use std::cmp::Ordering;
 use std::collections::HashSet;
 
 #[derive(Debug)]
@@ -27,7 +23,7 @@ fn parse_input(filename: &String) -> (HashSet<(i64, i64)>, Vec<Fold>) {
                     true => folds.push(Fold::X(value)),
                     false => folds.push(Fold::Y(value)),
                 };
-            } else if line.contains(",") {
+            } else if line.contains(',') {
                 let split: Vec<&str> = line.split(',').collect();
                 positions.insert((split[0].parse().unwrap(), split[1].parse().unwrap()));
             }
@@ -59,18 +55,20 @@ fn fold_paper(input: HashSet<(i64, i64)>, fold: &Fold) -> HashSet<(i64, i64)> {
     for position in input {
         match fold {
             Fold::X(value) => {
-                if position.0 < *value {
-                    folded.insert((position.0, position.1));
-                } else if position.0 > *value {
-                    folded.insert((position.0 - 2 * (position.0 - *value), position.1));
-                };
+                match position.0.cmp(value) {
+                    Ordering::Less => folded.insert((position.0, position.1)),
+                    Ordering::Equal | Ordering::Greater => {
+                        folded.insert((position.0 - 2 * (position.0 - *value), position.1))
+                    }
+                }
             }
             Fold::Y(value) => {
-                if position.1 < *value {
-                    folded.insert(position);
-                } else if position.1 > *value {
-                    folded.insert((position.0, position.1 - 2 * (position.1 - *value)));
-                };
+                match position.1.cmp(value) {
+                    Ordering::Less => folded.insert(position),
+                    Ordering::Equal | Ordering::Greater => {
+                        folded.insert((position.0, position.1 - 2 * (position.1 - *value)))
+                    }
+                }
             }
         };
     }
