@@ -13,16 +13,18 @@ mod day12;
 mod day13;
 mod day14;
 mod day15;
+mod day16;
 mod domain;
 mod solution;
+mod template;
 mod utils;
 
-use std::time::Instant;
 use crate::solution::Solution;
 use crate::utils::PuzzlePart;
 use argh::FromArgs;
 use chrono::Datelike;
 use paris::info;
+use std::time::Instant;
 use strum::IntoEnumIterator;
 
 pub fn hello_to_binary() -> String {
@@ -68,6 +70,7 @@ fn main() -> Result<(), std::io::Error> {
         13 => (day13::solve_1, day13::solve_2),
         14 => (day14::solve_1, day14::solve_2),
         15 => (day15::solve_1, day15::solve_2),
+        16 => (day16::solve_1, day16::solve_2),
         _ => {
             println!("Did not find any matching days");
             std::process::exit(1);
