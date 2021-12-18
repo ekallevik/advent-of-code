@@ -1,4 +1,3 @@
-
 use vectrix::Matrix;
 
 type Board = Matrix<(i64, bool), 5, 5>;
