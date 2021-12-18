@@ -1,4 +1,4 @@
-use crate::utils::get_input;
+
 use vectrix::Matrix;
 
 type Board = Matrix<(i64, bool), 5, 5>;
