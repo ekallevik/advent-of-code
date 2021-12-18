@@ -12,33 +12,33 @@ pub enum PuzzlePart {
     SecondReal,
 }
 
-pub fn get_input<T: FromStr>(file_name: &String) -> Vec<T>
+pub fn get_input<T: FromStr>(filename: &str) -> Vec<T>
 where
     <T as FromStr>::Err: Debug,
 {
-    std::fs::read_to_string(file_name)
+    std::fs::read_to_string(filename)
         .expect("file not found!")
         .lines()
         .map(|x| x.parse().unwrap())
         .collect()
 }
 
-pub fn get_comma_seperated_input<T: FromStr>(file_name: &String) -> Vec<T>
-    where
-        <T as FromStr>::Err: Debug,
+pub fn get_comma_seperated_input<T: FromStr>(filename: &str) -> Vec<T>
+where
+    <T as FromStr>::Err: Debug,
 {
-    std::fs::read_to_string(file_name)
+    std::fs::read_to_string(filename)
         .expect("file not found!")
         .split(',')
         .map(|x| x.trim().parse().unwrap())
         .collect()
 }
 
-pub fn get_input_array<T: FromStr>(file_name: &String) -> Vec<Vec<T>>
+pub fn get_input_array<T: FromStr>(filename: &str) -> Vec<Vec<T>>
 where
     <T as FromStr>::Err: Debug,
 {
-    std::fs::read_to_string(file_name)
+    std::fs::read_to_string(filename)
         .expect("file not found!")
         .lines()
         .map(|x| x.chars().map(|y| y.to_string().parse().unwrap()).collect())
@@ -61,11 +61,12 @@ pub fn prime_factor(number: i32) -> Vec<i32> {
     primes
 }
 
-
 pub fn factor(number: i32) -> Vec<i32> {
-    (1..=number).into_iter().filter(|&x| number % x == 0).collect::<Vec<i32>>()
+    (1..=number)
+        .into_iter()
+        .filter(|&x| number % x == 0)
+        .collect::<Vec<i32>>()
 }
-
 
 #[cfg(test)]
 mod tests {
@@ -74,7 +75,7 @@ mod tests {
 
     #[test]
     fn test_get_input() {
-        let result: Vec<String> = get_input(&"src/input03_test2.txt".to_string());
+        let result: Vec<String> = get_input("src/input03_test2.txt");
 
         let expected = vec!["00100", "11110"];
 
@@ -83,7 +84,7 @@ mod tests {
 
     #[test]
     fn test_get_input_array() {
-        let result: Vec<Vec<u8>> = get_input_array(&"src/input03_test2.txt".to_string());
+        let result: Vec<Vec<u8>> = get_input_array("src/input03_test2.txt");
 
         let expected = vec![vec![0, 0, 1, 0, 0], vec![1, 1, 1, 1, 0]];
 
@@ -101,7 +102,4 @@ mod tests {
     fn test_factor() {
         assert_eq!(factor(20), vec![1, 2, 4, 5, 10, 20]);
     }
-
-
-
 }

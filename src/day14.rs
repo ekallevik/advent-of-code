@@ -12,7 +12,7 @@ type PairFreq = HashMap<Pair, usize>;
 // into_once
 // better parsing
 // immutables
-fn parse_input(filename: &String) -> (PairFreq, Rules) {
+fn parse_input(filename: &str) -> (PairFreq, Rules) {
     let mut frequencies: PairFreq = HashMap::new();
     let mut rules = HashMap::new();
 
@@ -47,12 +47,12 @@ fn parse_input(filename: &String) -> (PairFreq, Rules) {
     (frequencies, rules)
 }
 
-pub fn solve_1(filename: &String) -> String {
+pub fn solve_1(filename: &str) -> String {
     let (frequencies, rules) = parse_input(filename);
     solve_problem(&rules, frequencies, 10).to_string()
 }
 
-pub fn solve_2(filename: &String) -> String {
+pub fn solve_2(filename: &str) -> String {
     let start = Instant::now();
     let (frequencies, rules) = parse_input(filename);
     let res = solve_problem(&rules, frequencies, 40).to_string();

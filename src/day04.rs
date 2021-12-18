@@ -1,15 +1,15 @@
-use vectrix::Matrix;
 use crate::utils::get_input;
+use vectrix::Matrix;
 
 type Board = Matrix<(i64, bool), 5, 5>;
 
-pub fn solve_1(filename: &String) -> String {
+pub fn solve_1(filename: &str) -> String {
     let input: String = std::fs::read_to_string(filename).expect("file not found!");
     let (draws, boards) = parse_input(input);
     solve_part_1(boards, draws).to_string()
 }
 
-pub fn solve_2(filename: &String) -> String {
+pub fn solve_2(filename: &str) -> String {
     let input: String = std::fs::read_to_string(filename).expect("file not found!");
     let (draws, boards) = parse_input(input);
     solve_part_2(boards, draws).to_string()

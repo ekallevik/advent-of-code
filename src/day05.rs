@@ -1,7 +1,7 @@
 use crate::domain::Line;
 use crate::utils::get_input;
 
-pub fn solve_1(filename: &String) -> String {
+pub fn solve_1(filename: &str) -> String {
     let input: Vec<Line> = get_input(filename);
 
     let size = input
@@ -17,6 +17,6 @@ pub fn solve_1(filename: &String) -> String {
     "-1".to_string()
 }
 
-pub fn solve_2(filename: &String) -> String {
+pub fn solve_2(filename: &str) -> String {
     solve_1(filename)
 }

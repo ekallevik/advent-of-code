@@ -4,7 +4,7 @@ type Connection = (String, String);
 type Path = Vec<String>;
 type Paths = Vec<Path>;
 
-fn parse_input(filename: &String) -> Vec<Connection> {
+fn parse_input(filename: &str) -> Vec<Connection> {
     std::fs::read_to_string(filename)
         .expect("file not found!")
         .lines()
@@ -15,14 +15,14 @@ fn parse_input(filename: &String) -> Vec<Connection> {
         .collect::<Vec<(String, String)>>()
 }
 
-pub fn solve_1(filename: &String) -> String {
+pub fn solve_1(filename: &str) -> String {
     let input: Vec<Connection> = parse_input(filename);
     let path: Path = vec!["start".to_string()];
 
     search(path, &input, &None).len().to_string()
 }
 
-pub fn solve_2(filename: &String) -> String {
+pub fn solve_2(filename: &str) -> String {
     let input: Vec<Connection> = parse_input(filename);
     let path: Path = vec!["start".to_string()];
 
@@ -43,12 +43,11 @@ pub fn solve_2(filename: &String) -> String {
     paths.iter().unique().count().to_string()
 }
 
-
 fn search(path: Path, input: &Vec<Connection>, special_cave: &Option<&String>) -> Vec<Path> {
     let current = path.last().unwrap();
 
     if *current == "end" {
-        return vec![path]
+        return vec![path];
     }
 
     input

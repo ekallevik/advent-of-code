@@ -27,16 +27,11 @@ use chrono::Datelike;
 use paris::info;
 use std::time::Instant;
 use strum::IntoEnumIterator;
-
-pub fn hello_to_binary() -> String {
-    String::from("Hello")
-}
-
 fn default_day() -> u32 {
     chrono::offset::Local::now().day()
 }
 
-type SolverFn = fn(&String) -> String;
+type SolverFn = fn(&str) -> String;
 
 #[derive(FromArgs)]
 /// Reach new heights.

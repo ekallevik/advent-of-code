@@ -26,7 +26,7 @@ impl Ord for State {
     }
 }
 
-pub fn solve_1(filename: &String) -> String {
+pub fn solve_1(filename: &str) -> String {
     let input: Vec<Vec<usize>> = get_input_array(filename);
 
     let max_y = input.len();
@@ -37,7 +37,7 @@ pub fn solve_1(filename: &String) -> String {
     result.to_string()
 }
 
-pub fn solve_2(filename: &String) -> String {
+pub fn solve_2(filename: &str) -> String {
     filename.to_string()
 }
 

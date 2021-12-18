@@ -2,7 +2,7 @@ use crate::utils::get_input_array;
 
 use std::str::Chars;
 
-pub fn solve_1(filename: &String) -> String {
+pub fn solve_1(filename: &str) -> String {
     //let input: Vec<char> = get_input(filename);
 
     let inputs = vec![
@@ -176,7 +176,7 @@ fn split_and_decode(bits: &[char], split: usize) -> (usize, &[char]) {
     (target, rest)
 }
 
-pub fn solve_2(filename: &String) -> String {
+pub fn solve_2(filename: &str) -> String {
     let _input: Vec<Vec<usize>> = get_input_array(filename);
 
     unimplemented!("Not implemented yet");
