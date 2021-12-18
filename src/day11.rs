@@ -2,35 +2,6 @@ use paris::info;
 
 use crate::utils::get_input_array;
 
-#[derive(Debug)]
-struct Octopus {
-    energy: u8,
-    flashed: bool,
-}
-
-impl Octopus {
-    fn step(mut self) -> Self {
-        self.flashed = false;
-        self.increase()
-    }
-
-    fn increase(mut self) -> Self {
-        if self.energy == 9 {
-            self.energy = 0;
-            self.flashed = true;
-        } else if !self.flashed {
-            self.energy += 1;
-        }
-
-        self
-    }
-
-    fn flash(mut self) {
-        self.flashed = true;
-        self.energy = 0;
-    }
-}
-
 type Cell = (u8, bool);
 
 type Row = Vec<Cell>;
