@@ -1,14 +1,14 @@
 use crate::utils::get_comma_seperated_input;
 
-pub fn solve_1(filename: &String) -> String {
+pub fn solve_1(filename: &str) -> String {
     solve(filename, 80)
 }
 
-pub fn solve_2(filename: &String) -> String {
+pub fn solve_2(filename: &str) -> String {
     solve(filename, 256)
 }
 
-fn solve(filename: &String, days: u16) -> String {
+fn solve(filename: &str, days: u16) -> String {
 
     let input: Vec<u32> = get_comma_seperated_input(filename);
 

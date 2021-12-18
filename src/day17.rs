@@ -26,7 +26,7 @@ fn parse_input(filename: &str) -> (Range<i32>, Range<i32>) {
     (x_range, y_range)
 }
 
-pub fn solve_1(filename: &String) -> String {
+pub fn solve_1(filename: &str) -> String {
     let (x_range, y_range) = parse_input(filename);
 
     // todo: check for off by one
@@ -64,7 +64,7 @@ pub fn solve_1(filename: &String) -> String {
     filename.to_string()
 }
 
-pub fn solve_2(filename: &String) -> String {
+pub fn solve_2(filename: &str) -> String {
     let (_x_range, _y_range) = parse_input(filename);
 
     filename.to_string()

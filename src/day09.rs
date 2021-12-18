@@ -2,7 +2,7 @@ use std::collections::HashSet;
 
 use crate::utils::get_input_array;
 
-pub fn solve_1(filename: &String) -> String {
+pub fn solve_1(filename: &str) -> String {
     let input = get_input_array::<u64>(filename);
     find_low_points(&input)
         .iter()
@@ -71,7 +71,7 @@ fn generate_neighbors(x: i32, y: i32, x_size: i32, y_size: i32) -> Vec<(i32, i32
     res
 }
 
-pub fn solve_2(filename: &String) -> String {
+pub fn solve_2(filename: &str) -> String {
     let depths = get_input_array::<u64>(filename);
     let origins = find_low_points(&depths);
 

@@ -1,7 +1,6 @@
-use paris::{info};
+use paris::info;
 
-
-use crate::utils::{get_input_array};
+use crate::utils::get_input_array;
 
 #[derive(Debug)]
 struct Octopus {
@@ -38,7 +37,7 @@ type Row = Vec<Cell>;
 
 type Grid = Vec<Row>;
 
-fn parse_input(filename: &String) -> Grid {
+fn parse_input(filename: &str) -> Grid {
     let input = get_input_array::<u8>(filename);
 
     input
@@ -47,7 +46,7 @@ fn parse_input(filename: &String) -> Grid {
         .collect::<Grid>()
 }
 
-pub fn solve_1(filename: &String) -> String {
+pub fn solve_1(filename: &str) -> String {
     let mut grid = parse_input(filename);
     let steps = 100;
     let mut flashes: u64 = 0;
@@ -168,7 +167,7 @@ fn flash_at(pos: (i8, i8), grid: &Grid) -> bool {
     }
 }
 
-pub fn solve_2(filename: &String) -> String {
+pub fn solve_2(filename: &str) -> String {
     let mut grid = parse_input(filename);
     let mut step = 0;
 
@@ -196,7 +195,6 @@ pub fn solve_2(filename: &String) -> String {
 #[cfg(test)]
 mod tests {
     use super::*;
-
 
     #[test]
     fn test_get_adjacent() {

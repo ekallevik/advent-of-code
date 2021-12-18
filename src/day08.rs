@@ -42,7 +42,7 @@ fn parse_input2(input: Vec<String>) -> Vec<(Vec<String>, Vec<String>)> {
     signals
 }
 
-pub fn solve_1(filename: &String) -> String {
+pub fn solve_1(filename: &str) -> String {
     let input = get_input(filename);
     let (_, displays) = parse_input(input);
 
@@ -65,7 +65,7 @@ pub fn solve_1(filename: &String) -> String {
         .to_string()
 }
 
-pub fn solve_2(filename: &String) -> String {
+pub fn solve_2(filename: &str) -> String {
     let input = get_input(filename);
     let signals = parse_input2(input);
 

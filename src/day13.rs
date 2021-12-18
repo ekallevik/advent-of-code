@@ -7,7 +7,7 @@ pub enum Fold {
     Y(i64),
 }
 
-fn parse_input(filename: &String) -> (HashSet<(i64, i64)>, Vec<Fold>) {
+fn parse_input(filename: &str) -> (HashSet<(i64, i64)>, Vec<Fold>) {
     let mut positions: HashSet<(i64, i64)> = HashSet::new();
     let mut folds = vec![];
 
@@ -32,14 +32,14 @@ fn parse_input(filename: &String) -> (HashSet<(i64, i64)>, Vec<Fold>) {
     (positions, folds)
 }
 
-pub fn solve_1(filename: &String) -> String {
+pub fn solve_1(filename: &str) -> String {
     let (elements, folds) = parse_input(filename);
 
     let first_fold = folds.first().unwrap();
     fold_paper(elements, first_fold).len().to_string()
 }
 
-pub fn solve_2(filename: &String) -> String {
+pub fn solve_2(filename: &str) -> String {
     let (mut elements, folds) = parse_input(filename);
 
     for fold in folds {
