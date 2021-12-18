@@ -9,7 +9,6 @@ pub fn solve_2(filename: &str) -> String {
 }
 
 fn solve(filename: &str, days: u16) -> String {
-
     let input: Vec<u32> = get_comma_seperated_input(filename);
 
     let mut count = (0..=8)
