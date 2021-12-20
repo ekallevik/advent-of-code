@@ -15,6 +15,8 @@ mod day14;
 mod day15;
 mod day16;
 mod day17;
+mod day18;
+mod day20;
 mod domain;
 mod solution;
 mod template;
@@ -68,6 +70,9 @@ fn main() -> Result<(), std::io::Error> {
         15 => (day15::solve_1, day15::solve_2),
         16 => (day16::solve_1, day16::solve_2),
         17 => (day17::solve_1, day17::solve_2),
+        18 => (day18::solve_1, day18::solve_2),
+        20 => (day20::solve_1, day20::solve_2),
+
         _ => {
             println!("Did not find any matching days");
             std::process::exit(1);
