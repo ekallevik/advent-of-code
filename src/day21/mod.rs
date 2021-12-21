@@ -19,7 +19,7 @@ impl Turn {
 }
 
 fn parser(input: Option<&String>) -> Option<usize> {
-    Some(input?.split(": ").last()?.parse::<usize>().ok()?)
+    input?.split(": ").last()?.parse::<usize>().ok()
 }
 
 fn parse_input(filename: &str) -> (usize, usize) {
@@ -74,18 +74,12 @@ pub fn solve_1(filename: &str) -> String {
 pub fn solve_2(filename: &str) -> String {
     let (first, second) = parse_input(filename);
 
-    let mut first_score: usize = 0;
-    let mut first_pos: usize = first - 1;
-    let mut second_score = 0;
-    let mut second_pos = second - 1;
-
     let throws = calculate_dirac_throw();
-
     let mut memo = HashMap::new();
 
     let (first_wins, second_wins) = play_quantum_dirac(
-        (first_pos, first_score),
-        (second_pos, second_score),
+        (first-1, 0),
+        (second-1, 0),
         Turn::PlayerOne,
         &throws,
         &mut memo,
