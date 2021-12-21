@@ -20,7 +20,6 @@ mod day20;
 mod day21;
 mod domain;
 mod solution;
-mod template;
 mod utils;
 
 use crate::solution::Solution;
@@ -81,8 +80,8 @@ fn main() -> Result<(), std::io::Error> {
         }
     };
 
-    let test_input = format!("src/day{:02}/input{:02}_test.txt", day, day);
-    let real_input = format!("src/day{:02}/input{:02}.txt", day, day);
+    let test_input = format!("src/day{:02}/test.txt", day);
+    let real_input = format!("src/day{:02}/real.txt", day);
 
     for part in PuzzlePart::iter() {
         let start = Instant::now();
