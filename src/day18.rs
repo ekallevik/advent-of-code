@@ -1,7 +1,6 @@
 use std::borrow::Borrow;
 use std::fmt;
 use std::str::FromStr;
-use test::RunIgnored::No;
 use crate::utils::get_input;
 
 #[derive(Debug, PartialEq, Eq)]
@@ -37,7 +36,7 @@ impl Snailfish {
             }
         }
     }
-
+/*
     fn explode(mut self) -> Option<(usize, usize)> {
         match self {
             Snailfish::Number(_) => None
@@ -48,6 +47,8 @@ impl Snailfish {
         };
 
     }
+
+ */
 
     fn get_number_value(self) -> usize {
         match self {
