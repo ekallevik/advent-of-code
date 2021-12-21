@@ -1,5 +1,5 @@
-use std::cmp::max;
 use crate::utils::get_input;
+use std::cmp::max;
 use std::collections::HashMap;
 
 // todo: replace turn with iteration?
@@ -19,11 +19,7 @@ impl Turn {
 }
 
 fn parser(input: Option<&String>) -> Option<usize> {
-    Some(input?
-        .split(": ")
-        .last()?
-        .parse::<usize>()
-        .ok()?)
+    Some(input?.split(": ").last()?.parse::<usize>().ok()?)
 }
 
 fn parse_input(filename: &str) -> (usize, usize) {
@@ -51,7 +47,10 @@ pub fn solve_1(filename: &str) -> String {
             first_score += first_pos + 1;
 
             if first_score >= 1000 {
-                println!("Player {} won, iteration {}, scores: {}, {}", 1, iterations, first_score, second_score);
+                println!(
+                    "Player {} won, iteration {}, scores: {}, {}",
+                    1, iterations, first_score, second_score
+                );
                 return (3 * iterations * second_score).to_string();
             }
         } else {
@@ -59,7 +58,10 @@ pub fn solve_1(filename: &str) -> String {
             second_score += second_pos + 1;
 
             if second_score >= 1000 {
-                println!("Player {} won, iteration {}, scores: {}, {}", 2, iterations, first_score, second_score);
+                println!(
+                    "Player {} won, iteration {}, scores: {}, {}",
+                    2, iterations, first_score, second_score
+                );
                 return (3 * iterations * second_score).to_string();
             }
         }
@@ -86,7 +88,7 @@ pub fn solve_2(filename: &str) -> String {
         (second_pos, second_score),
         Turn::PlayerOne,
         &throws,
-        &mut memo
+        &mut memo,
     );
 
     println!("\nTotal wins: {} - {}", first_wins, second_wins);
@@ -111,32 +113,31 @@ fn play_quantum_dirac(
 
     if memo.contains_key(&state) {
         *memo.get(&state).unwrap()
-        } else if turn==Turn::PlayerOne && second.1 >= 21 {
+    } else if turn == Turn::PlayerOne && second.1 >= 21 {
         (0, 1)
-    } else if turn==Turn::PlayerTwo && first.1 >= 21 {
+    } else if turn == Turn::PlayerTwo && first.1 >= 21 {
         (1, 0)
     } else {
         let (first_wins, second_wins) = iterate(first, second, &turn, throws, memo);
 
-        memo.insert(
-            (first, second, turn),
-            (first_wins, second_wins),
-        );
+        memo.insert((first, second, turn), (first_wins, second_wins));
 
-        println!(
-            "Branch victories: {} - {}",
-            first_wins, second_wins
-        );
+        println!("Branch victories: {} - {}", first_wins, second_wins);
         (first_wins, second_wins)
     }
 }
 
-fn iterate(first: (usize, usize), second: (usize, usize), turn: &Turn, throws: &HashMap<usize, usize>, memo: &mut Memo) -> (usize, usize) {
+fn iterate(
+    first: (usize, usize),
+    second: (usize, usize),
+    turn: &Turn,
+    throws: &HashMap<usize, usize>,
+    memo: &mut Memo,
+) -> (usize, usize) {
     let mut first_victories = 0;
     let mut second_victories = 0;
 
     for (throw, freq) in throws.iter() {
-
         let (player_a, player_b) = match turn {
             Turn::PlayerOne => {
                 let updated_first = update_player(first.0, first.1, *throw);
