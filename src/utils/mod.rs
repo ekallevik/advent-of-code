@@ -74,7 +74,7 @@ mod tests {
 
     #[test]
     fn test_get_input() {
-        let result: Vec<String> = get_input("src/input03_test2.txt");
+        let result: Vec<String> = get_input("src/day03/test1.txt");
 
         let expected = vec!["00100", "11110"];
 
@@ -83,7 +83,7 @@ mod tests {
 
     #[test]
     fn test_get_input_array() {
-        let result: Vec<Vec<u8>> = get_input_array("src/input03_test2.txt");
+        let result: Vec<Vec<u8>> = get_input_array("src/day03/test1.txt");
 
         let expected = vec![vec![0, 0, 1, 0, 0], vec![1, 1, 1, 1, 0]];
 
