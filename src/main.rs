@@ -21,13 +21,13 @@ mod day21;
 mod domain;
 mod utils;
 
-use utils::solution::Solution;
 use crate::utils::PuzzlePart;
 use argh::FromArgs;
 use chrono::Datelike;
 use paris::info;
 use std::time::Instant;
 use strum::IntoEnumIterator;
+use utils::solution::Solution;
 fn default_day() -> u32 {
     chrono::offset::Local::now().day()
 }
