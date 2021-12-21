@@ -54,22 +54,18 @@ fn fold_paper(input: HashSet<(i64, i64)>, fold: &Fold) -> HashSet<(i64, i64)> {
 
     for position in input {
         match fold {
-            Fold::X(value) => {
-                match position.0.cmp(value) {
-                    Ordering::Less => folded.insert((position.0, position.1)),
-                    Ordering::Equal | Ordering::Greater => {
-                        folded.insert((position.0 - 2 * (position.0 - *value), position.1))
-                    }
+            Fold::X(value) => match position.0.cmp(value) {
+                Ordering::Less => folded.insert((position.0, position.1)),
+                Ordering::Equal | Ordering::Greater => {
+                    folded.insert((position.0 - 2 * (position.0 - *value), position.1))
                 }
-            }
-            Fold::Y(value) => {
-                match position.1.cmp(value) {
-                    Ordering::Less => folded.insert(position),
-                    Ordering::Equal | Ordering::Greater => {
-                        folded.insert((position.0, position.1 - 2 * (position.1 - *value)))
-                    }
+            },
+            Fold::Y(value) => match position.1.cmp(value) {
+                Ordering::Less => folded.insert(position),
+                Ordering::Equal | Ordering::Greater => {
+                    folded.insert((position.0, position.1 - 2 * (position.1 - *value)))
                 }
-            }
+            },
         };
     }
 
