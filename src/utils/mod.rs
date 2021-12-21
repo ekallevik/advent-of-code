@@ -14,8 +14,7 @@ pub enum PuzzlePart {
 }
 
 pub fn get_input_string(filename: &str) -> String {
-    std::fs::read_to_string(filename)
-        .expect("file not found!")
+    std::fs::read_to_string(filename).expect("file not found!")
 }
 
 pub fn get_input<T: FromStr>(filename: &str) -> Vec<T>
@@ -30,8 +29,7 @@ where
 }
 
 pub fn get_partitioned_input(filename: &str) -> (String, String) {
-    let input = std::fs::read_to_string(filename)
-        .expect("file not found!");
+    let input = std::fs::read_to_string(filename).expect("file not found!");
     let (first, second) = input.split_once("\n\n").unwrap();
     (first.to_string(), second.to_string())
 }
