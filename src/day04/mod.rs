@@ -1,16 +1,42 @@
+use crate::utils::get_partitioned_input;
 use vectrix::Matrix;
+
+fn parse_input(filename: &str) -> (Vec<i64>, Vec<Board>) {
+    let (draws, boards) = get_partitioned_input(filename);
+
+    let draws = draws
+        .split(',')
+        .map(str::parse)
+        .map(Result::unwrap)
+        .collect();
+
+    let boards = boards
+        .split("\n\n")
+        .map(|board| {
+            board
+                .lines()
+                .flat_map(|line| {
+                    line.split_whitespace()
+                        .map(str::parse)
+                        .map(Result::unwrap)
+                        .map(|n| (n, false))
+                })
+                .collect()
+        })
+        .collect();
+
+    (draws, boards)
+}
 
 type Board = Matrix<(i64, bool), 5, 5>;
 
 pub fn solve_1(filename: &str) -> String {
-    let input: String = std::fs::read_to_string(filename).expect("file not found!");
-    let (draws, boards) = parse_input(input);
+    let (draws, boards) = parse_input(filename);
     solve_part_1(boards, draws).to_string()
 }
 
 pub fn solve_2(filename: &str) -> String {
-    let input: String = std::fs::read_to_string(filename).expect("file not found!");
-    let (draws, boards) = parse_input(input);
+    let (draws, boards) = parse_input(filename);
     solve_part_2(boards, draws).to_string()
 }
 
@@ -65,28 +91,4 @@ fn solve_part_2(mut boards: Vec<Board>, draws: Vec<i64>) -> i64 {
             .collect();
     }
     unreachable!()
-}
-
-fn parse_input(input: String) -> (Vec<i64>, Vec<Board>) {
-    let (draws, boards) = input.split_once("\n\n").unwrap();
-    let draws = draws
-        .split(',')
-        .map(str::parse)
-        .map(Result::unwrap)
-        .collect();
-    let boards = boards
-        .split("\n\n")
-        .map(|board| {
-            board
-                .lines()
-                .flat_map(|line| {
-                    line.split_whitespace()
-                        .map(str::parse)
-                        .map(Result::unwrap)
-                        .map(|n| (n, false))
-                })
-                .collect()
-        })
-        .collect();
-    (draws, boards)
 }
