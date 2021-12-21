@@ -15,7 +15,7 @@ pub struct Solution {
 
 impl Solution {
     pub fn load_or_create(day: u32) -> Solution {
-        let filename = format!("src/solution{}.json", day);
+        let filename = format!("src/day{:02}/solution.json", day);
         let path = std::path::Path::new(&filename);
 
         if path.exists() {
@@ -34,7 +34,7 @@ impl Solution {
     }
 
     pub fn save(&self) {
-        let filename = format!("src/solution{:02}.json", self.day);
+        let filename = format!("src/day{:02}/solution.json", self.day);
         let path = std::path::Path::new(&filename);
         let data = serde_json::to_string(&self).unwrap();
         fs::write(path, data).expect("Unable to write file");
