@@ -19,10 +19,9 @@ mod day18;
 mod day20;
 mod day21;
 mod domain;
-mod solution;
 mod utils;
 
-use crate::solution::Solution;
+use utils::solution::Solution;
 use crate::utils::PuzzlePart;
 use argh::FromArgs;
 use chrono::Datelike;
