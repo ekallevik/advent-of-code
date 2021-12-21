@@ -3,6 +3,8 @@ use std::str::FromStr;
 
 use strum_macros::EnumIter;
 
+pub mod solution;
+
 #[derive(Debug, EnumIter)]
 pub enum PuzzlePart {
     FirstTest,
