@@ -72,14 +72,9 @@ pub fn solve_2(filename: &str) -> String {
     let mut sum = 0;
 
     for (signal, display) in signals {
-        //println!("Display: {:?}", display);
-
         let mapping = decode(&signal);
 
-        //println!("Mapping {:?}", mapping);
-
         for (i, digit) in display.iter().enumerate() {
-            println!("{:?}", digit);
             let base: i32 = 10;
             let k = base.pow((3 - i) as u32);
             sum += k * (*mapping.get(&digit).unwrap() as i32);
