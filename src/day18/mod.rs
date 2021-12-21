@@ -132,8 +132,6 @@ fn explode(exploding: Snailfish, left: Option<Snailfish>, right: Option<Snailfis
 #[cfg(test)]
 mod tests {
     use super::*;
-    
-    
 
     #[test]
     fn test_add_snailfish_literal_pairs() {
