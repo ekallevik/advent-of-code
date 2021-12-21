@@ -1,4 +1,4 @@
-use crate::utils::{get_input_string};
+use crate::utils::get_input_string;
 
 use std::str::Chars;
 
