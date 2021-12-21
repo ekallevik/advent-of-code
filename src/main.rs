@@ -81,8 +81,8 @@ fn main() -> Result<(), std::io::Error> {
         }
     };
 
-    let test_input = format!("src/input{:02}_test.txt", day);
-    let real_input = format!("src/input{:02}.txt", day);
+    let test_input = format!("src/day{:02}/input{:02}_test.txt", day, day);
+    let real_input = format!("src/day{:02}/input{:02}.txt", day, day);
 
     for part in PuzzlePart::iter() {
         let start = Instant::now();
