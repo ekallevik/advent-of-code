@@ -1,23 +1,22 @@
+use crate::utils::get_input;
 use std::borrow::Borrow;
 use std::fmt;
 use std::str::FromStr;
-use crate::utils::get_input;
 
 #[derive(Debug, PartialEq, Eq)]
 enum Snailfish {
     Number(usize),
-    Pair(Box<Snailfish>, Box<Snailfish>)
+    Pair(Box<Snailfish>, Box<Snailfish>),
 }
 
 impl Snailfish {
-
     // todo: Use option to create a more generic?
     // todo: or remove number?
     // todo: improve error handling
     fn new_pair(left: usize, right: usize) -> Snailfish {
         Snailfish::Pair(
             Box::new(Snailfish::Number(left)),
-            Box::new(Snailfish::Number(right))
+            Box::new(Snailfish::Number(right)),
         )
     }
 
@@ -36,24 +35,24 @@ impl Snailfish {
             }
         }
     }
-/*
-    fn explode(mut self) -> Option<(usize, usize)> {
-        match self {
-            Snailfish::Number(_) => None
-            Snailfish::Pair(left, right) => {
-                self = Snailfish::Number(0)
-                Some((left, right))
-            }
-        };
+    /*
+       fn explode(mut self) -> Option<(usize, usize)> {
+           match self {
+               Snailfish::Number(_) => None
+               Snailfish::Pair(left, right) => {
+                   self = Snailfish::Number(0)
+                   Some((left, right))
+               }
+           };
 
-    }
+       }
 
- */
+    */
 
     fn get_number_value(self) -> usize {
         match self {
             Snailfish::Number(value) => value,
-            Snailfish::Pair(_, _) => panic!("Should not happen")
+            Snailfish::Pair(_, _) => panic!("Should not happen"),
         }
     }
 }
@@ -77,7 +76,7 @@ impl FromStr for Snailfish {
         let left = pair.0.chars().nth(1).unwrap();
         let left: usize = left.to_digit(10).unwrap() as usize;
 
-        let right = pair.1.chars().nth(0).unwrap();
+        let right = pair.1.chars().next().unwrap();
         let right: usize = right.to_digit(10).unwrap() as usize;
 
         Ok(Snailfish::new_pair(left, right))
@@ -85,13 +84,9 @@ impl FromStr for Snailfish {
 }
 
 pub fn solve_1(filename: &str) -> String {
-
     let input: Vec<Snailfish> = get_input(filename);
 
-    let mut result = input
-        .into_iter()
-        .reduce(|acc, elem| acc.add(elem))
-        .unwrap();
+    let result = input.into_iter().reduce(|acc, elem| acc.add(elem)).unwrap();
 
     println!("{}", result);
 
@@ -99,7 +94,6 @@ pub fn solve_1(filename: &str) -> String {
 }
 
 pub fn solve_2(filename: &str) -> String {
-
     filename.to_string()
 }
 
@@ -135,16 +129,14 @@ fn explode(exploding: Snailfish, left: Option<Snailfish>, right: Option<Snailfis
 
  */
 
-
 #[cfg(test)]
 mod tests {
-    use crate::day18::Snailfish::Number;
     use super::*;
-    use crate::utils::get_input_array;
+    
+    
 
     #[test]
     fn test_add_snailfish_literal_pairs() {
-
         let left = Snailfish::new_pair(1, 1);
         let right = Snailfish::new_pair(2, 2);
 
@@ -159,7 +151,6 @@ mod tests {
 
     #[test]
     fn test_add_snailfish_pairs() {
-
         let left = Snailfish::Pair(
             Box::new(Snailfish::new_pair(1, 1)),
             Box::new(Snailfish::new_pair(2, 2)),
@@ -180,7 +171,6 @@ mod tests {
 
     #[test]
     fn test_snailfish_contains_other() {
-
         let snailfish = Snailfish::Pair(
             Box::new(Snailfish::new_pair(1, 1)),
             Box::new(Snailfish::new_pair(2, 2)),
