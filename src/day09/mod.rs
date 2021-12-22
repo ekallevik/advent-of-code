@@ -11,7 +11,7 @@ pub fn solve_1(filename: &str) -> String {
         .to_string()
 }
 
-fn find_low_points(depths: &Vec<Vec<u64>>) -> Vec<(i32, i32, u64)> {
+fn find_low_points(depths: &[Vec<u64>]) -> Vec<(i32, i32, u64)> {
     let mut points = vec![];
     let row_size = depths.len();
     let col_size = depths.first().unwrap().len();
