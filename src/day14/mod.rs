@@ -31,15 +31,10 @@ fn parse_input(filename: &str) -> (PairFreq, Rules) {
 
                 rules.insert(key, value);
             } else if line.trim() != "" {
-                let pairs: Vec<Pair> = line.chars().tuple_windows().collect::<Vec<Pair>>();
+                let pairs: Vec<Pair> = line.chars().tuple_windows().collect();
 
                 for pair in pairs.iter() {
-                    if frequencies.contains_key(pair) {
-                        let current = frequencies.get(pair).unwrap();
-                        frequencies.insert(*pair, current + 1);
-                    } else {
-                        frequencies.insert(*pair, 1);
-                    }
+                    *frequencies.entry(*pair).or_insert(0) += 1;
                 }
             }
         });
