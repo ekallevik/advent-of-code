@@ -1,7 +1,7 @@
 use crate::utils::get_comma_seperated_input;
 
-pub fn solve_1(_filename: &str) -> String {
-    let input: Vec<isize> = get_comma_seperated_input(_filename);
+pub fn solve_1(filename: &str) -> String {
+    let input: Vec<isize> = get_comma_seperated_input(filename);
     let mut consumption = i64::MAX;
 
     let &min = input.iter().min().unwrap();
@@ -23,8 +23,8 @@ fn sum_to_n(n: i64) -> i64 {
     n * (n + 1) / 2
 }
 
-pub fn solve_2(_filename: &str) -> String {
-    let input: Vec<isize> = get_comma_seperated_input(_filename);
+pub fn solve_2(filename: &str) -> String {
+    let input: Vec<isize> = get_comma_seperated_input(filename);
     let mut consumption = i64::MAX;
 
     let &min = input.iter().min().unwrap();
