@@ -4,7 +4,6 @@ use std::cmp::Ordering;
 use std::collections::{BinaryHeap, HashMap};
 
 type Position = (usize, usize);
-type Grid = Vec<Vec<usize>>;
 
 #[derive(Copy, Clone, Eq, PartialEq)]
 struct State {
@@ -18,11 +17,12 @@ impl PartialOrd<Self> for State {
     }
 }
 
+// todo: use reverse
 impl Ord for State {
     fn cmp(&self, other: &Self) -> Ordering {
         let neg_self = -(self.cost as i64);
         let neg_other = -(other.cost as i64);
-        neg_self.cmp(&neg_other)
+        neg_self.cmp(&neg_other).reverse()
     }
 }
 
@@ -41,7 +41,7 @@ pub fn solve_2(filename: &str) -> String {
     filename.to_string()
 }
 
-fn a_star(start: Position, goal: Position, grid: &Grid) -> usize {
+fn a_star(start: Position, goal: Position, grid: &[Vec<usize>]) -> usize {
     let mut open = BinaryHeap::new();
     open.push(State {
         cost: 0,
