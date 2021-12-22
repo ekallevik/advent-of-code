@@ -129,7 +129,7 @@ fn get_adjacent_with_overflow(i: i8, j: i8) -> Vec<(i8, i8)> {
     ]
 }
 
-fn flash_at(pos: (i8, i8), grid: &Grid) -> bool {
+fn flash_at(pos: (i8, i8), grid: &[Vec<Cell>]) -> bool {
     if pos.0 < 0 || pos.1 < 0 || pos.0 > 9 || pos.1 > 9 {
         false
     } else {
