@@ -102,7 +102,7 @@ fn decode_base(signal: &String) -> Option<(&String, u8)> {
     }
 }
 
-fn decode(signals: &Vec<String>) -> HashMap<&String, u8> {
+fn decode(signals: &[String]) -> HashMap<&String, u8> {
     let mut decoding = HashMap::new();
     let mut encoding = HashMap::new();
 
