@@ -43,7 +43,7 @@ pub fn solve_2(filename: &str) -> String {
     paths.iter().unique().count().to_string()
 }
 
-fn search(path: Path, input: &Vec<Connection>, special_cave: &Option<&String>) -> Vec<Path> {
+fn search(path: Path, input: &[Connection], special_cave: &Option<&str>) -> Vec<Path> {
     let current = path.last().unwrap();
 
     if *current == "end" {
@@ -59,17 +59,17 @@ fn search(path: Path, input: &Vec<Connection>, special_cave: &Option<&String>) -
         .collect()
 }
 
-fn extend_path(path: &Path, node: String) -> Path {
-    let mut new_path = path.clone();
+fn extend_path(path: &[String], node: String) -> Path {
+    let mut new_path = path.to_owned();
     new_path.push(node);
     new_path
 }
 
 fn can_use_connection(
-    node: &String,
+    node: &str,
     next: &Connection,
-    path: &Path,
-    special_cave: &Option<&String>,
+    path: &[String],
+    special_cave: &Option<&str>,
 ) -> bool {
     if *node == (*next).0 {
         is_available_cave(&(*next).1, path, special_cave)
@@ -80,7 +80,7 @@ fn can_use_connection(
     }
 }
 
-fn get_next_node(node: &String, next: &Connection) -> String {
+fn get_next_node(node: &str, next: &Connection) -> String {
     let clone = next.clone();
     if *node == (*next).0 {
         clone.1
@@ -89,7 +89,7 @@ fn get_next_node(node: &String, next: &Connection) -> String {
     }
 }
 
-fn is_available_cave(name: &String, path: &Vec<String>, special_cave: &Option<&String>) -> bool {
+fn is_available_cave(name: &str, path: &[String], special_cave: &Option<&str>) -> bool {
     let visit_count = path.iter().filter(|&node| *node == *name).count();
 
     match is_small_cave(name) {
@@ -108,6 +108,6 @@ fn is_available_cave(name: &String, path: &Vec<String>, special_cave: &Option<&S
     }
 }
 
-fn is_small_cave(name: &String) -> bool {
+fn is_small_cave(name: &str) -> bool {
     name.chars().all(|c| c.is_lowercase())
 }
