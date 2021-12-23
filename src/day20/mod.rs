@@ -1,6 +1,5 @@
 use crate::utils::get_partitioned_input;
 
-
 fn parse_to_boolean(char: char) -> bool {
     match char {
         '#' => true,

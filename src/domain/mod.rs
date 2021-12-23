@@ -1,26 +1,31 @@
+mod cube;
+mod line;
+
 use std::cmp::max;
 use std::str::FromStr;
+pub use line::Line;
+pub use cube::Cube;
 
 #[derive(Debug)]
-pub struct Line {
+pub struct NaiveLine {
     pub start: NaivePosition,
     pub end: NaivePosition,
 }
 
-impl FromStr for Line {
+impl FromStr for NaiveLine {
     type Err = ();
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         let pairs: Vec<&str> = s.split(" -> ").collect();
 
-        Ok(Line {
+        Ok(NaiveLine {
             start: pairs[0].parse().unwrap(),
             end: pairs[0].parse().unwrap(),
         })
     }
 }
 
-impl Line {
+impl NaiveLine {
     pub fn largest_point(&self) -> i64 {
         let max_x = max(self.start.x, self.end.x);
         let max_y = max(self.start.y, self.end.y);
