@@ -1,8 +1,8 @@
-use crate::domain::Line;
+use crate::domain::NaiveLine;
 use crate::utils::get_input;
 
 pub fn solve_1(filename: &str) -> String {
-    let input: Vec<Line> = get_input(filename);
+    let input: Vec<NaiveLine> = get_input(filename);
 
     let size = input
         .iter()
