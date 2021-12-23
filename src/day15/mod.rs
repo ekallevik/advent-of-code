@@ -1,7 +1,9 @@
 use crate::utils::get_input_array;
 
-use std::cmp::Ordering;
+use std::cmp::{Ordering, Reverse};
 use std::collections::{BinaryHeap, HashMap};
+use std::io;
+use std::io::Read;
 
 type Position = (usize, usize);
 
@@ -17,11 +19,10 @@ impl PartialOrd<Self> for State {
     }
 }
 
-// todo: use reverse
 impl Ord for State {
     fn cmp(&self, other: &Self) -> Ordering {
-        let neg_self = -(self.cost as i64);
-        let neg_other = -(other.cost as i64);
+        let neg_self = (self.cost as i64);
+        let neg_other = (other.cost as i64);
         neg_self.cmp(&neg_other).reverse()
     }
 }
@@ -32,13 +33,16 @@ pub fn solve_1(filename: &str) -> String {
     let max_y = input.len();
     let max_x = input.first().unwrap().len();
 
-    let result = a_star((0, 0), (max_x - 1, max_y - 1), &input);
-
-    result.to_string()
+    a_star((0, 0), (max_x - 1, max_y - 1), &input).to_string()
 }
 
 pub fn solve_2(filename: &str) -> String {
-    filename.to_string()
+    let input: Vec<Vec<usize>> = get_input_array(filename);
+
+    let max_y = input.len() * 5;
+    let max_x = input.first().unwrap().len() * 5;
+
+    a_star((0, 0), (max_x - 1, max_y - 1), &input).to_string()
 }
 
 fn a_star(start: Position, goal: Position, grid: &[Vec<usize>]) -> usize {
@@ -57,16 +61,13 @@ fn a_star(start: Position, goal: Position, grid: &[Vec<usize>]) -> usize {
     while !open.is_empty() {
         let state = open.pop().unwrap();
         let current = state.position;
-        println!("Searching from: {:?} (est. score={})", current, state.cost);
 
-        if current.0 == goal.0 && current.1 == goal.1 {
-            println!("FOUND GOAL (current={:?})", current);
+        if current == goal {
             return *current_scores.get(&current).unwrap();
         }
 
         for neighbor in get_neighbors(&current, goal) {
-            // todo
-            let node_cost = grid[neighbor.1][neighbor.0];
+            let node_cost = get_grid_value(grid, neighbor);
             let candidate_g = current_scores.get(&current).unwrap() + node_cost;
             let present_g = *current_scores.entry(neighbor).or_insert(usize::MAX);
 
@@ -84,10 +85,34 @@ fn a_star(start: Position, goal: Position, grid: &[Vec<usize>]) -> usize {
     unreachable!("A* failed...")
 }
 
-// todo: off by one x2?
-// estimate for score further down
+fn get_grid_value(grid: &[Vec<usize>], position: Position) -> usize {
+    let max_y = grid.len();
+    let max_x = grid.first().unwrap().len();
+
+    let increment = get_increment(position, max_x, max_y);
+
+    let node_cost = grid[position.0 % max_x][position.1 % max_y];
+    if increment == 0 {
+        node_cost
+    } else {
+        let mut value = (node_cost + increment);
+        if value <= 9 {
+            value
+        } else {
+            value % 10 + 1
+        }
+    }
+}
+
+fn get_increment(position: Position, max_x: usize, max_y: usize) -> usize {
+    let increment_x = position.0 / (max_x);
+    let increment_y = position.1 / (max_y);
+
+    increment_x + increment_y
+}
+
 fn calculate_h(current: &Position, goal: Position) -> usize {
-    goal.0 - current.0 + goal.1 - current.0 + 2
+    goal.0 - current.0 + goal.1 - current.1
 }
 
 fn get_neighbors(current: &Position, max: (usize, usize)) -> Vec<Position> {
@@ -99,6 +124,14 @@ fn get_neighbors(current: &Position, max: (usize, usize)) -> Vec<Position> {
 
     if current.1 < max.1 {
         neighbors.push((current.0, current.1 + 1))
+    };
+
+    if current.0 > 0 {
+        neighbors.push((current.0 - 1, current.1))
+    };
+
+    if current.1 > 0 {
+        neighbors.push((current.0, current.1 - 1))
     };
 
     neighbors
@@ -113,5 +146,42 @@ fn print_grid(grid: &[Vec<usize>]) {
 fn print_nodes(input: &[(usize, usize)]) {
     for node in input {
         println!("{:?}", node);
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::day15::{get_grid_value, get_increment};
+    use crate::utils::get_input_array;
+
+    #[test]
+    fn test_get_grid_value() {
+        let input: Vec<Vec<usize>> = get_input_array("src/day15/test.txt");
+
+        assert_eq!(get_grid_value(&input, (0, 0)), 1);
+        assert_eq!(get_grid_value(&input, (9, 9)), 1);
+        assert_eq!(get_grid_value(&input, (10, 0)), 2);
+        assert_eq!(get_grid_value(&input, (0, 10)), 2);
+        assert_eq!(get_grid_value(&input, (10, 10)), 3);
+    }
+
+    #[test]
+    fn test_get_tile() {
+        let tile = get_increment((10, 10), 10, 10);
+
+        assert_eq!(tile, 2);
+    }
+
+    #[test]
+    fn test_wrap() {
+
+        let initial = 8;
+        let expected = [8, 9, 1, 2, 3, 4, 5, 6, 7];
+
+        for (inc, exp) in expected.into_iter().enumerate() {
+            println!("{}", inc);
+            let actual = if initial + inc <= 9 {initial+inc} else {(initial + inc) % 10 +1};
+            assert_eq!(actual, exp)
+        }
     }
 }
