@@ -20,7 +20,7 @@ impl FromStr for NaiveLine {
 
         Ok(NaiveLine {
             start: pairs[0].parse().unwrap(),
-            end: pairs[0].parse().unwrap(),
+            end: pairs[1].parse().unwrap(),
         })
     }
 }
@@ -35,6 +35,53 @@ impl NaiveLine {
     pub fn get_start(&self) -> &NaivePosition {
         &self.start
     }
+
+    pub fn to_diagonal_vec(&self) -> Vec<(i64, i64)>{
+
+        let mut current = (self.start.x, self.start.y);
+        let mut points = vec![current];
+
+        let delta_x = if self.start.x < self.end.x {1} else {-1};
+        let delta_y = if self.start.y < self.end.y {1} else {-1};
+
+        while current.0 != self.end.x && current.1 != self.end.y {
+            current = (current.0 + delta_x, current.1 + delta_y);
+            points.push(current);
+        }
+
+        points
+    }
+}
+
+
+#[test]
+fn test_iter() {
+
+    let line = NaiveLine {
+        start: NaivePosition { x: 1, y: 1},
+        end: NaivePosition { x: 3, y: 3 }
+    };
+
+    let points = line.to_diagonal_vec();
+
+    let expected = vec![(1, 1), (2, 2,), (3, 3)];
+
+    assert_eq!(points, expected)
+}
+
+#[test]
+fn test_iter2() {
+
+    let line = NaiveLine {
+        start: NaivePosition { x: 9, y: 7},
+        end: NaivePosition { x: 7, y: 9 }
+    };
+
+    let points = line.to_diagonal_vec();
+
+    let expected = vec![(9, 7), (8, 8), (7, 9)];
+
+    assert_eq!(points, expected)
 }
 
 #[derive(Debug)]
