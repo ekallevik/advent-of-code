@@ -92,10 +92,11 @@ fn main() -> Result<(), std::io::Error> {
         let start = Instant::now();
 
         let result = match part {
-            PuzzlePart::FirstTest => first(&test_input),
-            PuzzlePart::FirstReal => first(&real_input),
+            //PuzzlePart::FirstTest => first(&test_input),
+            //PuzzlePart::FirstReal => first(&real_input),
             PuzzlePart::SecondTest => second(&test_input),
             PuzzlePart::SecondReal => second(&real_input),
+            _ => continue
         };
         println!("\nElapsed: {:#?}", start.elapsed());
 
