@@ -138,6 +138,7 @@ impl FromStr for Instruction {
     }
 }
 
+/*
 
 #[cfg(test)]
 mod tests {
@@ -225,6 +226,6 @@ mod tests {
 
         assert_eq!(registry, expected)
     }
-
-
 }
+
+ */

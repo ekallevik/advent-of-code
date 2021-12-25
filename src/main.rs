@@ -21,6 +21,7 @@ mod day21;
 mod day22;
 mod day23;
 mod day24;
+mod day25;
 mod domain;
 mod utils;
 
@@ -78,6 +79,7 @@ fn main() -> Result<(), std::io::Error> {
         22 => (day22::solve_1, day22::solve_2),
         23 => (day23::solve_1, day23::solve_2),
         24 => (day24::solve_1, day24::solve_2),
+        25 => (day25::solve_1, day25::solve_2),
 
         _ => {
             println!("Did not find any matching days");
