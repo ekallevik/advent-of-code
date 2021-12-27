@@ -1,182 +1,73 @@
 use crate::utils::get_input;
 use std::borrow::Borrow;
+use std::cmp::max;
+use std::collections::VecDeque;
 use std::fmt;
 use std::str::FromStr;
+use itertools::Itertools;
+use snailfish::Snailfish;
 
-#[derive(Debug, PartialEq, Eq)]
-enum Snailfish {
-    Number(usize),
-    Pair(Box<Snailfish>, Box<Snailfish>),
-}
-
-impl Snailfish {
-    // todo: Use option to create a more generic?
-    // todo: or remove number?
-    // todo: improve error handling
-    fn new_pair(left: usize, right: usize) -> Snailfish {
-        Snailfish::Pair(
-            Box::new(Snailfish::Number(left)),
-            Box::new(Snailfish::Number(right)),
-        )
-    }
-
-    fn add(self, other: Snailfish) -> Snailfish {
-        Snailfish::Pair(Box::new(self), Box::new(other))
-    }
-
-    fn contains(self, other: Snailfish) -> bool {
-        match self {
-            Snailfish::Number(_) => false,
-            Snailfish::Pair(left, right) => {
-                let left: &Snailfish = left.borrow();
-                let right: &Snailfish = right.borrow();
-
-                *left == other || other == *right
-            }
-        }
-    }
-    /*
-       fn explode(mut self) -> Option<(usize, usize)> {
-           match self {
-               Snailfish::Number(_) => None
-               Snailfish::Pair(left, right) => {
-                   self = Snailfish::Number(0)
-                   Some((left, right))
-               }
-           };
-
-       }
-
-    */
-
-    fn get_number_value(self) -> usize {
-        match self {
-            Snailfish::Number(value) => value,
-            Snailfish::Pair(_, _) => panic!("Should not happen"),
-        }
-    }
-}
-
-impl fmt::Display for Snailfish {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        let printable = match self {
-            Snailfish::Number(value) => format!("{:?}", value),
-            Snailfish::Pair(left, right) => format!("[{}, {}]", left, right),
-        };
-        write!(f, "{}", printable)
-    }
-}
-
-impl FromStr for Snailfish {
-    type Err = ();
-
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let pair: (&str, &str) = s.split_once(",").unwrap();
-
-        let left = pair.0.chars().nth(1).unwrap();
-        let left: usize = left.to_digit(10).unwrap() as usize;
-
-        let right = pair.1.chars().next().unwrap();
-        let right: usize = right.to_digit(10).unwrap() as usize;
-
-        Ok(Snailfish::new_pair(left, right))
-    }
-}
+mod snailfish;
 
 pub fn solve_1(filename: &str) -> String {
-    let input: Vec<Snailfish> = get_input(filename);
+    let input: Vec<String> = get_input(filename);
+    let mut school = VecDeque::from_iter(input.iter().map(|fish| Snailfish::parse(fish)));
 
-    let result = input.into_iter().reduce(|acc, elem| acc.add(elem)).unwrap();
+    add_numbers(&mut school).to_string()
+}
 
-    println!("{}", result);
+fn add_numbers(school: &mut VecDeque<Snailfish>) -> usize {
+    let mut snailfish = school.pop_front().unwrap();
 
-    filename.to_string()
+    while !school.is_empty() {
+        let next = school.pop_front().unwrap();
+        let added = snailfish.add(next);
+        snailfish = reduce(added);
+    }
+    snailfish.calculate_magnitude()
+}
+
+fn reduce(mut snailfish: Snailfish) -> Snailfish {
+    loop {
+        // todo: drop last return value?
+        let (_, exploded, _, _) = snailfish.traverse_and_explode(0, false);
+        let (has_splitted, splitted) = exploded.traverse_and_split(false);
+        snailfish = splitted;
+
+        if !has_splitted {
+            return snailfish
+        }
+    }
 }
 
 pub fn solve_2(filename: &str) -> String {
-    filename.to_string()
+    let input: Vec<String> = get_input(filename);
+    let mut school: Vec<Snailfish> = input.iter().map(|fish| Snailfish::parse(fish)).collect();
+
+    let mut largest_sum = 0;
+    for perm in school.iter().permutations(2) {
+
+        let a = *perm.first().unwrap();
+        let b = *perm.last().unwrap();
+
+
+        let mut first_school = VecDeque::from_iter([a.clone(), b.clone()]);
+        let first_sum = add_numbers(&mut first_school);
+
+        let mut second_school = VecDeque::from_iter([b.clone(), a.clone()]);
+        let second_sum = add_numbers(&mut second_school);
+
+        let sum = max(first_sum, second_sum);
+        largest_sum = max(largest_sum, sum);
+    }
+
+    largest_sum.to_string()
+
 }
 
-/*
-fn explode(exploding: Snailfish, left: Option<Snailfish>, right: Option<Snailfish>) -> Snailfish {
 
-    match exploding {
-        Snailfish::Number(_) => panic!("Should never happen"),
-        Snailfish::Pair(left_number, right_number) => {
-            let left_number = left_number.get_number_value();
-            let right_number = right_number.get_number_value();
-
-            let new_left = if let Some(left) = left {
-                // add left
-                match left {
-                    Snailfish::Number(_) => None
-                    Snailfish::Pair(current_left, _) =>
-                }
-
-
-            } else {None};
-
-            if let Some(right) = right {
-                // add right
-            }
-
-        }
-    };
-
-
-    Snailfish::Number(1)
-}
-
- */
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn test_add_snailfish_literal_pairs() {
-        let left = Snailfish::new_pair(1, 1);
-        let right = Snailfish::new_pair(2, 2);
-
-        let added = left.add(right);
-        let expected = Snailfish::Pair(
-            Box::new(Snailfish::new_pair(1, 1)),
-            Box::new(Snailfish::new_pair(2, 2)),
-        );
-
-        assert_eq!(added, expected)
-    }
-
-    #[test]
-    fn test_add_snailfish_pairs() {
-        let left = Snailfish::Pair(
-            Box::new(Snailfish::new_pair(1, 1)),
-            Box::new(Snailfish::new_pair(2, 2)),
-        );
-        let right = Snailfish::new_pair(3, 3);
-
-        let added = left.add(right);
-        let expected = Snailfish::Pair(
-            Box::new(Snailfish::Pair(
-                Box::new(Snailfish::new_pair(1, 1)),
-                Box::new(Snailfish::new_pair(2, 2)),
-            )),
-            Box::new(Snailfish::new_pair(3, 3)),
-        );
-
-        assert_eq!(added, expected)
-    }
-
-    #[test]
-    fn test_snailfish_contains_other() {
-        let snailfish = Snailfish::Pair(
-            Box::new(Snailfish::new_pair(1, 1)),
-            Box::new(Snailfish::new_pair(2, 2)),
-        );
-        let other = Snailfish::new_pair(2, 2);
-
-        let expected = snailfish.contains(other);
-
-        assert!(expected)
-    }
+fn breakpoint(message: &str) {
+    let mut is_correct = String::new();
+    println!("{}", message);
+    std::io::stdin().read_line(&mut is_correct).unwrap();
 }

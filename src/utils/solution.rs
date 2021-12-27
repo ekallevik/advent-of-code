@@ -55,8 +55,8 @@ impl Solution {
 
         let verified = match &answer {
             None => {
-                let mut is_correct = String::new();
                 println!("Answer: {}\n", result);
+                let mut is_correct = String::new();
                 println!("Is it correct for {:?}?... ", part);
                 std::io::stdin().read_line(&mut is_correct).unwrap();
                 if is_correct.trim() == "y" {
