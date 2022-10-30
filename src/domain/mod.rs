@@ -1,5 +1,6 @@
 mod cube;
 mod line;
+pub(crate) mod position;
 
 use std::cmp::max;
 use std::str::FromStr;
