@@ -1,8 +1,5 @@
-use std::collections::{HashMap, VecDeque};
-use std::str::FromStr;
+use std::collections::VecDeque;
 use instruction::Instruction;
-use source::Source;
-use crate::day24::instruction::Symbol;
 use crate::utils::get_input;
 
 mod source;

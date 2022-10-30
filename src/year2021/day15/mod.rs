@@ -1,9 +1,7 @@
 use crate::utils::get_input_array;
 
-use std::cmp::{Ordering, Reverse};
+use std::cmp::Ordering;
 use std::collections::{BinaryHeap, HashMap};
-use std::io;
-use std::io::Read;
 
 type Position = (usize, usize);
 
@@ -21,8 +19,8 @@ impl PartialOrd<Self> for State {
 
 impl Ord for State {
     fn cmp(&self, other: &Self) -> Ordering {
-        let neg_self = (self.cost as i64);
-        let neg_other = (other.cost as i64);
+        let neg_self = self.cost as i64;
+        let neg_other = other.cost as i64;
         neg_self.cmp(&neg_other).reverse()
     }
 }
@@ -95,7 +93,7 @@ fn get_grid_value(grid: &[Vec<usize>], position: Position) -> usize {
     if increment == 0 {
         node_cost
     } else {
-        let mut value = (node_cost + increment);
+        let mut value = node_cost + increment;
         if value <= 9 {
             value
         } else {
@@ -151,8 +149,8 @@ fn print_nodes(input: &[(usize, usize)]) {
 
 #[cfg(test)]
 mod tests {
-    use crate::day15::{get_grid_value, get_increment};
     use crate::utils::get_input_array;
+    use crate::year2021::day15::{get_grid_value, get_increment};
 
     #[test]
     fn test_get_grid_value() {

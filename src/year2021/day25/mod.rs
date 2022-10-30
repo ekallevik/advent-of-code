@@ -1,8 +1,5 @@
 use std::collections::HashMap;
 use std::fmt::{Display, Formatter};
-use std::str::FromStr;
-use itertools::Itertools;
-use crate::utils::get_input;
 
 struct Dimensions(usize, usize);
 

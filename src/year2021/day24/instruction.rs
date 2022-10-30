@@ -1,6 +1,5 @@
-use std::collections::{HashMap, VecDeque};
+use std::collections::{VecDeque};
 use std::str::FromStr;
-use crate::day24::source::Source;
 
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub enum Symbol {

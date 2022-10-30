@@ -1,11 +1,12 @@
 use crate::PuzzlePart;
-use std::fs;
+use std::{fs};
 use std::path::Path;
 
 use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize)]
 pub struct Solution {
+    year: i32,
     day: u32,
     first_test: Option<String>,
     first_real: Option<String>,
@@ -14,14 +15,16 @@ pub struct Solution {
 }
 
 impl Solution {
-    pub fn load_or_create(day: u32) -> Solution {
-        let filename = format!("src/day{:02}/solution.json", day);
-        let path = std::path::Path::new(&filename);
+    pub fn load_or_create(year: i32, day: u32) -> Solution {
+        let filename = format!("src/year{year}/day{:02}/solution.json", day);
+
+        let path = Path::new(&filename);
 
         if path.exists() {
             Solution::load(path)
         } else {
             let solution: Solution = Solution {
+                year,
                 day,
                 first_test: None,
                 first_real: None,
@@ -34,7 +37,7 @@ impl Solution {
     }
 
     pub fn save(&self) {
-        let filename = format!("src/day{:02}/solution.json", self.day);
+        let filename = format!("src/year{}/day{:02}/solution.json", self.year, self.day);
         let path = std::path::Path::new(&filename);
         let data = serde_json::to_string(&self).unwrap();
         fs::write(path, data).expect("Unable to write file");
@@ -53,7 +56,7 @@ impl Solution {
             PuzzlePart::SecondReal => &mut self.second_real,
         };
 
-        let verified = match &answer {
+        match &answer {
             None => {
                 println!("Answer: {}\n", result);
                 let mut is_correct = String::new();
@@ -69,8 +72,6 @@ impl Solution {
                 }
             }
             Some(value) => *value == result,
-        };
-
-        verified
+        }
     }
 }

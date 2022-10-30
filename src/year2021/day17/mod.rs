@@ -1,10 +1,6 @@
 use std::cmp::{max, min};
 use std::collections::HashSet;
-use std::iter::Rev;
-use crate::utils::factor;
-use itertools::Itertools;
-
-use std::ops::{Range, RangeInclusive};
+use std::ops::RangeInclusive;
 
 fn parse_line(line: &str) -> Option<RangeInclusive<isize>> {
     let (_, content) = line.split_once("=")?;
@@ -365,8 +361,7 @@ pub fn solve_2(filename: &str) -> String {
 
 #[cfg(test)]
 mod tests {
-    use std::ops::RangeInclusive;
-    use crate::day17::{calculate_pos, calculate_pos_y, calculate_v_x_range, find_v_y_max, find_v_y_min, hits_target};
+    use crate::year2021::day17::{calculate_pos, calculate_pos_y, calculate_v_x_range, find_v_y_max, find_v_y_min, hits_target};
 
     #[test]
     fn test_create_v_x_range() {

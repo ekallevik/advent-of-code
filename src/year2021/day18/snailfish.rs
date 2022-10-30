@@ -1,6 +1,5 @@
 use std::fmt;
 use std::str::FromStr;
-use itertools::Itertools;
 
 #[derive(Debug, PartialEq, Eq, Clone)]
 pub enum Snailfish {

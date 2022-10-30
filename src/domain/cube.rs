@@ -271,4 +271,39 @@ mod test_cube {
 
         assert_eq!(diff.len(), 7)
     }
+
+    #[test]
+    fn test_subtract_unit_cube() {
+
+        let cube = Cube::new_symmetric( 0, 1);
+        let unit = Cube::new_symmetric(0, 0);
+
+        let subtracted = cube.subtract(&unit);
+
+        assert_eq!(subtracted.len(), 7);
+        assert!(!subtracted.contains(&unit));
+    }
+
+    #[test]
+    fn test_subtract_super_cube() {
+
+        let cube = Cube::new_symmetric( 0, 1);
+        let super_cube = Cube::new_symmetric(0, 2);
+
+        let subtracted = cube.subtract(&super_cube);
+
+        assert!(subtracted.is_empty());
+    }
+
+
+    #[test]
+    fn test_subtract_sub_cube() {
+
+        let cube = Cube::new_symmetric( 0, 10);
+        let sub_cube = Cube::new_symmetric(4, 6);
+
+        let subtracted = cube.subtract(&sub_cube);
+
+        assert_eq!(subtracted, vec![sub_cube]);
+    }
 }

@@ -72,6 +72,12 @@ pub fn prime_factor(number: i32) -> Vec<i32> {
     primes
 }
 
+pub fn breakpoint(message: &str) {
+    let mut is_correct = String::new();
+    println!("{}", message);
+    std::io::stdin().read_line(&mut is_correct).unwrap();
+}
+
 pub fn factor(number: i32) -> Vec<i32> {
     (1..=number)
         .into_iter()
@@ -114,3 +120,4 @@ mod tests {
         assert_eq!(factor(20), vec![1, 2, 4, 5, 10, 20]);
     }
 }
+

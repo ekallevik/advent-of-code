@@ -1,9 +1,6 @@
 use crate::utils::get_input;
-use std::borrow::Borrow;
 use std::cmp::max;
 use std::collections::VecDeque;
-use std::fmt;
-use std::str::FromStr;
 use itertools::Itertools;
 use snailfish::Snailfish;
 
@@ -66,8 +63,4 @@ pub fn solve_2(filename: &str) -> String {
 }
 
 
-fn breakpoint(message: &str) {
-    let mut is_correct = String::new();
-    println!("{}", message);
-    std::io::stdin().read_line(&mut is_correct).unwrap();
-}
+

@@ -156,7 +156,7 @@ fn print_image(image: &[Vec<bool>]) {
 
 #[cfg(test)]
 mod tests {
-    use crate::day20::get_pixel_value;
+    use crate::year2021::day20::get_pixel_value;
     use itertools::Itertools;
 
     #[test]
