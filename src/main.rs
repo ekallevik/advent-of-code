@@ -3,6 +3,7 @@ extern crate core;
 mod year2021;
 mod domain;
 mod utils;
+mod year2015;
 
 use crate::utils::{PuzzlePart, solution::Solution};
 use argh::FromArgs;
@@ -39,6 +40,7 @@ fn main() -> Result<(), std::io::Error> {
     info!("Solving day {:?}", day);
 
     let (first, second) = match year {
+        2015 => year2015::get_solvers(day),
         2021 => year2021::get_solvers(day),
         _ => {
             println!("Year {year} is not supported");
