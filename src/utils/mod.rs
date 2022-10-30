@@ -56,6 +56,15 @@ where
         .collect()
 }
 
+pub fn parse_3d_measurement(measurement: String) -> (u32, u32, u32) {
+    let mut values = measurement
+        .split('x')
+        .map( |c| c.parse().unwrap())
+        .collect::<Vec<_>>();
+
+    (values.pop().unwrap(), values.pop().unwrap(), values.pop().unwrap())
+}
+
 pub fn prime_factor(number: i32) -> Vec<i32> {
     let mut n = number;
     let mut primes = vec![];
