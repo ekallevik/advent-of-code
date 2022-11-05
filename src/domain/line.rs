@@ -83,7 +83,6 @@ impl FromStr for Line {
 #[cfg(test)]
 mod tests {
     use crate::domain::line::Line;
-    use crate::utils::get_input_array;
     #[test]
     fn test_line_intersection() {
 

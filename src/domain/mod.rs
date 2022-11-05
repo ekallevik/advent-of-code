@@ -116,7 +116,7 @@ impl SubmarineCommand {
         }
     }
 
-    pub fn apply_from(&self, position: Position) -> Position {
+    pub fn apply_from(&self, position: AimedPosition) -> AimedPosition {
         match self {
             SubmarineCommand::Up(value) => position.up(value),
             SubmarineCommand::Down(value) => position.down(value),
@@ -167,31 +167,31 @@ impl NaivePosition {
     }
 }
 
-pub struct Position {
+pub struct AimedPosition {
     pub x: i64,
     pub y: i64,
     pub aim: i64,
 }
 
-impl Position {
-    fn up(&self, value: &i64) -> Position {
-        Position {
+impl AimedPosition {
+    fn up(&self, value: &i64) -> AimedPosition {
+        AimedPosition {
             x: self.x,
             y: self.y,
             aim: self.aim - value,
         }
     }
 
-    fn down(&self, value: &i64) -> Position {
-        Position {
+    fn down(&self, value: &i64) -> AimedPosition {
+        AimedPosition {
             x: self.x,
             y: self.y,
             aim: self.aim + value,
         }
     }
 
-    fn forward(&self, value: &i64) -> Position {
-        Position {
+    fn forward(&self, value: &i64) -> AimedPosition {
+        AimedPosition {
             x: self.x + value,
             y: self.y + value * self.aim,
             aim: self.aim,
