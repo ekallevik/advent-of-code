@@ -1,4 +1,4 @@
-use crate::domain::{NaivePosition, Position, SubmarineCommand};
+use crate::domain::{NaivePosition, AimedPosition, SubmarineCommand};
 use crate::utils::get_input;
 
 pub fn solve_1(filename: &str) -> String {
@@ -24,7 +24,7 @@ fn calculate_naive_position(commands: Vec<SubmarineCommand>) -> i64 {
 fn calculate_position(commands: Vec<SubmarineCommand>) -> i64 {
     let pos = commands
         .iter()
-        .fold(Position { x: 0, y: 0, aim: 0 }, |p, command| {
+        .fold(AimedPosition { x: 0, y: 0, aim: 0 }, |p, command| {
             command.apply_from(p)
         });
 
