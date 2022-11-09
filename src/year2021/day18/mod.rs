@@ -39,7 +39,7 @@ fn reduce(mut snailfish: Snailfish) -> Snailfish {
 
 pub fn solve_2(filename: &str) -> String {
     let input: Vec<String> = get_input(filename);
-    let mut school: Vec<Snailfish> = input.iter().map(|fish| Snailfish::parse(fish)).collect();
+    let school: Vec<Snailfish> = input.iter().map(|fish| Snailfish::parse(fish)).collect();
 
     let mut largest_sum = 0;
     for perm in school.iter().permutations(2) {

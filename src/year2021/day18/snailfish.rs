@@ -29,9 +29,9 @@ impl Snailfish {
     }
 
     pub fn get_number_value(&self) -> Option<usize> {
-        match self {
-            &Snailfish::Number(value) => Some(value),
-            &Snailfish::Pair(_, _) => None,
+        match *self {
+            Snailfish::Number(value) => Some(value),
+            Snailfish::Pair(_, _) => None,
         }
     }
 
@@ -48,7 +48,7 @@ impl Snailfish {
         }
     }
 
-    fn add_next(mut self, value: usize) -> Snailfish {
+    fn add_next(self, value: usize) -> Snailfish {
         match self {
             Snailfish::Number(current) => Snailfish::Number(current + value),
             Snailfish::Pair(left, right) => {
@@ -58,7 +58,7 @@ impl Snailfish {
         }
     }
 
-    fn add_prev(mut self, value: usize) -> Snailfish {
+    fn add_prev(self, value: usize) -> Snailfish {
         match self {
             Snailfish::Number(current) => Snailfish::Number(current + value),
             Snailfish::Pair(left, right) => {
@@ -88,12 +88,11 @@ impl Snailfish {
     }
 
     fn create_from_split(value: usize) -> Snailfish {
-        let base_value = value / 2 as usize;
+        let base_value = value / 2_usize;
         let left = Snailfish::Number(base_value);
         let right = if value % 2 == 0 {Snailfish::Number(base_value)} else {Snailfish::Number(base_value + 1)};
-        let fish = Snailfish::Pair(Box::from(left), Box::from(right));
 
-        fish
+        Snailfish::Pair(Box::from(left), Box::from(right))
     }
 
     pub fn traverse_and_explode(self, level: usize, has_exploded: bool) -> (Option<usize>, Snailfish, Option<usize>, bool) {
@@ -235,7 +234,7 @@ impl FromStr for Snailfish {
 
 #[cfg(test)]
 mod tests {
-    use crate::day18::*;
+    use crate::year2021::day18::*;
 
     #[test]
     fn test_parse() {
