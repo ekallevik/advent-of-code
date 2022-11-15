@@ -1,9 +1,9 @@
-use std::cmp::{max, min};
+use std::cmp::max;
 use std::collections::HashSet;
 use std::ops::RangeInclusive;
 
 fn parse_line(line: &str) -> Option<RangeInclusive<isize>> {
-    let (_, content) = line.split_once("=")?;
+    let (_, content) = line.split_once('=')?;
     let (start, end) = content.split_once("..")?;
     Some(start.parse::<isize>().ok()?..=end.parse::<isize>().ok()?)
 }
@@ -30,7 +30,7 @@ pub fn solve_1(filename: &str) -> String {
         for steps in (1..750).rev() {
 
             let v_y_min = max(max_initial_velocity, find_v_y_min(target_y.start(), steps));
-            let v_y_max = find_v_y_max(&target_y.end(), steps);
+            let v_y_max = find_v_y_max(target_y.end(), steps);
 
             if v_y_min >= v_y_max {
                 continue
@@ -89,7 +89,7 @@ fn solve(target_x: RangeInclusive<isize>, target_y: RangeInclusive<isize>) -> us
 
     let mut velocities = HashSet::new();
 
-    let end = target_x.start()*2 as isize;
+    let end = target_x.start()*2_isize;
     for v_x_0 in calculate_v_x_range(&target_x) {
 
         for steps in (1..end).rev() {
@@ -135,9 +135,10 @@ fn solve(target_x: RangeInclusive<isize>, target_y: RangeInclusive<isize>) -> us
 
     println!("{:?}", velocities);
 
-    velocities.iter().count()
+    velocities.len()
 }
 
+/*
 fn step(v_x_0: isize, v_y_0: isize, steps: usize) -> (isize, isize) {
     let mut pos_x = 0;
     let mut pos_y = 0;
@@ -159,6 +160,7 @@ fn step(v_x_0: isize, v_y_0: isize, steps: usize) -> (isize, isize) {
 
     (pos_x, pos_y)
 }
+*/
 
 fn hits_target(target_x: &RangeInclusive<isize>, target_y: &RangeInclusive<isize>, v_x_0: isize, max_steps: usize, v_y_0: isize) -> bool {
     let mut pos_x = 0;
@@ -184,9 +186,11 @@ fn hits_target(target_x: &RangeInclusive<isize>, target_y: &RangeInclusive<isize
     has_hit_target
 }
 
+/*
 fn in_target_area(pos_x: isize, pos_y: isize, target_x: &RangeInclusive<isize>, target_y: &RangeInclusive<isize>) -> bool {
     target_x.contains(&pos_x) && target_y.contains(&pos_y)
 }
+*/
 
 fn sum_to_n(n: isize) -> isize {
     n * (n + 1) / 2
@@ -205,6 +209,7 @@ fn calculate_v_x_range(target: &RangeInclusive<isize>) -> RangeInclusive<isize> 
     v_x_min..=v_x_max
 }
 
+/*
 fn calculate_pos(v_0: isize, steps: usize) -> isize {
     /*
     v_x_n = min(v_x_(n-1) - 1, 0)
@@ -238,7 +243,6 @@ fn calculate_pos_y(v_y_0: isize, steps: usize) -> isize {
     pos - neg
 }
 
-
 pub fn solver() {
     let (x, y) = include_str!("real.txt")
         .trim()
@@ -264,6 +268,7 @@ pub fn solver() {
     );
 }
 
+
 fn fire(target: (i32, i32, i32, i32), mut v: (i32, i32)) -> bool {
     let mut p = (0, 0);
     if v.1 > 1 {
@@ -288,11 +293,16 @@ fn fire(target: (i32, i32, i32, i32), mut v: (i32, i32)) -> bool {
     unreachable!();
 }
 
+
+
+
 fn path(p: (i32, i32), v: (i32, i32)) -> impl Iterator<Item = (i32, i32, i32, i32)> {
     std::iter::successors(Some((p.0, p.1, v.0, v.1)), |p| {
         Some((p.0 + p.2, p.1 + p.3, (p.2 - 1).max(0), p.3 - 1))
     })
 }
+
+ */
 
 
 // todo: combine
@@ -306,11 +316,7 @@ fn find_v_y_max(highest_point: &isize, steps: usize) -> isize {
 
 
     let t = highest_point + steps as isize;
-    if t % 2 == 0 {
-        t / 2 + 3
-    } else {
-        t / 2 + 3
-    }
+    t / 2 + 3
 }
 
 fn find_v_y_min(lowest_point: &isize, steps: usize) -> isize {
@@ -361,7 +367,7 @@ pub fn solve_2(filename: &str) -> String {
 
 #[cfg(test)]
 mod tests {
-    use crate::year2021::day17::{calculate_pos, calculate_pos_y, calculate_v_x_range, find_v_y_max, find_v_y_min, hits_target};
+    use crate::year2021::day17::{calculate_v_x_range, find_v_y_max, find_v_y_min, hits_target};
 
     #[test]
     fn test_create_v_x_range() {
@@ -441,49 +447,6 @@ mod tests {
 
         let actual = hits_target(&target_x, &target_y, v_x_0, 20, v_y_0);
         assert!(!actual)
-    }
-
-    #[test]
-    fn test_pos_x() {
-        let parameters = vec![
-            //(6, 0, 0),
-            (6, 1, 6),
-            (6, 2, 11),
-            (6, 3, 15),
-            (6, 4, 18),
-            (6, 5, 20),
-            (6, 6, 21),
-            (6, 7, 21),
-            (6, 8, 21),
-            (6, 9, 21),
-        ];
-
-        for (v_x_0, steps, expected) in parameters {
-            let actual = calculate_pos(v_x_0, steps);
-            println!("v_x_0={}, steps={}, actual={}, expected={}", v_x_0, steps, actual, expected);
-            assert_eq!(actual, expected)
-        }
-    }
-
-    #[test]
-    fn test_pos_y() {
-        let parameters = vec![
-            (3, 1, 3),
-            (3, 2, 5),
-            (3, 3, 6),
-            (3, 4, 6),
-            (3, 5, 5),
-            (3, 6, 3),
-            (3, 7, 0),
-            (3, 8, -4),
-            (3, 9, -9),
-        ];
-
-        for (v_y_0, steps, expected) in parameters {
-            let actual = calculate_pos_y(v_y_0, steps);
-            println!("v_x_0={}, steps={}, actual={}, expected={}", v_y_0, steps, actual, expected);
-            assert_eq!(actual, expected)
-        }
     }
 
     #[test]
