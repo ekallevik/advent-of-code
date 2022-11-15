@@ -8,14 +8,14 @@ THE RULES OF THE GAME
 4. the Amphipods should be sorted A-D left to right
 5. Amphipods will never stop just outside a room, but can pass through
 6. Amphipods will only move into the room that it it's finally destination
-    & it only contains Amphipods of the correct tyoe
+    & it only contains Amphipods of the correct type
 7. Once moved into the hallway, it will stay there til it can move directly to destination
 */
 
 use core::fmt;
 use std::{fmt::{Display, Formatter}, str::FromStr};
 
-pub fn solve_1(filename: &str) -> String {
+pub fn solve_1(_: &str) -> String {
 
     let locations = vec![
         Location::new_hallway(0),
@@ -41,7 +41,7 @@ pub fn solve_2(filename: &str) -> String {
 fn solve(locations: Vec<Location>, iteration: usize, branch: usize) -> Option<usize> {
 
     let mut costs = vec![];
-    let mut candidates: Vec<usize> = locations.iter().filter(|loc| loc.has_movable()).map(|loc| loc.position()).collect();
+    let candidates: Vec<usize> = locations.iter().filter(|loc| loc.has_movable()).map(|loc| loc.position()).collect();
 
     println!("\n### START ITERATION {}-{} ###", iteration, branch);
     print_locations(&locations);
@@ -78,10 +78,10 @@ fn solve(locations: Vec<Location>, iteration: usize, branch: usize) -> Option<us
 
     println!("### END ITERATION {} ###", iteration);
 
-    costs.into_iter().filter_map(|cost| cost).min()
+    costs.into_iter().flatten().min()
 }
 
-fn find_targets<'a>(locations: &'a Vec<Location>, position: usize, peek: &Amphipod) -> Vec<&'a Location> {
+fn find_targets<'a>(locations: &'a [Location], position: usize, peek: &Amphipod) -> Vec<&'a Location> {
 
     let occupied_halls: Vec<&Location> = locations
         .iter()
@@ -121,7 +121,7 @@ fn find_targets<'a>(locations: &'a Vec<Location>, position: usize, peek: &Amphip
     targets
 }
 
-fn calculate_score(locations: &Vec<Location>) -> Option<usize> {
+fn calculate_score(locations: &[Location]) -> Option<usize> {
 
     let mut score = 0;
 
@@ -140,19 +140,19 @@ fn calculate_score(locations: &Vec<Location>) -> Option<usize> {
 
     println!("\n### START ###\n");
     println!("Found score: {:?}", score);
-    print_locations(&locations);
+    print_locations(locations);
     println!("\n### END ###\n");
 
     Some(score)
 }
 
-fn print_locations(locations: &Vec<Location>) {
+fn print_locations(locations: &[Location]) {
     for candidate in locations.iter() {
         println!("{}", candidate)
     }
 }
 
-fn print_locations2(locations: &Vec<&Location>) {
+fn print_locations2(locations: &[&Location]) {
     for candidate in locations.iter() {
         println!("{}", candidate)
     }
@@ -165,9 +165,9 @@ fn apply_move(mut locs: Vec<Location>, from: usize, to: usize, iteration: usize,
     let (pod, up_steps) = from.pop();
 
     let to = locs.get_mut(to).unwrap();
-    let sideways_steps = (to.position() as isize - from_pos).abs() as usize;
+    let sideways_steps = to.position() - from_pos.unsigned_abs();
 
-    let mut pod = pod.unwrap();
+    let pod = pod.unwrap();
     let steps: usize = up_steps + sideways_steps;
 
     to.push_and_update(pod, steps);
@@ -183,8 +183,8 @@ pub enum Location {
     Room(Vec<Amphipod>, Amphipod, usize),
 }
 
-impl fmt::Display for Location {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+impl Display for Location {
+    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
         match self {
             Location::Hallway(pods, pos) => {
                 if let Some(pod) = pods.first() {
@@ -427,14 +427,14 @@ impl FromStr for Amphipod {
             "B" => Ok(Amphipod::Bronze(vec![])),
             "C" => Ok(Amphipod::Copper(vec![])),
             "D" => Ok(Amphipod::Dessert(vec![])),
-            _ => Result::Err(())
+            _ => Err(())
         }
     }
 }
 
 impl Display for Amphipod {
 
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
         match self {
             Amphipod::Amber(moves) => write!(f, "Amber {:?}", moves),
             Amphipod::Bronze(moves) => write!(f, "Bronze {:?}", moves),
