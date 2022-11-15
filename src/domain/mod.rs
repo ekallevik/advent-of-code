@@ -2,7 +2,6 @@ mod cube;
 mod line;
 pub(crate) mod position;
 
-use std::cmp::max;
 use std::str::FromStr;
 pub use line::Line;
 pub use cube::Cube;
@@ -27,15 +26,6 @@ impl FromStr for NaiveLine {
 }
 
 impl NaiveLine {
-    pub fn largest_point(&self) -> i64 {
-        let max_x = max(self.start.x, self.end.x);
-        let max_y = max(self.start.y, self.end.y);
-        max(max_x, max_y)
-    }
-
-    pub fn get_start(&self) -> &NaivePosition {
-        &self.start
-    }
 
     pub fn to_diagonal_vec(&self) -> Vec<(i64, i64)>{
 
