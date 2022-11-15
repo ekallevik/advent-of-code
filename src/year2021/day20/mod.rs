@@ -143,17 +143,6 @@ fn extend_image(image: Vec<Vec<bool>>, default: bool) -> (Vec<Vec<bool>>, usize)
     (padded_image, size)
 }
 
-fn print_image(image: &[Vec<bool>]) {
-    println!();
-    for row in image {
-        for char in row {
-            print!("{}", if *char { '#' } else { ' ' })
-        }
-        println!()
-    }
-    println!();
-}
-
 #[cfg(test)]
 mod tests {
     use crate::year2021::day20::get_pixel_value;
