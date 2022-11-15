@@ -54,7 +54,7 @@ impl Line {
 
             diffs
                 .into_iter()
-                .filter_map(|line| line)
+                .flatten()
                 .collect()
         } else {
             vec![]
