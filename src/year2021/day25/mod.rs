@@ -112,7 +112,7 @@ fn move_cucumbers(current: HashMap<(usize, usize), SeaCucumber>, dims: &Dimensio
                 }
             }
         };
-        next.insert(insert_pos, cucumber.clone());
+        next.insert(insert_pos, *cucumber);
     }
 
     (next, has_moved)
@@ -123,8 +123,8 @@ fn print_trench(trench: &HashMap<(usize, usize), SeaCucumber>, dims: &Dimensions
         let mut row_s = String::with_capacity(dims.1);
         for j in 0..dims.1 {
             match trench.get(&(i, j)) {
-                None => row_s = row_s + ".",
-                Some(value) => row_s = row_s + &*value.to_string().clone()
+                None => row_s += ".",
+                Some(value) => row_s += &*value.to_string().clone()
             }
         }
         println!("{}", row_s);
