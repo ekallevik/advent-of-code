@@ -116,28 +116,6 @@ fn get_adjacent(i: i32, j: i32, max: i32) -> Vec<(i32, i32)> {
     res
 }
 
-fn get_adjacent_with_overflow(i: i8, j: i8) -> Vec<(i8, i8)> {
-    vec![
-        (i - 1, j),
-        (i - 1, j - 1),
-        (i - 1, j + 1),
-        (i, j - 1),
-        (i, j + 1),
-        (i + 1, j),
-        (i + 1, j - 1),
-        (i + 1, j + 1),
-    ]
-}
-
-fn flash_at(pos: (i8, i8), grid: &[Vec<Cell>]) -> bool {
-    if pos.0 < 0 || pos.1 < 0 || pos.0 > 9 || pos.1 > 9 {
-        false
-    } else {
-        let c = grid[pos.0 as usize][pos.1 as usize];
-        c.1
-    }
-}
-
 pub fn solve_2(filename: &str) -> String {
     let mut grid = parse_input(filename);
     let mut step = 0;
