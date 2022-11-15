@@ -93,7 +93,7 @@ fn get_grid_value(grid: &[Vec<usize>], position: Position) -> usize {
     if increment == 0 {
         node_cost
     } else {
-        let mut value = node_cost + increment;
+        let value = node_cost + increment;
         if value <= 9 {
             value
         } else {
@@ -135,17 +135,6 @@ fn get_neighbors(current: &Position, max: (usize, usize)) -> Vec<Position> {
     neighbors
 }
 
-fn print_grid(grid: &[Vec<usize>]) {
-    for (i, line) in grid.iter().enumerate() {
-        println!("I={}: {:?}", i, line);
-    }
-}
-
-fn print_nodes(input: &[(usize, usize)]) {
-    for node in input {
-        println!("{:?}", node);
-    }
-}
 
 #[cfg(test)]
 mod tests {
