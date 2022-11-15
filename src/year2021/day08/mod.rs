@@ -84,11 +84,11 @@ pub fn solve_2(filename: &str) -> String {
     sum.to_string()
 }
 
-fn is_superset(signal: &String, encoding: &String) -> bool {
+fn is_superset(signal: &str, encoding: &str) -> bool {
     encoding.chars().all(|c| signal.contains(c))
 }
 
-fn count_diff(signal: &String, encoding: &String) -> u8 {
+fn count_diff(signal: &str, encoding: &str) -> u8 {
     encoding.chars().filter(|&c| !signal.contains(c)).count() as u8
 }
 
