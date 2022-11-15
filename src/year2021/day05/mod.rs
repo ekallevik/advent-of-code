@@ -58,7 +58,7 @@ fn map_ocean_vents(lines: Vec<NaiveLine>) -> usize {
     }
 
     print_ocean_floor(&ocean_map);
-    ocean_map.iter().filter(|(k, v)| **v >= 2).count()
+    ocean_map.iter().filter(|(_, v)| **v >= 2).count()
 }
 
 //todo: generalize?
@@ -70,7 +70,7 @@ fn print_ocean_floor(ocean: &HashMap<(usize, usize), i64>) {
             if let Some(value) = ocean.get(&(j as usize, i as usize)) {
                 row = row + " " + &*value.to_string();
             } else {
-                row = row + &*"  ".to_string();
+                row += &*"  ".to_string();
 
             }
         }
