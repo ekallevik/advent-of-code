@@ -75,7 +75,7 @@ pub fn solve_2(filename: &str) -> String {
     (oxygen * co2).to_string()
 }
 
-fn count_ones(lines: &Vec<Vec<u8>>, index: usize) -> usize {
+fn count_ones(lines: &[Vec<u8>], index: usize) -> usize {
     lines.iter().filter(|&line| line[index] == 1).count()
 }
 
@@ -83,16 +83,7 @@ fn count_ones2(lines: Vec<Vec<u8>>, index: usize) -> usize {
     lines.iter().filter(|&line| line[index] == 1).count()
 }
 
-fn get_most_common_bit(lines: &Vec<Vec<u8>>, index: usize, size: usize) -> usize {
-    let ones = count_ones(lines, index);
-    if 2 * ones >= size {
-        1
-    } else {
-        0
-    }
-}
-
-fn get_most_common_bit2(lines: Vec<Vec<u8>>, index: usize, size: usize) -> usize {
+fn get_most_common_bit(lines: Vec<Vec<u8>>, index: usize, size: usize) -> usize {
     let ones = count_ones2(lines, index);
     if 2 * ones >= size {
         1
@@ -150,7 +141,7 @@ fn calculate_gamma2(frequencies: Vec<u8>, size: usize, length: usize) -> i64 {
     res
 }
 
-fn find_most_common_bit_from_char(lines: &Vec<Vec<char>>, i: usize) -> char {
+fn find_most_common_bit_from_char(lines: &[Vec<char>], i: usize) -> char {
     let zeros = lines.iter().filter(|&x| x[i] == '0').count();
     let ones = lines.iter().filter(|&x| x[i] == '1').count();
 
@@ -177,7 +168,7 @@ fn filter_inputs(input_a: Vec<Vec<u8>>, length: usize, size: usize) -> i64 {
             .iter()
             .map(|x| x.iter().clone().copied().collect())
             .collect();
-        let most_common_bit = get_most_common_bit2(copy, i, size);
+        let most_common_bit = get_most_common_bit(copy, i, size);
         input = input
             .into_iter()
             .filter(|elem| elem[i] == most_common_bit as u8)
