@@ -182,12 +182,6 @@ fn generate_dirac_permutations() -> Vec<(usize, usize, usize)> {
     res
 }
 
-fn aggregate_scores(scores: Vec<(usize, usize)>) -> (usize, usize) {
-    let first_victories = scores.iter().map(|&score| (score).0).sum::<usize>();
-    let second_victories = scores.iter().map(|&score| (score).1).sum::<usize>();
-    (first_victories, second_victories)
-}
-
 // todo: use struct?
 fn update_player(current_pos: usize, current_score: usize, throw: usize) -> (usize, usize) {
     let new_pos = (current_pos + throw) % 10;
