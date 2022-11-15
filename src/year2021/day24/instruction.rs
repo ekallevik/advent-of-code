@@ -1,19 +1,10 @@
-use std::collections::{VecDeque};
+use std::collections::VecDeque;
 use std::str::FromStr;
 
-#[derive(Clone, Copy, Debug, PartialEq)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum Symbol {
     Variable(char),
     Value(isize),
-}
-
-impl Symbol {
-    pub fn get_value(&self) -> Option<isize> {
-        match self {
-            Symbol::Variable(_) => None,
-            Symbol::Value(v) => Some(*v)
-        }
-    }
 }
 
 impl FromStr for Symbol {
@@ -57,7 +48,7 @@ impl Instruction {
                 _ => panic!("Should not happen")
             }
         };
-        let mut get = |c: &char| -> isize {registry[index(c)]};
+        let get = |c: &char| -> isize {registry[index(c)]};
 
         match &self {
             Instruction::Inp(a) => {
@@ -118,7 +109,7 @@ impl FromStr for Instruction {
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
 
-        let (instruction, operands) = s.split_once(" ").unwrap();
+        let (instruction, operands) = s.split_once(' ').unwrap();
         let operands = operands.chars().collect::<Vec<char>>();
         let first = *operands.first().unwrap();
         let second: String = (*operands.last().unwrap()).to_string();
