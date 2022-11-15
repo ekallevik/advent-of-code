@@ -65,33 +65,10 @@ pub fn parse_3d_measurement(measurement: String) -> (u32, u32, u32) {
     (values.pop().unwrap(), values.pop().unwrap(), values.pop().unwrap())
 }
 
-pub fn prime_factor(number: i32) -> Vec<i32> {
-    let mut n = number;
-    let mut primes = vec![];
-    let mut candidate = 2;
-
-    while n > 1 {
-        while n % candidate == 0 {
-            primes.push(candidate);
-            n /= candidate
-        }
-        candidate += 1;
-    }
-
-    primes
-}
-
 pub fn breakpoint(message: &str) {
     let mut is_correct = String::new();
     println!("{}", message);
     std::io::stdin().read_line(&mut is_correct).unwrap();
-}
-
-pub fn factor(number: i32) -> Vec<i32> {
-    (1..=number)
-        .into_iter()
-        .filter(|&x| number % x == 0)
-        .collect::<Vec<i32>>()
 }
 
 #[cfg(test)]
@@ -124,9 +101,5 @@ mod tests {
         assert_eq!(u8::from_str_radix("10", 2), Ok(2));
     }
 
-    #[test]
-    fn test_factor() {
-        assert_eq!(factor(20), vec![1, 2, 4, 5, 10, 20]);
-    }
 }
 
