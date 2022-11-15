@@ -7,21 +7,17 @@ pub struct Cube(pub Line, pub Line, pub Line);
 
 impl Cube {
 
-    pub fn new(x: &Line, y: &Line, z: &Line) -> Cube {
-        Cube(x.clone(), y.clone(), z.clone())
-    }
-
     pub fn new_optional(x: &Option<Line>, y: &Option<Line>, z: &Option<Line>) -> Option<Cube> {
 
         if let Some(x) = x {
             if let Some(y) = y {
                 if let Some(z) = z {
-                    return Some(Cube(x.clone(), y.clone(), z.clone()))
+                    return Some(Cube(*x, *y, *z))
                 }
             }
         }
 
-        return None
+        None
     }
 
     pub fn new_symmetric(start: isize, end: isize) -> Cube {
@@ -35,6 +31,7 @@ impl Cube {
             && self.2.overlaps(&other.2)
     }
 
+    /*
     pub fn intersection(&self, other: &Cube) -> Option<Cube> {
 
         let x_line = self.0.intersection(&other.0);
@@ -43,6 +40,8 @@ impl Cube {
 
         Cube::new_optional(&x_line, &y_line, &z_line)
     }
+
+     */
 
     pub fn subtract(&self, other: &Cube) -> Vec<Cube> {
 
@@ -59,54 +58,55 @@ impl Cube {
 
         for x_line in &x_diff {
 
-            let x_line = &Some(x_line.clone());
+            let x_line = &Some(*x_line);
 
             // internals
             cubes.insert(Cube::new_optional(x_line, &y_intersect, &z_intersect));
 
             // external y's
             for y_line in &y_diff {
-                let y_line = &Some(y_line.clone());
+                let y_line = &Some(*y_line);
                 cubes.insert(Cube::new_optional(x_line, y_line, &z_intersect));
 
                 // external yz's
                 for z_line in &z_diff {
-                    let z_line = &Some(z_line.clone());
+                    let z_line = &Some(*z_line);
                     cubes.insert(Cube::new_optional(x_line, y_line, z_line));
                 }
             }
 
             // external z's
             for z_line in &z_diff {
-                let z_line = &Some(z_line.clone());
+                let z_line = &Some(*z_line);
                 cubes.insert(Cube::new_optional(x_line, &y_intersect, z_line));
             }
         }
 
         for y_line in &y_diff {
             // internals
-            let y_line = &Some(y_line.clone());
+            let y_line = &Some(*y_line);
             cubes.insert(Cube::new_optional(&x_intersect, y_line, &z_intersect));
 
             // external z's
             for z_line in &z_diff {
-                let z_line = &Some(z_line.clone());
+                let z_line = &Some(*z_line);
                 cubes.insert(Cube::new_optional(&x_intersect, y_line, z_line));
             }
         }
 
         for z_line in &y_diff {
             // internals
-            let z_line = &Some(z_line.clone());
+            let z_line = &Some(*z_line);
             cubes.insert(Cube::new_optional(&x_intersect, &y_intersect, z_line));
         }
 
-        cubes.into_iter().filter_map(|cube| cube).collect()
+        cubes.into_iter().flatten().collect()
     }
 
 
     // todo: replace lines with vectors?
     // todo: make more fine-grained by removing duplicates?
+
     pub fn diff(&self, other: &Cube) -> Vec<Cube> {
         let x_diff = self.0.diff(&other.0);
         let y_diff = self.1.diff(&other.1);
