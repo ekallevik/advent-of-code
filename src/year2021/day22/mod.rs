@@ -1,22 +1,17 @@
 use crate::utils::{breakpoint, get_input};
 use std::collections::HashSet;
-use std::ops::RangeInclusive;
 use crate::domain::Line;
 use crate::domain::Cube;
 
 // todo: removed unused
 
 fn parse_step(step: String) -> (bool, Cube) {
-    let (active, rest) = step.split_once(" ").unwrap();
+    let (active, rest) = step.split_once(' ').unwrap();
     let active = active == "on";
 
-    let cleaned: Vec<&str> = rest
-        .split(",")
-        .map(|part| part.split_once("=").unwrap().1)
-        .collect();
-
-    let lines: Vec<Line> = cleaned
-        .into_iter()
+    let lines: Vec<Line> = rest
+        .split(',')
+        .map(|part| part.split_once('=').unwrap().1)
         .map(|part: &str| part.parse::<Line>().unwrap())
         .collect();
 
@@ -67,12 +62,11 @@ pub fn solve_2(filename: &str) -> String {
     reboot(steps).to_string()
 }
 
+/*
 fn reboot_reactor(steps: &[(bool, SimpleCube)]) -> usize {
     let mut reactor = HashSet::new();
-    let mut step = 0;
 
     for (state, (x_range, y_range, z_range)) in steps {
-        step += 1;
         for x in x_range.clone() {
             println!("- x={}", x);
             for y in y_range.clone() {
@@ -88,6 +82,8 @@ fn reboot_reactor(steps: &[(bool, SimpleCube)]) -> usize {
 
     reactor.len()
 }
+
+ */
 
 fn calculate_size(reactor: &[Cube]) -> usize {
     reactor.iter().map(|cube| cube.size()).sum()
@@ -160,7 +156,7 @@ fn reboot(steps: Vec<(bool, Cube)>) -> usize {
 
     let mut cuboids: HashSet<(isize, isize, isize)> = HashSet::new();
     for c in reactor.iter()  {
-        let mut cb = c.get_cuboids();
+        let cb = c.get_cuboids();
         for c in cb {
             cuboids.insert(c);
         }
@@ -180,13 +176,14 @@ fn reboot(steps: Vec<(bool, Cube)>) -> usize {
     reactor.into_iter().map(|cube| cube.size()).sum()
 }
 
+/*
 pub type SimpleCube = (
-        RangeInclusive<isize>,
-RangeInclusive<isize>,
-RangeInclusive<isize>,
+    RangeInclusive<isize>,
+    RangeInclusive<isize>,
+    RangeInclusive<isize>,
 );
 
-/*
+
 // todo: improve part1 solution with superfluous inputs
 // todo: use tuples
 // todo: performance
