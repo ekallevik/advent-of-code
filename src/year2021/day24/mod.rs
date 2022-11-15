@@ -19,13 +19,11 @@ pub fn solve_1(filename: &str) -> String {
 
 
     let smallest = "13579246899998";
-    let biggest = "9999999999999";
+    //let biggest = "9999999999999";
 
     let num = smallest
-    //let num = "9"
         .chars()
-        .map(|x| x.to_digit(10))
-        .filter_map(|d| d)
+        .filter_map(|x| x.to_digit(10))
         .collect::<Vec<u32>>();
 
     for n in num {
