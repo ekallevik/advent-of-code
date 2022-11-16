@@ -1,8 +1,9 @@
+use anyhow::Result;
 use fancy_regex::Regex;
 use crate::utils::get_input;
 
 
-pub fn solve_1(filename: &str) -> String {
+pub fn solve_1(filename: &str) -> Result<String> {
     let lines: Vec<String> = get_input(filename);
 
     let count = lines
@@ -10,7 +11,7 @@ pub fn solve_1(filename: &str) -> String {
         .filter(|line| is_ridiculous_string(line))
         .count();
 
-    count.to_string()
+    Ok(count.to_string())
 }
 
 fn is_ridiculous_string(value: &str) -> bool {
@@ -35,7 +36,7 @@ fn has_repeated_char(value: &str) -> bool {
     re.is_match(value).unwrap()
 }
 
-pub fn solve_2(filename: &str) -> String {
+pub fn solve_2(filename: &str) -> Result<String> {
     let lines: Vec<String> = get_input(filename);
 
     let count = lines
@@ -43,7 +44,7 @@ pub fn solve_2(filename: &str) -> String {
         .filter(|line| is_nice_string(line))
         .count();
 
-    count.to_string()
+    Ok(count.to_string())
 }
 
 fn is_nice_string(value: &str) -> bool {

@@ -1,3 +1,4 @@
+use anyhow::Result;
 use paris::info;
 
 use crate::utils::get_input_array;
@@ -17,7 +18,7 @@ fn parse_input(filename: &str) -> Grid {
         .collect::<Grid>()
 }
 
-pub fn solve_1(filename: &str) -> String {
+pub fn solve_1(filename: &str) -> Result<String> {
     let mut grid = parse_input(filename);
     let steps = 100;
     let mut flashes: u64 = 0;
@@ -40,7 +41,7 @@ pub fn solve_1(filename: &str) -> String {
         info!("Step  {} (flashes: {}):", step, flashes);
     }
 
-    flashes.to_string()
+    Ok(flashes.to_string())
 }
 
 fn increase_energy(grid: Grid) -> Grid {
@@ -116,7 +117,7 @@ fn get_adjacent(i: i32, j: i32, max: i32) -> Vec<(i32, i32)> {
     res
 }
 
-pub fn solve_2(filename: &str) -> String {
+pub fn solve_2(filename: &str) -> Result<String> {
     let mut grid = parse_input(filename);
     let mut step = 0;
 
@@ -136,7 +137,7 @@ pub fn solve_2(filename: &str) -> String {
         }
 
         if flashes_in_step == 100 {
-            return step.to_string();
+            return Ok(step.to_string());
         }
     }
 }

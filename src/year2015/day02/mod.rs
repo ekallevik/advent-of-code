@@ -1,7 +1,8 @@
 use std::cmp::max;
+use anyhow::Result;
 use crate::utils::{get_input, parse_3d_measurement};
 
-pub fn solve_1(filename: &str) -> String {
+pub fn solve_1(filename: &str) -> Result<String> {
     let measurements = get_input(filename)
         .into_iter()
         .map(parse_3d_measurement);
@@ -10,10 +11,10 @@ pub fn solve_1(filename: &str) -> String {
         .map(calculate_area)
         .sum();
 
-    area.to_string()
+    Ok(area.to_string())
 }
 
-pub fn solve_2(filename: &str) -> String {
+pub fn solve_2(filename: &str) -> Result<String> {
     let measurements = get_input(filename)
         .into_iter()
         .map(parse_3d_measurement);
@@ -22,7 +23,7 @@ pub fn solve_2(filename: &str) -> String {
         .map(|measurement| calculate_shortest_perimeter(measurement) + calculate_volume(measurement))
         .sum();
 
-    ribbon_length.to_string()
+    Ok(ribbon_length.to_string())
 }
 
 fn calculate_area((x, y, z): (u32, u32, u32)) -> u32 {

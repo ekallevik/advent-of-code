@@ -5,6 +5,10 @@ use strum_macros::EnumIter;
 
 pub mod solution;
 
+use anyhow::Result;
+
+pub type SolverFn = fn(&str) -> Result<String>;
+
 #[derive(Debug, EnumIter)]
 pub enum PuzzlePart {
     FirstTest,

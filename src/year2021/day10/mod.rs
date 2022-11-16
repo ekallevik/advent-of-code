@@ -1,8 +1,9 @@
+use anyhow::Result;
 use paris::{info, warn};
 
 use crate::utils::get_input_array;
 
-pub fn solve_1(filename: &str) -> String {
+pub fn solve_1(filename: &str) -> Result<String> {
     let input = get_input_array::<char>(filename);
 
     let opening_def = vec!['(', '[', '{', '<'];
@@ -52,7 +53,7 @@ pub fn solve_1(filename: &str) -> String {
 
     warn!("Corrupted: {:?}", corrupted);
 
-    corrupted
+    Ok(corrupted
         .iter()
         .map(|&c| match c {
             ')' => 3,
@@ -62,10 +63,10 @@ pub fn solve_1(filename: &str) -> String {
             _ => 0,
         })
         .sum::<u64>()
-        .to_string()
+        .to_string())
 }
 
-pub fn solve_2(filename: &str) -> String {
+pub fn solve_2(filename: &str) -> Result<String> {
     let input = get_input_array::<char>(filename);
 
     let opening_def = vec!['(', '[', '{', '<'];
@@ -150,5 +151,5 @@ pub fn solve_2(filename: &str) -> String {
 
     println!("{:?}", scores);
     let index = scores.len() / 2;
-    scores[index].to_string()
+    Ok(scores[index].to_string())
 }

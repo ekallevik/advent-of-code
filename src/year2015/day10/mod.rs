@@ -1,19 +1,20 @@
+use anyhow::Result;
 use itertools::PeekingNext;
 use paris::info;
 use crate::utils::get_input_string;
 
-pub fn solve_1(filename: &str) -> String {
+pub fn solve_1(filename: &str) -> Result<String> {
     let input = get_input_string(filename);
     let output = iterate_look_and_say(input, 50);
 
-    output.len().to_string()
+    Ok(output.len().to_string())
 }
 
-pub fn solve_2(filename: &str) -> String {
+pub fn solve_2(filename: &str) -> Result<String> {
     let input = get_input_string(filename);
     let output = iterate_look_and_say(input, 50);
 
-    output.len().to_string()
+    Ok(output.len().to_string())
 }
 
 fn iterate_look_and_say(mut input: String, iterations: usize) -> String {

@@ -1,5 +1,6 @@
 use std::cmp::Ordering;
 use std::collections::{HashMap, HashSet};
+use anyhow::Result;
 use fancy_regex::Regex;
 use itertools::Itertools;
 use paris::info;
@@ -32,7 +33,7 @@ fn parse_inputs(filename: &str) -> Vec<ValuedRelation> {
         .collect()
 }
 
-pub fn solve_1(filename: &str) -> String {
+pub fn solve_1(filename: &str) -> Result<String> {
     let values = parse_inputs(filename);
 
     let (relations, guests) = get_relations(values);
@@ -41,7 +42,7 @@ pub fn solve_1(filename: &str) -> String {
     let arrangements = get_arrangements(&guests);
     let happiness = find_best_arrangement(&relations, arrangements);
 
-    happiness.to_string()
+    Ok(happiness.to_string())
 }
 
 fn get_relations(values: Vec<ValuedRelation>) -> (HashMap<Relation, i32>, HashSet<String>) {
@@ -109,7 +110,7 @@ fn get_happiness_pair(left: &str, right: &str, values: &HashMap<(String, String)
     *values.get(&key).unwrap()
 }
 
-pub fn solve_2(filename: &str) -> String {
+pub fn solve_2(filename: &str) -> Result<String> {
     let values = parse_inputs(filename);
 
     let (mut relations, mut guests) = get_relations(values);
@@ -127,5 +128,5 @@ pub fn solve_2(filename: &str) -> String {
     let arrangements = get_arrangements(&guests);
     let happiness = find_best_arrangement(&relations, arrangements);
 
-    happiness.to_string()
+    Ok(happiness.to_string())
 }

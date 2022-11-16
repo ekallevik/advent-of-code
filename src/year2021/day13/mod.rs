@@ -1,3 +1,4 @@
+use anyhow::Result;
 use std::cmp::Ordering;
 use std::collections::HashSet;
 
@@ -32,21 +33,21 @@ fn parse_input(filename: &str) -> (HashSet<(i64, i64)>, Vec<Fold>) {
     (positions, folds)
 }
 
-pub fn solve_1(filename: &str) -> String {
+pub fn solve_1(filename: &str) -> Result<String> {
     let (elements, folds) = parse_input(filename);
 
     let first_fold = folds.first().unwrap();
-    fold_paper(elements, first_fold).len().to_string()
+    Ok(fold_paper(elements, first_fold).len().to_string())
 }
 
-pub fn solve_2(filename: &str) -> String {
+pub fn solve_2(filename: &str) -> Result<String> {
     let (mut elements, folds) = parse_input(filename);
 
     for fold in folds {
         elements = fold_paper(elements, &fold);
     }
 
-    folded_to_string(&elements)
+    Ok(folded_to_string(&elements))
 }
 
 fn fold_paper(input: HashSet<(i64, i64)>, fold: &Fold) -> HashSet<(i64, i64)> {

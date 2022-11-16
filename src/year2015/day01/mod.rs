@@ -1,6 +1,8 @@
+use anyhow::{anyhow, Result};
 use crate::utils::get_input_string;
 
-pub fn solve_1(filename: &str) -> String {
+type SolverFn = fn(&str) -> Result<String>;
+pub fn solve_1(filename: &str) -> Result<String> {
     let directions = get_input_string(filename);
 
     let count = directions
@@ -16,11 +18,11 @@ pub fn solve_1(filename: &str) -> String {
         )
         ;
 
-    count.to_string()
+    Ok(count.to_string())
 }
 
 
-pub fn solve_2(filename: &str) -> String {
+pub fn solve_2(filename: &str) -> Result<String> {
     let directions = get_input_string(filename);
 
     println!("{}", directions.len());
@@ -35,12 +37,11 @@ pub fn solve_2(filename: &str) -> String {
         };
 
         if floor == -1 {
-            return (index + 1).to_string()
+            return Ok((index + 1).to_string())
         }
 
 
     }
 
-
-    "Could not find an answer".to_string()
+    Err(anyhow!("Could not find an answer"))
 }

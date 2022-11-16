@@ -1,3 +1,4 @@
+use anyhow::Result;
 use std::collections::VecDeque;
 use instruction::Instruction;
 use crate::utils::get_input;
@@ -11,7 +12,7 @@ fn parse_instructions(filename: &str) -> Vec<Instruction> {
     input.iter().map(|line| line.parse().unwrap()).collect()
 }
 
-pub fn solve_1(filename: &str) -> String {
+pub fn solve_1(filename: &str) -> Result<String> {
 
     let instructions = parse_instructions(filename);
 
@@ -37,7 +38,7 @@ pub fn solve_1(filename: &str) -> String {
     run_instructions(&instructions, input);
 
 
-    "12".to_string()
+    todo!()
 }
 
 fn run_instructions(instructions: &[Instruction], mut input: VecDeque<u32>) {
@@ -54,6 +55,6 @@ fn run_instructions(instructions: &[Instruction], mut input: VecDeque<u32>) {
 
 }
 
-pub fn solve_2(filename: &str) -> String {
-    filename.to_string()
+pub fn solve_2(_filename: &str) -> Result<String> {
+    todo!()
 }

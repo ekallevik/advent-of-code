@@ -1,3 +1,4 @@
+use anyhow::Result;
 use std::collections::HashSet;
 use std::fmt::{Display, Formatter};
 use std::str::FromStr;
@@ -5,28 +6,28 @@ use itertools::Itertools;
 use paris::info;
 use crate::utils::get_input;
 
-pub fn solve_1(filename: &str) -> String {
+pub fn solve_1(filename: &str) -> Result<String> {
     let routes: Vec<Route> = get_input(filename);
 
-    let distances = find_distances(routes);
-
-    distances
+    let answer = find_distances(routes)
         .iter()
         .min()
         .unwrap()
-        .to_string()
+        .to_string();
+
+    Ok(answer)
 }
 
-pub fn solve_2(filename: &str) -> String {
+pub fn solve_2(filename: &str) -> Result<String> {
     let routes: Vec<Route> = get_input(filename);
 
-    let distances = find_distances(routes);
-
-    distances
+    let answer = find_distances(routes)
         .iter()
         .max()
         .unwrap()
-        .to_string()
+        .to_string();
+
+    Ok(answer)
 }
 
 

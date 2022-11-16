@@ -1,3 +1,4 @@
+use anyhow::Result;
 use itertools::Itertools;
 
 type Connection = (String, String);
@@ -15,14 +16,14 @@ fn parse_input(filename: &str) -> Vec<Connection> {
         .collect::<Vec<(String, String)>>()
 }
 
-pub fn solve_1(filename: &str) -> String {
+pub fn solve_1(filename: &str) -> Result<String> {
     let input: Vec<Connection> = parse_input(filename);
     let path: Path = vec!["start".to_string()];
 
-    search(path, &input, &None).len().to_string()
+    Ok(search(path, &input, &None).len().to_string())
 }
 
-pub fn solve_2(filename: &str) -> String {
+pub fn solve_2(filename: &str) -> Result<String> {
     let input: Vec<Connection> = parse_input(filename);
     let path: Path = vec!["start".to_string()];
 
@@ -40,7 +41,7 @@ pub fn solve_2(filename: &str) -> String {
         .collect();
 
     // need to filter because special cave might be used 0, 1 or 2 times.
-    paths.iter().unique().count().to_string()
+    Ok(paths.iter().unique().count().to_string())
 }
 
 fn search(path: Path, input: &[Connection], special_cave: &Option<&str>) -> Vec<Path> {

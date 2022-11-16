@@ -1,14 +1,15 @@
+use anyhow::Result;
 use crate::utils::get_comma_seperated_input;
 
-pub fn solve_1(filename: &str) -> String {
+pub fn solve_1(filename: &str) -> Result<String> {
     solve(filename, 80)
 }
 
-pub fn solve_2(filename: &str) -> String {
+pub fn solve_2(filename: &str) -> Result<String> {
     solve(filename, 256)
 }
 
-fn solve(filename: &str, days: u16) -> String {
+fn solve(filename: &str, days: u16) -> Result<String> {
     let input: Vec<u32> = get_comma_seperated_input(filename);
 
     let mut count = (0..=8)
@@ -22,5 +23,5 @@ fn solve(filename: &str, days: u16) -> String {
         count.push(number_of_zeroes);
     }
 
-    count.iter().sum::<u64>().to_string()
+    Ok(count.iter().sum::<u64>().to_string())
 }

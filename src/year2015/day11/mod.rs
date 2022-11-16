@@ -1,9 +1,10 @@
+use anyhow::Result;
 use fancy_regex::Regex;
 use itertools::Itertools;
 use paris::info;
 use crate::utils::get_input_string;
 
-pub fn solve_1(filename: &str) -> String {
+pub fn solve_1(filename: &str) -> Result<String> {
     let mut password = get_input_string(filename);
 
     loop {
@@ -15,10 +16,10 @@ pub fn solve_1(filename: &str) -> String {
         }
     }
 
-    password
+    Ok(password)
 }
 
-pub fn solve_2(_: &str) -> String {
+pub fn solve_2(_: &str) -> Result<String> {
     let mut password = "hepxxyzz".to_string();
 
     loop {
@@ -29,7 +30,7 @@ pub fn solve_2(_: &str) -> String {
         }
     }
 
-    password
+    Ok(password)
 }
 
 fn increment_password(password: &str) -> String {

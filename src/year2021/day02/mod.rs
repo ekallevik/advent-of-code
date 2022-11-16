@@ -1,14 +1,15 @@
+use anyhow::Result;
 use crate::domain::{NaivePosition, AimedPosition, SubmarineCommand};
 use crate::utils::get_input;
 
-pub fn solve_1(filename: &str) -> String {
+pub fn solve_1(filename: &str) -> Result<String> {
     let input = get_input(filename);
-    calculate_naive_position(input).to_string()
+    Ok(calculate_naive_position(input).to_string())
 }
 
-pub fn solve_2(filename: &str) -> String {
+pub fn solve_2(filename: &str) -> Result<String> {
     let input = get_input(filename);
-    calculate_position(input).to_string()
+    Ok(calculate_position(input).to_string())
 }
 
 fn calculate_naive_position(commands: Vec<SubmarineCommand>) -> i64 {

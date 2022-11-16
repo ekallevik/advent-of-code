@@ -1,9 +1,10 @@
+use anyhow::Result;
 use fancy_regex::Regex;
 use serde_json::Value;
 
 use crate::utils::get_input_string;
 
-pub fn solve_1(filename: &str) -> String {
+pub fn solve_1(filename: &str) -> Result<String> {
     let input = get_input_string(filename);
 
     let re = Regex::new(r#"(-*\d+)"#).unwrap();
@@ -14,15 +15,15 @@ pub fn solve_1(filename: &str) -> String {
         sum += value.parse::<i32>().unwrap();
     }
 
-    sum.to_string()
+    Ok(sum.to_string())
 }
 
-pub fn solve_2(filename: &str) -> String {
+pub fn solve_2(filename: &str) -> Result<String> {
 
     let input = get_input_string(filename);
     let json: Value = serde_json::from_str(&*input).unwrap();
 
-    sum_json(json).to_string()
+    Ok(sum_json(json).to_string())
 }
 
 fn sum_json(json: Value) -> i64 {

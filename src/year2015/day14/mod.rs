@@ -1,6 +1,7 @@
 use std::cmp::min;
 use std::fmt::{Display, Formatter};
 use std::str::FromStr;
+use anyhow::Result;
 use fancy_regex::Regex;
 use crate::utils::get_input;
 
@@ -73,18 +74,18 @@ impl FromStr for Reindeer {
 
 const COMPETITION_TIME: usize = 2503;
 
-pub fn solve_1(filename: &str) -> String {
+pub fn solve_1(filename: &str) -> Result<String> {
     let herd: Vec<Reindeer> = get_input(filename);
 
-    herd
+    Ok(herd
         .iter()
         .map(|reindeer| reindeer.fly(COMPETITION_TIME))
         .max()
         .unwrap()
-        .to_string()
+        .to_string())
 }
 
-pub fn solve_2(filename: &str) -> String {
+pub fn solve_2(filename: &str) -> Result<String> {
     let _herd: Vec<Reindeer> = get_input(filename);
 
     for _tick in 0..COMPETITION_TIME {}

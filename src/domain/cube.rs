@@ -240,7 +240,7 @@ mod test_cube {
         let other = Cube::new_symmetric(4, 6);
 
         let diff = cube.subtract(&other);
-        let expected: Vec<Cube> = vec![];
+        let _expected: Vec<Cube> = vec![];
 
         for diff_cube in &diff {
             println!("{}", diff_cube)
@@ -258,7 +258,7 @@ mod test_cube {
         let other = Cube::new_symmetric(10, 10);
 
         let diff = cube.subtract(&other);
-        let expected: Vec<Cube> = vec![];
+        let _expected: Vec<Cube> = vec![];
 
         for diff_cube in &diff {
             //println!("{}", diff_cube);

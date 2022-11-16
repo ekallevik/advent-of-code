@@ -1,8 +1,9 @@
+use anyhow::Result;
 use std::collections::HashMap;
 use crate::domain::NaiveLine;
 use crate::utils::get_input;
 
-pub fn solve_1(filename: &str) -> String {
+pub fn solve_1(filename: &str) -> Result<String> {
     let input: Vec<NaiveLine> = get_input(filename);
 
     let lines = input
@@ -10,14 +11,14 @@ pub fn solve_1(filename: &str) -> String {
         .filter(|line| line.start.x == line.end.x || line.start.y == line.end.y)
         .collect::<Vec<NaiveLine>>();
 
-    map_ocean_vents(lines).to_string()
+    Ok(map_ocean_vents(lines).to_string())
 }
 
 
-pub fn solve_2(filename: &str) -> String {
+pub fn solve_2(filename: &str) -> Result<String> {
     let input: Vec<NaiveLine> = get_input(filename);
 
-    map_ocean_vents(input).to_string()
+    Ok(map_ocean_vents(input).to_string())
 }
 
 fn map_ocean_vents(lines: Vec<NaiveLine>) -> usize {

@@ -11,11 +11,11 @@ THE RULES OF THE GAME
     & it only contains Amphipods of the correct type
 7. Once moved into the hallway, it will stay there til it can move directly to destination
 */
-
+use anyhow::Result;
 use core::fmt;
 use std::{fmt::{Display, Formatter}, str::FromStr};
 
-pub fn solve_1(_: &str) -> String {
+pub fn solve_1(_: &str) -> Result<String> {
 
     let locations = vec![
         Location::new_hallway(0),
@@ -31,11 +31,11 @@ pub fn solve_1(_: &str) -> String {
         Location::new_hallway(10),
     ];
 
-    solve(locations, 0, 0).unwrap().to_string()
+    Ok(solve(locations, 0, 0).unwrap().to_string())
 }
 
-pub fn solve_2(filename: &str) -> String {
-    filename.to_string()
+pub fn solve_2(_filename: &str) -> Result<String> {
+    todo!()
 }
 
 fn solve(locations: Vec<Location>, iteration: usize, branch: usize) -> Option<usize> {

@@ -1,3 +1,4 @@
+use anyhow::Result;
 use std::cmp::max;
 use std::str::FromStr;
 use std::string::ParseError;
@@ -7,7 +8,7 @@ use crate::utils::get_input;
 
 const DIMENSIONS: usize = 1000;
 
-pub fn solve_1(filename: &str) -> String {
+pub fn solve_1(filename: &str) -> Result<String> {
     let instructions: Vec<SwitchInstruction> = get_input(filename)
         .into_iter()
         .map(|line: String| line.parse().unwrap())
@@ -22,7 +23,7 @@ pub fn solve_1(filename: &str) -> String {
         .map(|row| count_switches(row))
         .sum();
 
-    a.to_string()
+    Ok(a.to_string())
 }
 
 fn count_switches(switches: &[Switch]) -> usize {
@@ -30,7 +31,7 @@ fn count_switches(switches: &[Switch]) -> usize {
 }
 
 
-pub fn solve_2(filename: &str) -> String {
+pub fn solve_2(filename: &str) -> Result<String> {
     let instructions: Vec<SwitchInstruction> = get_input(filename)
         .into_iter()
         .map(|line: String| line.parse().unwrap())
@@ -45,7 +46,7 @@ pub fn solve_2(filename: &str) -> String {
         .map(|row| count_lights(row))
         .sum();
 
-    a.to_string()
+    Ok(a.to_string())
 }
 
 fn count_lights(lights: &[Light]) -> isize {

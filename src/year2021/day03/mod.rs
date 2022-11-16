@@ -1,6 +1,7 @@
+use anyhow::Result;
 use crate::utils::{get_input, get_input_array};
 
-pub fn solve_1(filename: &str) -> String {
+pub fn solve_1(filename: &str) -> Result<String> {
     let input = get_input_array(filename);
 
     let size = input.len();
@@ -12,10 +13,10 @@ pub fn solve_1(filename: &str) -> String {
     let max_value = 2i64.pow(length as u32) - 1;
     let epsilon = max_value - gamma;
 
-    (epsilon * gamma).to_string()
+    Ok((epsilon * gamma).to_string())
 }
 
-pub fn solve_2(filename: &str) -> String {
+pub fn solve_2(filename: &str) -> Result<String> {
     let input_a: Vec<Vec<u8>> = get_input_array(filename);
     let input2 = get_input(filename);
     let input: Vec<String> = get_input(filename);
@@ -72,7 +73,7 @@ pub fn solve_2(filename: &str) -> String {
         panic!("Oxygen: {}, ox: {}", oxygen, ox);
     }
 
-    (oxygen * co2).to_string()
+    Ok((oxygen * co2).to_string())
 }
 
 fn count_ones(lines: &[Vec<u8>], index: usize) -> usize {

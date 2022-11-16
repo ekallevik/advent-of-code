@@ -1,11 +1,12 @@
+use anyhow::Result;
 use crate::utils::get_input_string;
 
-pub fn solve_1(filename: &str) -> String {
+pub fn solve_1(filename: &str) -> Result<String> {
     let _secret = get_input_string(filename);
 
     //md5::compute();
 
-    "count".to_string()
+    Ok("count".to_string())
 }
 
 /*
@@ -118,8 +119,8 @@ fn get_md5_k() -> Vec<u32> {
 
  */
 
-pub fn solve_2(filename: &str) -> String {
+pub fn solve_2(filename: &str) -> Result<String> {
     let _secret = get_input_string(filename);
 
-    "Could not find an answer".to_string()
+    Ok("Could not find an answer".to_string())
 }

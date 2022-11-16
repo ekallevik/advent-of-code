@@ -1,8 +1,9 @@
 use std::collections::HashSet;
+use anyhow::Result;
 use crate::domain::position::Position2D;
 use crate::utils::get_input_string;
 
-pub fn solve_1(filename: &str) -> String {
+pub fn solve_1(filename: &str) -> Result<String> {
     let directions = get_input_string(filename);
 
     let mut set = HashSet::new();
@@ -15,10 +16,10 @@ pub fn solve_1(filename: &str) -> String {
         current = new_position
     }
 
-    set.len().to_string()
+    Ok(set.len().to_string())
 }
 
-pub fn solve_2(filename: &str) -> String {
+pub fn solve_2(filename: &str) -> Result<String> {
     let directions = get_input_string(filename);
 
     // todo: use set of references
@@ -44,7 +45,7 @@ pub fn solve_2(filename: &str) -> String {
         };
     }
 
-    set.len().to_string()
+    Ok(set.len().to_string())
 }
 
 fn to_next_position(current: &Position2D, c: char) -> Position2D {

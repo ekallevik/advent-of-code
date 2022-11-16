@@ -1,13 +1,14 @@
+use anyhow::Result;
 use crate::utils::get_input;
 
-pub fn solve_1(filename: &str) -> String {
+pub fn solve_1(filename: &str) -> Result<String> {
     let input = get_input(filename);
-    count_depth_increases(input).to_string()
+    Ok(count_depth_increases(input).to_string())
 }
 
-pub fn solve_2(filename: &str) -> String {
+pub fn solve_2(filename: &str) -> Result<String> {
     let input = get_input(filename);
-    count_sliding_depth_increases(input).to_string()
+    Ok(count_sliding_depth_increases(input).to_string())
 }
 
 fn count_depth_increases(depths: Vec<u64>) -> u64 {

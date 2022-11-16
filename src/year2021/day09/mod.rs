@@ -1,14 +1,15 @@
+use anyhow::Result;
 use std::collections::HashSet;
 
 use crate::utils::get_input_array;
 
-pub fn solve_1(filename: &str) -> String {
+pub fn solve_1(filename: &str) -> Result<String> {
     let input = get_input_array::<u64>(filename);
-    find_low_points(&input)
+    Ok(find_low_points(&input)
         .iter()
         .map(|&point| point.2 + 1)
         .sum::<u64>()
-        .to_string()
+        .to_string())
 }
 
 fn find_low_points(depths: &[Vec<u64>]) -> Vec<(i32, i32, u64)> {
@@ -71,7 +72,7 @@ fn generate_neighbors(x: i32, y: i32, x_size: i32, y_size: i32) -> Vec<(i32, i32
     res
 }
 
-pub fn solve_2(filename: &str) -> String {
+pub fn solve_2(filename: &str) -> Result<String> {
     let depths = get_input_array::<u64>(filename);
     let origins = find_low_points(&depths);
 
@@ -120,5 +121,5 @@ pub fn solve_2(filename: &str) -> String {
     sorted.sort_unstable();
     sorted.reverse();
 
-    (sorted[0] * sorted[1] * sorted[2]).to_string()
+    Ok((sorted[0] * sorted[1] * sorted[2]).to_string())
 }

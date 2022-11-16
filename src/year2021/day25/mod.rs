@@ -1,5 +1,7 @@
+use anyhow::Result;
 use std::collections::HashMap;
 use std::fmt::{Display, Formatter};
+use crate::utils::get_input_string;
 
 struct Dimensions(usize, usize);
 
@@ -52,8 +54,8 @@ fn parse_mariana_trench(input: &str) -> (HashMap<(usize, usize), SeaCucumber>, D
 }
 
 
-pub fn solve_1(filename: &str) -> String {
-    let input = std::fs::read_to_string(filename).expect("file not found!");
+pub fn solve_1(filename: &str) -> Result<String> {
+    let input = get_input_string(filename);
     let (mut current, dims) = parse_mariana_trench(&input);
 
     let east_target = &SeaCucumber::East;
@@ -76,12 +78,12 @@ pub fn solve_1(filename: &str) -> String {
         }
     }
 
-    iteration.to_string()
+    Ok(iteration.to_string())
 }
 
-pub fn solve_2(_: &str) -> String {
+pub fn solve_2(_: &str) -> Result<String> {
     let number_of_stars = 37;
-    number_of_stars.to_string()
+    Ok(number_of_stars.to_string())
 }
 
 fn move_cucumbers(current: HashMap<(usize, usize), SeaCucumber>, dims: &Dimensions, target: &SeaCucumber) -> (HashMap<(usize, usize), SeaCucumber>, bool) {

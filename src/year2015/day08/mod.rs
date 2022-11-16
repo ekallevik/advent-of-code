@@ -1,7 +1,8 @@
+use anyhow::Result;
 use fancy_regex::Regex;
 use crate::utils::get_input;
 
-pub fn solve_1(filename: &str) -> String {
+pub fn solve_1(filename: &str) -> Result<String> {
     let input: Vec<String> = get_input(filename);
 
     let answer: usize = input
@@ -9,10 +10,10 @@ pub fn solve_1(filename: &str) -> String {
         .map(|line| find_decoding_difference(line))
         .sum();
 
-    answer.to_string()
+    Ok(answer.to_string())
 }
 
-pub fn solve_2(filename: &str) -> String {
+pub fn solve_2(filename: &str) -> Result<String> {
     let input: Vec<String> = get_input(filename);
 
     let answer: usize = input
@@ -20,7 +21,7 @@ pub fn solve_2(filename: &str) -> String {
         .map(|line| find_encoding_difference(line))
         .sum();
 
-    answer.to_string()
+    Ok(answer.to_string())
 }
 
 fn get_ascii_regex() -> Regex {

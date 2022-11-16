@@ -1,3 +1,4 @@
+use anyhow::Result;
 use crate::utils::get_input_array;
 
 use std::cmp::Ordering;
@@ -25,22 +26,22 @@ impl Ord for State {
     }
 }
 
-pub fn solve_1(filename: &str) -> String {
+pub fn solve_1(filename: &str) -> Result<String> {
     let input: Vec<Vec<usize>> = get_input_array(filename);
 
     let max_y = input.len();
     let max_x = input.first().unwrap().len();
 
-    a_star((0, 0), (max_x - 1, max_y - 1), &input).to_string()
+    Ok(a_star((0, 0), (max_x - 1, max_y - 1), &input).to_string())
 }
 
-pub fn solve_2(filename: &str) -> String {
+pub fn solve_2(filename: &str) -> Result<String> {
     let input: Vec<Vec<usize>> = get_input_array(filename);
 
     let max_y = input.len() * 5;
     let max_x = input.first().unwrap().len() * 5;
 
-    a_star((0, 0), (max_x - 1, max_y - 1), &input).to_string()
+    Ok(a_star((0, 0), (max_x - 1, max_y - 1), &input).to_string())
 }
 
 fn a_star(start: Position, goal: Position, grid: &[Vec<usize>]) -> usize {

@@ -1,3 +1,5 @@
+use crate::utils::SolverFn;
+
 mod day01;
 mod day02;
 mod day03;
@@ -22,9 +24,6 @@ mod day22;
 mod day23;
 mod day24;
 mod day25;
-
-type SolverFn = fn(&str) -> String;
-
 
 pub fn get_solvers(day: u32) -> (SolverFn, SolverFn) {
 

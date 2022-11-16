@@ -8,7 +8,7 @@ mod year2015;
 use crate::utils::{PuzzlePart, solution::Solution};
 use argh::FromArgs;
 use chrono::Datelike;
-use paris::info;
+use paris::{error, info};
 use std::time::Instant;
 use strum::IntoEnumIterator;
 
@@ -62,11 +62,13 @@ fn main() -> Result<(), std::io::Error> {
             PuzzlePart::SecondTest => second(&test_input),
             PuzzlePart::SecondReal => second(&real_input),
         };
-        println!("\nElapsed: {:#?}", start.elapsed());
+        info!("\nElapsed: {:#?}", start.elapsed());
 
+        let r = result.expect("Result was an error");
 
-        let is_solved = solution.verify_or_update(part, result);
+        let is_solved = solution.verify_or_update(part, r);
         if !is_solved {
+            error!("Could not solve {}-{}", year, day);
             std::process::exit(1);
         }
         solution.save();

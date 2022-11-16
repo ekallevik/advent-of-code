@@ -1,3 +1,4 @@
+use anyhow::Result;
 use std::collections::HashMap;
 
 use crate::utils::get_input;
@@ -42,11 +43,11 @@ fn parse_input2(input: Vec<String>) -> Vec<(Vec<String>, Vec<String>)> {
     signals
 }
 
-pub fn solve_1(filename: &str) -> String {
+pub fn solve_1(filename: &str) -> Result<String> {
     let input = get_input(filename);
     let (_, displays) = parse_input(input);
 
-    displays
+    Ok(displays
         .into_iter()
         .inspect(|s| println!("{:?}", s))
         .map(|segment| {
@@ -62,10 +63,10 @@ pub fn solve_1(filename: &str) -> String {
                 .sum::<i64>()
         })
         .sum::<i64>()
-        .to_string()
+        .to_string())
 }
 
-pub fn solve_2(filename: &str) -> String {
+pub fn solve_2(filename: &str) -> Result<String> {
     let input = get_input(filename);
     let signals = parse_input2(input);
 
@@ -81,7 +82,7 @@ pub fn solve_2(filename: &str) -> String {
         }
     }
 
-    sum.to_string()
+    Ok(sum.to_string())
 }
 
 fn is_superset(signal: &str, encoding: &str) -> bool {

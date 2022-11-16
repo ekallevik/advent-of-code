@@ -1,3 +1,4 @@
+use anyhow::Result;
 use std::cmp::max;
 use std::collections::HashSet;
 use std::ops::RangeInclusive;
@@ -18,7 +19,7 @@ fn parse_input(filename: &str) -> Option<(RangeInclusive<isize>, RangeInclusive<
 }
 
 
-pub fn solve_1(filename: &str) -> String {
+pub fn solve_1(filename: &str) -> Result<String> {
     let (target_x, target_y) = parse_input(filename).unwrap();
 
     //let mut velocities = HashSet::new();
@@ -80,7 +81,7 @@ pub fn solve_1(filename: &str) -> String {
     //println!("{:?}", cu);
 
     //let result = velocities.into_iter().max_by_key(|v| v.1).unwrap();
-    (sum_to_n(max_initial_velocity)).to_string()
+    Ok((sum_to_n(max_initial_velocity)).to_string())
 }
 
 fn solve(target_x: RangeInclusive<isize>, target_y: RangeInclusive<isize>) -> usize {
@@ -355,14 +356,14 @@ fn find_y_range(target_y: &RangeInclusive<isize>) -> RangeInclusive<isize> {
 }
 
 
-pub fn solve_2(filename: &str) -> String {
-    let (target_x, target_y) = parse_input(filename).unwrap();
+pub fn solve_2(filename: &str) -> Result<String> {
+    let (_target_x, _target_y) = parse_input(filename).unwrap();
 
     //solver();
     //"asd.".to_string()
     // 3528
 
-    solve(target_x, target_y).to_string()
+    todo!()
 }
 
 #[cfg(test)]

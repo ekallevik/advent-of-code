@@ -1,3 +1,4 @@
+use anyhow::Result;
 use itertools::Itertools;
 
 use std::collections::HashMap;
@@ -42,18 +43,18 @@ fn parse_input(filename: &str) -> (PairFreq, Rules) {
     (frequencies, rules)
 }
 
-pub fn solve_1(filename: &str) -> String {
+pub fn solve_1(filename: &str) -> Result<String> {
     let (frequencies, rules) = parse_input(filename);
-    solve_problem(&rules, frequencies, 10).to_string()
+    Ok(solve_problem(&rules, frequencies, 10).to_string())
 }
 
-pub fn solve_2(filename: &str) -> String {
+pub fn solve_2(filename: &str) -> Result<String> {
     let start = Instant::now();
     let (frequencies, rules) = parse_input(filename);
     let res = solve_problem(&rules, frequencies, 40).to_string();
     let duration = start.elapsed();
     println!("{:?}", duration);
-    res
+    Ok(res)
 }
 
 fn solve_problem(rules: &Rules, mut frequencies: PairFreq, steps: i8) -> usize {

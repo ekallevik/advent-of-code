@@ -1,6 +1,7 @@
+use anyhow::Result;
 use crate::utils::get_comma_seperated_input;
 
-pub fn solve_1(filename: &str) -> String {
+pub fn solve_1(filename: &str) -> Result<String> {
     let input: Vec<isize> = get_comma_seperated_input(filename);
     let mut consumption = i64::MAX;
 
@@ -16,14 +17,14 @@ pub fn solve_1(filename: &str) -> String {
         println!("Pos: {:?} consumption: {:?}", position, consumption);
     }
 
-    consumption.to_string()
+    Ok(consumption.to_string())
 }
 
 fn sum_to_n(n: i64) -> i64 {
     n * (n + 1) / 2
 }
 
-pub fn solve_2(filename: &str) -> String {
+pub fn solve_2(filename: &str) -> Result<String> {
     let input: Vec<isize> = get_comma_seperated_input(filename);
     let mut consumption = i64::MAX;
 
@@ -41,5 +42,5 @@ pub fn solve_2(filename: &str) -> String {
         consumption = i64::min(sum as i64, consumption);
     }
 
-    consumption.to_string()
+    Ok(consumption.to_string())
 }

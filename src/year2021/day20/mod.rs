@@ -1,3 +1,4 @@
+use anyhow::Result;
 use crate::utils::get_partitioned_input;
 
 fn parse_to_boolean(char: char) -> bool {
@@ -22,16 +23,16 @@ fn parse_input(filename: &str) -> (Vec<bool>, Vec<Vec<bool>>) {
     (input, output)
 }
 
-pub fn solve_1(filename: &str) -> String {
+pub fn solve_1(filename: &str) -> Result<String> {
     let (codec, image) = parse_input(filename);
 
     let (first, new_default) = apply_codec(&codec, image, false);
     let (second, _) = apply_codec(&codec, first, new_default);
 
-    count_light_pixels(&second).to_string()
+    Ok(count_light_pixels(&second).to_string())
 }
 
-pub fn solve_2(filename: &str) -> String {
+pub fn solve_2(filename: &str) -> Result<String> {
     let (codec, image) = parse_input(filename);
 
     let mut image = image;
@@ -45,7 +46,7 @@ pub fn solve_2(filename: &str) -> String {
         default = updated_default;
     }
 
-    count_light_pixels(&image).to_string()
+    Ok(count_light_pixels(&image).to_string())
 }
 
 fn count_light_pixels(image: &[Vec<bool>]) -> usize {

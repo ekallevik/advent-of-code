@@ -1,3 +1,4 @@
+use anyhow::Result;
 use crate::utils::{breakpoint, get_input};
 use std::collections::HashSet;
 use crate::domain::Line;
@@ -49,17 +50,17 @@ fn parse_steps(filename: &str, core_only: bool) -> Vec<(bool, Cube)> {
 
 
 
-pub fn solve_1(filename: &str) -> String {
+pub fn solve_1(filename: &str) -> Result<String> {
     let steps = parse_steps(filename, true);
 
-    reboot(steps).to_string()
+    Ok(reboot(steps).to_string())
 }
 
 
-pub fn solve_2(filename: &str) -> String {
+pub fn solve_2(filename: &str) -> Result<String> {
     let steps = parse_steps(filename, false);
 
-    reboot(steps).to_string()
+    Ok(reboot(steps).to_string())
 }
 
 /*

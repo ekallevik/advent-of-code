@@ -49,6 +49,7 @@ impl Solution {
     }
 
     pub fn verify_or_update(&mut self, part: PuzzlePart, result: String) -> bool {
+
         let answer = match part {
             PuzzlePart::FirstTest => &mut self.first_test,
             PuzzlePart::FirstReal => &mut self.first_real,

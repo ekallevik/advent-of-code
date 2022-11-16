@@ -1,3 +1,4 @@
+use anyhow::Result;
 use crate::utils::get_input;
 use std::cmp::max;
 use std::collections::VecDeque;
@@ -6,11 +7,11 @@ use snailfish::Snailfish;
 
 mod snailfish;
 
-pub fn solve_1(filename: &str) -> String {
+pub fn solve_1(filename: &str) -> Result<String> {
     let input: Vec<String> = get_input(filename);
     let mut school = VecDeque::from_iter(input.iter().map(|fish| Snailfish::parse(fish)));
 
-    add_numbers(&mut school).to_string()
+    Ok(add_numbers(&mut school).to_string())
 }
 
 fn add_numbers(school: &mut VecDeque<Snailfish>) -> usize {
@@ -37,7 +38,7 @@ fn reduce(mut snailfish: Snailfish) -> Snailfish {
     }
 }
 
-pub fn solve_2(filename: &str) -> String {
+pub fn solve_2(filename: &str) -> Result<String> {
     let input: Vec<String> = get_input(filename);
     let school: Vec<Snailfish> = input.iter().map(|fish| Snailfish::parse(fish)).collect();
 
@@ -58,9 +59,6 @@ pub fn solve_2(filename: &str) -> String {
         largest_sum = max(largest_sum, sum);
     }
 
-    largest_sum.to_string()
+    Ok(largest_sum.to_string())
 
 }
-
-
-

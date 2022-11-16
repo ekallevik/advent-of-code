@@ -1,3 +1,4 @@
+use anyhow::Result;
 use crate::utils::get_input;
 use std::cmp::max;
 use std::collections::HashMap;
@@ -31,7 +32,7 @@ fn parse_input(filename: &str) -> (usize, usize) {
     (first, last)
 }
 
-pub fn solve_1(filename: &str) -> String {
+pub fn solve_1(filename: &str) -> Result<String> {
     let (first, second) = parse_input(filename);
 
     let mut first_score: usize = 0;
@@ -51,7 +52,7 @@ pub fn solve_1(filename: &str) -> String {
                     "Player {} won, iteration {}, scores: {}, {}",
                     1, iterations, first_score, second_score
                 );
-                return (3 * iterations * second_score).to_string();
+                return Ok((3 * iterations * second_score).to_string());
             }
         } else {
             second_pos = (second_pos + throw * 3 + 3) % 10;
@@ -62,7 +63,7 @@ pub fn solve_1(filename: &str) -> String {
                     "Player {} won, iteration {}, scores: {}, {}",
                     2, iterations, first_score, second_score
                 );
-                return (3 * iterations * second_score).to_string();
+                return Ok((3 * iterations * second_score).to_string());
             }
         }
 
@@ -71,7 +72,7 @@ pub fn solve_1(filename: &str) -> String {
     }
 }
 
-pub fn solve_2(filename: &str) -> String {
+pub fn solve_2(filename: &str) -> Result<String> {
     let (first, second) = parse_input(filename);
 
     let throws = calculate_dirac_throw();
@@ -87,7 +88,7 @@ pub fn solve_2(filename: &str) -> String {
 
     println!("\nTotal wins: {} - {}", first_wins, second_wins);
 
-    max(first_wins, second_wins).to_string()
+    Ok(max(first_wins, second_wins).to_string())
 }
 
 // todo: replace player with struct, and add references to memo?

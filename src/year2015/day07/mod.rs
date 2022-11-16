@@ -1,18 +1,18 @@
 use std::collections::{HashMap, VecDeque};
 use std::str::FromStr;
-
+use anyhow::Result;
 use fancy_regex::Regex;
 use itertools::Itertools;
 
 use crate::utils::get_input;
 
-pub fn solve_1(filename: &str) -> String {
+pub fn solve_1(filename: &str) -> Result<String> {
     let symbols: Vec<CircuitSymbol> = get_input(filename);
 
     let symbol_queue = VecDeque::from_iter(symbols.into_iter());
     let resolution = resolve_symbols(symbol_queue);
 
-    resolved_to_string(&resolution)
+    Ok(resolved_to_string(&resolution))
 }
 
 fn resolved_to_string(resolved: &HashMap<String, u16>) -> String {
@@ -135,7 +135,7 @@ fn is_numeric(s: &str) -> bool {
     s.trim().chars().all(|c| c.is_numeric())
 }
 
-pub fn solve_2(filename: &str) -> String {
+pub fn solve_2(filename: &str) -> Result<String> {
     let symbols: Vec<CircuitSymbol> = get_input(filename);
 
     let updated_symbols = symbols
@@ -151,7 +151,7 @@ pub fn solve_2(filename: &str) -> String {
 
     let resolution = resolve_symbols(symbol_queue);
 
-    resolved_to_string(&resolution)
+    Ok(resolved_to_string(&resolution))
 }
 
 
@@ -251,8 +251,6 @@ mod tests {
 
         let actual: CircuitSymbol = a.parse().unwrap();
         let expected = CircuitSymbol::Unary { name: "gp".to_string(), operator: Not, operand: CircuitValue::Variable("go".to_string()) };
-        let expected =
-
-            assert_eq!(actual, expected);
+        assert_eq!(actual, expected);
     }
 }

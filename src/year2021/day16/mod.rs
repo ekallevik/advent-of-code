@@ -1,3 +1,4 @@
+use anyhow::Result;
 use crate::utils::get_input_string;
 
 use std::str::Chars;
@@ -8,11 +9,11 @@ fn parse_input(filename: &str) -> Vec<char> {
     bits
 }
 
-pub fn solve_1(filename: &str) -> String {
+pub fn solve_1(filename: &str) -> Result<String> {
     let bits = parse_input(filename);
     let (acc_version, _, _) = decode(&bits);
 
-    acc_version.to_string()
+    Ok(acc_version.to_string())
 }
 
 fn decode(bits: &[char]) -> (usize, usize, Vec<char>) {
@@ -155,11 +156,11 @@ fn split_and_decode(bits: &[char], split: usize) -> (usize, &[char]) {
     (target, rest)
 }
 
-pub fn solve_2(filename: &str) -> String {
+pub fn solve_2(filename: &str) -> Result<String> {
     let bits = parse_input(filename);
     let (_, value, _) = decode(&bits);
 
-    value.to_string()
+    Ok(value.to_string())
 }
 
 fn chars_to_number(chars: &[char]) -> usize {

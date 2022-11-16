@@ -1,3 +1,4 @@
+use anyhow::Result;
 use crate::utils::get_partitioned_input;
 use vectrix::Matrix;
 
@@ -30,14 +31,14 @@ fn parse_input(filename: &str) -> (Vec<i64>, Vec<Board>) {
 
 type Board = Matrix<(i64, bool), 5, 5>;
 
-pub fn solve_1(filename: &str) -> String {
+pub fn solve_1(filename: &str) -> Result<String> {
     let (draws, boards) = parse_input(filename);
-    solve_part_1(boards, draws).to_string()
+    Ok(solve_part_1(boards, draws).to_string())
 }
 
-pub fn solve_2(filename: &str) -> String {
+pub fn solve_2(filename: &str) -> Result<String> {
     let (draws, boards) = parse_input(filename);
-    solve_part_2(boards, draws).to_string()
+    Ok(solve_part_2(boards, draws).to_string())
 }
 
 fn update(board: Board, draw: i64) -> Board {
