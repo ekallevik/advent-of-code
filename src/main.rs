@@ -1,16 +1,23 @@
+
+use rusqlite::Connection;
+use anyhow::Result;
+
 extern crate core;
 
-mod year2021;
 mod domain;
 mod utils;
+mod database;
 mod year2015;
+mod year2021;
 
-use crate::utils::{PuzzlePart, solution::Solution};
+use crate::utils::{PuzzlePart};
 use argh::FromArgs;
-use chrono::Datelike;
-use paris::{error, info};
+use chrono::{Datelike, NaiveDate};
+use paris::{error, info, success, warn};
 use std::time::Instant;
 use strum::IntoEnumIterator;
+use crate::database::{get_correct_solution, get_mission, save};
+use crate::utils::solution::Solution;
 
 fn default_day() -> u32 {
     chrono::offset::Local::now().day()
@@ -30,25 +37,27 @@ struct InitialArgs {
     year: i32,
 }
 
-fn main() -> Result<(), std::io::Error> {
+fn main() -> Result<()> {
     let args: InitialArgs = argh::from_env();
     let day = args.day;
+    let month = 12;
     let year = args.year;
 
+    let date = NaiveDate::from_ymd_opt(year, month, day).unwrap();
+    let conn = Connection::open("database.sqlite")?;
+
     println!();
-    info!("<green><u>⭐ ️Advent of Code {year} ⭐️");
-    info!("Solving day {:?}", day);
+    info!("<green><u>⭐️Advent of Code {year} ⭐️");
+    info!("Solving day {:?}\n", day);
 
     let (first, second) = match year {
         2015 => year2015::get_solvers(day),
         2021 => year2021::get_solvers(day),
         _ => {
-            println!("Year {year} is not supported");
+            warn!("Year {year} is not supported");
             std::process::exit(1);
         }
     };
-
-    let mut solution = Solution::load_or_create(year, day);
 
     let test_input = format!("src/year{}/day{:02}/test.txt", year, day);
     let real_input = format!("src/year{}/day{:02}/real.txt", year, day);
@@ -61,22 +70,53 @@ fn main() -> Result<(), std::io::Error> {
             PuzzlePart::FirstReal => first(&real_input),
             PuzzlePart::SecondTest => second(&test_input),
             PuzzlePart::SecondReal => second(&real_input),
+        }?;
+
+        let duration = start.elapsed();
+
+        info!("<u>{}", part);
+        info!("Answer: {:>12}", result);
+        info!("Duration: {:>12?}", duration);
+
+        let solution = if let Some(correct) = get_correct_solution(&conn, date, &part) {
+            if correct.result != result {
+                error!("The solution was not correct. Try again...\n");
+                std::process::exit(1);
+            }
+
+            let diff = correct.duration.as_micros() as f64 - duration.as_micros() as f64;
+            let gain = 100_f64 * diff / (correct.duration.as_micros() as f64);
+
+            if gain >= 0_f64 {
+                info!("New solution was <green>{:>.1}%</> faster\n", gain)
+            } else {
+                info!("New solution was <red>{:>.1}%</> slower\n", gain)
+            }
+
+            Solution { date, part, result, is_correct: true, duration }
+        } else {
+            println!("Is this the correct solution?");
+            let mut is_correct_solution = String::new();
+            std::io::stdin().read_line(&mut is_correct_solution).unwrap();
+
+            if is_correct_solution.trim() != "y" {
+                error!("The solution was not correct. Try again...\n");
+                Solution { date, part, result, is_correct: false, duration }
+            } else {
+                info!("<green>You found the correct solution!\n");
+                Solution { date, part, result, is_correct: true, duration }
+            }
         };
-        info!("\nElapsed: {:#?}", start.elapsed());
 
-        let r = result.expect("Result was an error");
+        save(&conn, &solution).expect("Failed to save to database");
 
-        let is_solved = solution.verify_or_update(part, r);
-        if !is_solved {
-            error!("Could not solve {}-{}", year, day);
+        if !solution.is_correct {
+            error!("Incorrect solution. Try again");
             std::process::exit(1);
         }
-        solution.save();
-
-
-
     }
 
-    info!("<green><u>Hurray, you are one day closer to finding the sleigh keys 🎉\n");
+    let mission = get_mission(&conn, year);
+    success!("<green><u>Hurray, you are one day closer to {} 🎉\n", mission);
     std::process::exit(0);
 }

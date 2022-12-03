@@ -17,3 +17,4 @@ strum = "0.23"
 strum_macros = "0.23"
 fancy-regex = "0.10.0"
 anyhow = "1.0.66"
+rusqlite = { version = "0.28.0", features = ["chrono"] }

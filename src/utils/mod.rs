@@ -1,20 +1,41 @@
-use std::fmt::Debug;
+use std::fmt::{Debug, Display, Formatter};
 use std::str::FromStr;
 
-use strum_macros::EnumIter;
+use strum_macros::{EnumIter};
 
 pub mod solution;
 
 use anyhow::Result;
+use rusqlite::ToSql;
+use rusqlite::types::ToSqlOutput;
+use serde::Deserialize;
 
 pub type SolverFn = fn(&str) -> Result<String>;
 
-#[derive(Debug, EnumIter)]
+#[derive(Debug, Deserialize, EnumIter)]
 pub enum PuzzlePart {
     FirstTest,
     FirstReal,
     SecondTest,
     SecondReal,
+}
+
+impl Display for PuzzlePart {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+        match self {
+            PuzzlePart::FirstTest => write!(f, "Part I - test"),
+            PuzzlePart::FirstReal => write!(f, "Part I - real"),
+            PuzzlePart::SecondTest => write!(f, "Part II - test"),
+            PuzzlePart::SecondReal => write!(f, "Part II - real"),
+        }
+    }
+}
+
+
+impl ToSql for PuzzlePart {
+    fn to_sql(&self) -> rusqlite::Result<ToSqlOutput<'_>> {
+        Ok(self.to_string().into())
+    }
 }
 
 pub fn get_input_string(filename: &str) -> String {
