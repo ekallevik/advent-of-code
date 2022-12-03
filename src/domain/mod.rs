@@ -1,6 +1,7 @@
 mod cube;
 mod line;
 pub(crate) mod position;
+pub(crate) mod order;
 
 use std::str::FromStr;
 pub use line::Line;

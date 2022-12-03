@@ -9,6 +9,7 @@ mod utils;
 mod database;
 mod year2015;
 mod year2021;
+mod year2022;
 
 use crate::utils::{PuzzlePart};
 use argh::FromArgs;
@@ -53,6 +54,7 @@ fn main() -> Result<()> {
     let (first, second) = match year {
         2015 => year2015::get_solvers(day),
         2021 => year2021::get_solvers(day),
+        2022 => year2022::get_solvers(day),
         _ => {
             warn!("Year {year} is not supported");
             std::process::exit(1);
