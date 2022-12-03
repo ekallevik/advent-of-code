@@ -103,32 +103,8 @@ impl Cube {
         cubes.into_iter().flatten().collect()
     }
 
-
     // todo: replace lines with vectors?
     // todo: make more fine-grained by removing duplicates?
-
-    pub fn diff(&self, other: &Cube) -> Vec<Cube> {
-        let x_diff = self.0.diff(&other.0);
-        let y_diff = self.1.diff(&other.1);
-        let z_diff = self.2.diff(&other.2);
-
-        let mut cubes = x_diff
-            .into_iter()
-            .map(|x_line| Cube(x_line, self.1, self.2))
-            .collect::<Vec<Cube>>();
-
-        let y_iterator = y_diff
-            .into_iter()
-            .map(|y_line| Cube(self.0, y_line, self.2));
-
-        let z_iterator = z_diff
-            .into_iter()
-            .map(|z_line| Cube(self.0, self.1, z_line));
-
-        cubes.extend(y_iterator);
-        cubes.extend(z_iterator);
-        cubes
-    }
 
     pub fn size(&self) -> usize {
         self.0.length() * self.1.length() * self.2.length()
@@ -215,22 +191,6 @@ mod test_cube {
 
         assert!(cube.overlaps(&other));
         assert!(other.overlaps(&cube));
-    }
-
-    #[test]
-    fn test_cube_diff() {
-
-        let cube = Cube::new_symmetric(0, 10);
-        let other = Cube::new_symmetric(4, 6);
-
-        let diff = cube.diff(&other);
-        let expected: Vec<Cube> = vec![];
-
-        for diff_cube in &diff {
-            println!("{:?}", diff_cube)
-        }
-
-        assert_eq!(diff, expected)
     }
 
     #[test]
