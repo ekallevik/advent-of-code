@@ -1,6 +1,5 @@
 use anyhow::Result;
 use std::cmp::max;
-use std::collections::HashSet;
 use std::ops::RangeInclusive;
 
 fn parse_line(line: &str) -> Option<RangeInclusive<isize>> {
@@ -84,6 +83,7 @@ pub fn solve_1(filename: &str) -> Result<String> {
     Ok((sum_to_n(max_initial_velocity)).to_string())
 }
 
+/*
 fn solve(target_x: RangeInclusive<isize>, target_y: RangeInclusive<isize>) -> usize {
 
     // 2753 too low
@@ -139,7 +139,7 @@ fn solve(target_x: RangeInclusive<isize>, target_y: RangeInclusive<isize>) -> us
     velocities.len()
 }
 
-/*
+
 fn step(v_x_0: isize, v_y_0: isize, steps: usize) -> (isize, isize) {
     let mut pos_x = 0;
     let mut pos_y = 0;
@@ -349,12 +349,15 @@ fn find_v_y_min(lowest_point: &isize, steps: usize) -> isize {
 
 }
 
+/*
+
 fn find_y_range(target_y: &RangeInclusive<isize>) -> RangeInclusive<isize> {
     let v_y_min = -target_y.start().abs();
     let v_y_max = target_y.end().abs()+20;
     v_y_min..=v_y_max
 }
 
+ */
 
 pub fn solve_2(filename: &str) -> Result<String> {
     let (_target_x, _target_y) = parse_input(filename).unwrap();
