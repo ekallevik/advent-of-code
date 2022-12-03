@@ -1,5 +1,4 @@
 use anyhow::{Result};
-use itertools::Itertools;
 use crate::utils::get_input;
 
 pub fn solve_1(filename: &str) -> Result<String> {
@@ -29,21 +28,19 @@ fn find_realignment_priority(rucksack: &str) -> u32 {
 
     let overlapping = left
         .chars()
-        .filter(|c| right.contains(*c))
-        .unique();
+        .find(|c| right.contains(*c))
+        .unwrap();
 
-    overlapping
-        .map(|c| get_char_priority(&c))
-        .sum()
+    get_char_priority(&overlapping)
 }
 
 fn find_badge_priority(rucksack: &[String]) -> u32 {
-    let chars = rucksack[0]
+    let overlapping = rucksack[0]
         .chars()
-        .filter(|&c| rucksack[1].contains(c) && rucksack[2].contains(c))
-        .collect::<Vec<char>>();
+        .find(|&c| rucksack[1].contains(c) && rucksack[2].contains(c))
+        .unwrap();
 
-    get_char_priority(chars.first().unwrap())
+    get_char_priority(&overlapping)
 }
 
 fn get_char_priority(c: &char) -> u32 {
