@@ -1,7 +1,6 @@
 use anyhow::{anyhow, Result};
 use crate::utils::get_input_string;
 
-type SolverFn = fn(&str) -> Result<String>;
 pub fn solve_1(filename: &str) -> Result<String> {
     let directions = get_input_string(filename);
 
