@@ -9,7 +9,7 @@ mod snailfish;
 
 pub fn solve_1(filename: &str) -> Result<String> {
     let input: Vec<String> = get_input(filename);
-    let mut school = VecDeque::from_iter(input.iter().map(|fish| Snailfish::parse(fish)));
+    let mut school = VecDeque::from_iter(input.iter().map(|fish| fish.parse().unwrap()));
 
     Ok(add_numbers(&mut school).to_string())
 }
@@ -40,7 +40,7 @@ fn reduce(mut snailfish: Snailfish) -> Snailfish {
 
 pub fn solve_2(filename: &str) -> Result<String> {
     let input: Vec<String> = get_input(filename);
-    let school: Vec<Snailfish> = input.iter().map(|fish| Snailfish::parse(fish)).collect();
+    let school: Vec<Snailfish> = input.iter().map(|fish| fish.parse().unwrap()).collect();
 
     let mut largest_sum = 0;
     for perm in school.iter().permutations(2) {
