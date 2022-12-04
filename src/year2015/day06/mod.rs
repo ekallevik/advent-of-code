@@ -1,5 +1,6 @@
 use anyhow::Result;
 use std::cmp::max;
+use std::fmt::{Display, Formatter};
 use std::str::FromStr;
 use std::string::ParseError;
 use fancy_regex::Regex;
@@ -9,14 +10,14 @@ use crate::utils::get_input;
 const DIMENSIONS: usize = 1000;
 
 pub fn solve_1(filename: &str) -> Result<String> {
-    let instructions: Vec<SwitchInstruction> = get_input(filename)
-        .into_iter()
-        .map(|line: String| line.parse().unwrap())
-        .collect();
+    let instructions: Vec<SwitchInstruction> = get_input(filename);
+    let mut grid = [[Switch(false); DIMENSIONS]; DIMENSIONS];
 
-    let grid = [[Switch(false); DIMENSIONS]; DIMENSIONS];
+    for ins in &instructions {
 
-    do_commands::<Switch>(grid, instructions);
+        println!("{:?}", ins);
+    }
+    do_commands::<Switch>(&mut grid, instructions);
 
     let a: usize = grid
         .iter()
@@ -32,14 +33,11 @@ fn count_switches(switches: &[Switch]) -> usize {
 
 
 pub fn solve_2(filename: &str) -> Result<String> {
-    let instructions: Vec<SwitchInstruction> = get_input(filename)
-        .into_iter()
-        .map(|line: String| line.parse().unwrap())
-        .collect();
+    let instructions: Vec<SwitchInstruction> = get_input(filename);
 
-    let grid = [[Light(0); DIMENSIONS]; DIMENSIONS];
+    let mut grid = [[Light(0); DIMENSIONS]; DIMENSIONS];
 
-    do_commands::<Light>(grid, instructions);
+    do_commands::<Light>(&mut grid, instructions);
 
     let a: isize = grid
         .iter()
@@ -55,6 +53,15 @@ fn count_lights(lights: &[Light]) -> isize {
 
 #[derive(Copy, Clone, Debug)]
 struct Switch(bool);
+
+impl Display for Switch {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+        match self.0 {
+            true => write!(f, " "),
+            false => write!(f, "x")
+        }
+    }
+}
 
 impl Switchable for Switch {
     fn do_command(&mut self, command: &SwitchCommand) {
@@ -79,6 +86,7 @@ impl Switchable for Light {
     }
 }
 
+#[derive(Debug)]
 struct SwitchInstruction {
     first: Position2D,
     second: Position2D,
@@ -128,7 +136,7 @@ trait Switchable {
     fn do_command(&mut self, command: &SwitchCommand);
 }
 
-fn do_commands<T: Switchable>(mut grid: [[T; 1000]; 1000], instructions: Vec<SwitchInstruction>) {
+fn do_commands<T: Switchable>(grid: &mut [[T; 1000]; 1000], instructions: Vec<SwitchInstruction>) {
     for SwitchInstruction { first, second, command: switch_command } in instructions {
         for x in first.0..(second.0 + 1) {
             for y in first.1..(second.1 + 1) {
