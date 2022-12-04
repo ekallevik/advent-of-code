@@ -5,7 +5,7 @@ use crate::utils::get_input_string;
 
 pub fn solve_1(filename: &str) -> Result<String> {
     let input = get_input_string(filename);
-    let output = iterate_look_and_say(input, 50);
+    let output = iterate_look_and_say(input, 40);
 
     Ok(output.len().to_string())
 }
