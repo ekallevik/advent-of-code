@@ -18,6 +18,7 @@ pub fn get_solvers(day: u32) -> (SolverFn, SolverFn) {
         4 => (day04::solve_1, day04::solve_2),
         5 => (day05::solve_1, day05::solve_2),
         6 => (day06::solve_1, day06::solve_2),
+        7 => (day07::solve_1, day07::solve_2),
         _ => {
             warn!("Did not find any matching days");
             std::process::exit(1);
