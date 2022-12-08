@@ -1,5 +1,6 @@
 use anyhow::{Result};
 use itertools::Itertools;
+use crate::domain::grid::{from_vec};
 use crate::utils::{get_input};
 
 fn parse_grid(filename: &str) -> Vec<Vec<u32>> {
@@ -18,27 +19,29 @@ fn parse_grid(filename: &str) -> Vec<Vec<u32>> {
 
 pub fn solve_1(filename: &str) -> Result<String> {
     let grid = parse_grid(filename);
+    let a = from_vec(grid);
 
-    let size = grid[1].len();
     let mut visible = 0;
+    let size = a.row_size;
 
-    for (i, row) in grid.iter().enumerate() {
-        for (j, value) in row.iter().enumerate() {
-            if i == 0 || i == size - 1 || j == 0 || j == size - 1 {
-                visible += 1;
-                continue;
-            }
+    for (i, j) in a.iterate().into_iter() {
 
-            let vertical = get_vertical(&grid, size,j);
+        let row = a.get_row(i);
+        let col = a.get_col(j);
+        let value = a.get(i, j);
 
-            let left_max = row[0..j].iter().max().unwrap_or(&row[0]);
-            let right_max = row[j + 1..size].iter().max().unwrap_or(&row.last().unwrap());
-            let top_max = *vertical[0..i].iter().max().unwrap_or(&vertical[0]);
-            let down_max = *vertical[i + 1..size].iter().max().unwrap_or(&vertical.last().unwrap());
+        if i == 0 || i == size - 1 || j == 0 || j == size - 1 {
+            visible += 1;
+            continue;
+        }
 
-            if (left_max < value || value > right_max) || (top_max < value || value > down_max) {
-                visible += 1;
-            }
+        let left_max = *row[0..j].iter().max().unwrap_or(&row[0]);
+        let right_max = *row[j + 1..size].iter().max().unwrap_or(&row.last().unwrap());
+        let top_max = *col[0..i].iter().max().unwrap_or(&col[0]);
+        let down_max = *col[i + 1..size].iter().max().unwrap_or(&col.last().unwrap());
+
+        if (left_max < value || value > right_max) || (top_max < value || value > down_max) {
+            visible += 1;
         }
     }
 
