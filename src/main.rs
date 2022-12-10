@@ -48,7 +48,7 @@ fn main() -> Result<()> {
     let conn = Connection::open("database.sqlite")?;
 
     println!();
-    info!("<green><u>⭐️Advent of Code {year} ⭐️");
+    info!("<green><u>⭐️Advent of Code {year} ⭐️</>");
     info!("Solving day {:?}\n", day);
 
     let (first, second) = match year {
@@ -65,6 +65,7 @@ fn main() -> Result<()> {
     let real_input = format!("src/year{}/day{:02}/real.txt", year, day);
 
     for part in PuzzlePart::iter() {
+        info!("<u>{part}</>");
         let start = Instant::now();
 
         let result = match part {
@@ -75,10 +76,8 @@ fn main() -> Result<()> {
         }?;
 
         let duration = start.elapsed();
-
-        info!("<u>{}", part);
-        info!("Answer: {:>12}", result);
         info!("Duration: {:>12?}", duration);
+        info!("Answer: {:>12}", result);
 
         let solution = if let Some(correct) = get_correct_solution(&conn, date, &part) {
             if correct.result != result {
