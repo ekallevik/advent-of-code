@@ -1,7 +1,7 @@
 use std::collections::HashSet;
 use std::fmt::{Display, Formatter};
 use std::str::FromStr;
-use anyhow::{Result};
+use anyhow::Result;
 use crate::utils::{get_input};
 
 #[derive(Debug)]
