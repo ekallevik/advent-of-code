@@ -64,37 +64,21 @@ struct Monkey {
 }
 
 impl Monkey {
-    fn get_moves(&self, items: &mut VecDeque<isize>) -> Vec<(usize, isize)> {
-        let mut moves = vec![];
 
-        while let Some(item) = items.pop_front() {
-            let applied = self.operation.apply(item) / 3;
-
-            let recipient = if applied % self.divisor == 0 {
-                self.happy_path_monkey
-            } else {
-                self.unhappy_path_monkey
-            };
-
-            moves.push((recipient, applied));
-        }
-
-        moves
-    }
-
-    fn get_moves2(&self, items: &mut VecDeque<isize>) -> Vec<(usize, isize)> {
+    fn get_moves(&self, items: &mut VecDeque<isize>, reducer: impl Fn(isize) -> isize) -> Vec<(usize, isize)> {
         let mut moves = vec![];
 
         while let Some(item) = items.pop_front() {
             let applied = self.operation.apply(item);
+            let reduced = reducer(applied);
 
-            let recipient = if (applied % self.divisor) == 0 {
+            let recipient = if (reduced % self.divisor) == 0 {
                 self.happy_path_monkey
             } else {
                 self.unhappy_path_monkey
             };
 
-            moves.push((recipient, applied));
+            moves.push((recipient, reduced));
         }
 
         moves
@@ -153,10 +137,12 @@ pub fn solve_1(filename: &str) -> Result<String> {
         .map(|m| (m.index, m.starting_items.clone()))
         .collect();
 
+    let reducer = |x| x / 3;
+
     for _ in 1..=20 {
         for monkey in &monkeys {
             let items = catalog.get_mut(&monkey.index).unwrap();
-            let moves = monkey.get_moves(items);
+            let moves = monkey.get_moves(items, reducer);
             inspections[monkey.index] += moves.len();
             for (recipient_index, item) in moves {
                 let recipient = catalog.get_mut(&recipient_index).unwrap();
@@ -183,17 +169,17 @@ pub fn solve_2(filename: &str) -> Result<String> {
         .map(|m| m.divisor)
         .fold(1, |acc, curr| acc * curr);
 
+    let reducer = |x| adjust_item(x, &gcd);
+
     for _ in 1..=10000 {
         for (i, monkey) in monkeys.iter().enumerate() {
             let items = catalog.get_mut(&i).unwrap();
-            let moves = monkey.get_moves2(items);
+            let moves = monkey.get_moves(items, reducer);
             inspections[i] += moves.len();
 
             for (recipient, item) in moves.into_iter() {
-                let adjusted = adjust_item(item, &gcd);
-
                 let recipient_items = catalog.get_mut(&recipient).unwrap();
-                recipient_items.push_back(adjusted);
+                recipient_items.push_back(item);
             }
         }
     }
