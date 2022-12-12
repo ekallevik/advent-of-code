@@ -1,6 +1,4 @@
-
-
-use anyhow::{Result};
+use anyhow::Result;
 
 use crate::utils::get_input;
 
