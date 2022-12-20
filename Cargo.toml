@@ -19,3 +19,4 @@ fancy-regex = "0.10.0"
 anyhow = "1.0.66"
 rusqlite = { version = "0.28.0", features = ["chrono"] }
 scan_fmt = "0.2.6"
+colored = "2.0.0"
