@@ -1,7 +1,6 @@
 use std::collections::HashMap;
 use std::fmt::{Display, Formatter};
 use std::str::FromStr;
-use std::thread::current;
 use anyhow::Result;
 use itertools::Itertools;
 use scan_fmt::scan_fmt;
