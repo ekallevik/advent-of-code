@@ -1,7 +1,6 @@
 use std::cmp::Ordering;
 use std::collections::{BinaryHeap, HashMap};
-use anyhow::{bail, Result};
-use itertools::Itertools;
+use anyhow::{Result};
 use crate::utils::get_input;
 
 #[derive(Clone, Copy, Eq, PartialEq, Hash, Debug)]
