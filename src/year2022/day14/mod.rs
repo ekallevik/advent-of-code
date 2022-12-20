@@ -304,8 +304,6 @@ impl RegolithMap {
             Some(Position(source.0, source.1-1))
         };
 
-        println!("Current={current:?}");
-
         loop {
             let left = current.get_next(&SandMove::Left);
             let down = current.get_next(&SandMove::Down);
