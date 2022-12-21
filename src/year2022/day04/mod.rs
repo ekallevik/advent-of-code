@@ -21,7 +21,7 @@ impl FromStr for Pair {
     type Err = ();
 
     fn from_str(s: &str) -> std::result::Result<Self, Self::Err> {
-        let (left, right) = s.split_once(",").unwrap();
+        let (left, right) = s.split_once(',').unwrap();
         Ok(
             Pair {
                 left: left.parse().unwrap(),
@@ -52,7 +52,7 @@ impl FromStr for Range {
     type Err = ();
 
     fn from_str(s: &str) -> std::result::Result<Self, Self::Err> {
-        let (from, to) = s.split_once("-").unwrap();
+        let (from, to) = s.split_once('-').unwrap();
         Ok(Range {
             from: from.parse().unwrap(),
             to: to.parse().unwrap(),
