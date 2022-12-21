@@ -17,6 +17,7 @@ mod day13;
 mod day14;
 mod day15;
 mod day20;
+mod day21;
 
 pub fn get_solvers(day: u32) -> (SolverFn, SolverFn) {
 
@@ -37,6 +38,7 @@ pub fn get_solvers(day: u32) -> (SolverFn, SolverFn) {
         14 => (day14::solve_1, day14::solve_2),
         15 => (day15::solve_1, day15::solve_2),
         20 => (day20::solve_1, day20::solve_2),
+        21 => (day21::solve_1, day21::solve_2),
         _ => {
             warn!("Did not find any matching days");
             std::process::exit(1);
