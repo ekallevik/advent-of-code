@@ -20,16 +20,15 @@ impl Display for Elem {
     }
 }
 
-fn parse_elem(current: &mut PathBuf, line: &String) -> Elem {
-    let (value, name) = line.split_once(" ").unwrap();
+fn parse_elem(current: &Path, line: &str) -> Elem {
+    let (value, name) = line.split_once(' ').unwrap();
     let new = current.join(name);
 
-    let elem = if line.starts_with("dir") {
+    if line.starts_with("dir") {
         Elem::Dir(new, vec![])
     } else {
         Elem::File(new, value.parse().unwrap())
-    };
-    elem
+    }
 }
 
 pub fn solve_1(filename: &str) -> Result<String> {
@@ -72,8 +71,8 @@ fn catalog_files(input: Vec<String>) -> HashMap<PathBuf, Vec<Elem>> {
     let mut current = Path::new(".").to_owned();
 
     for line in input {
-        if !line.starts_with("$") {
-            let elem = parse_elem(&mut current, &line);
+        if !line.starts_with('$') {
+            let elem = parse_elem(&current, &line);
 
             if let Some(parent) = directories.get_mut(&current) {
                 parent.push(elem);
@@ -84,9 +83,9 @@ fn catalog_files(input: Vec<String>) -> HashMap<PathBuf, Vec<Elem>> {
                 };
             }
         } else if line.starts_with("$ cd") {
-            let (_, dir) = line.rsplit_once(" ").unwrap();
+            let (_, dir) = line.rsplit_once(' ').unwrap();
 
-            if dir == "/".to_string() {
+            if dir == "/" {
                 current = get_root();
             } else if dir == ".." {
                 current = current.parent().unwrap().to_path_buf();
@@ -105,7 +104,7 @@ fn catalog_files(input: Vec<String>) -> HashMap<PathBuf, Vec<Elem>> {
 
 fn resolve_catalog_size(catalog: &HashMap<PathBuf, Vec<Elem>>) -> HashMap<PathBuf, usize> {
     let mut sizes = HashMap::new();
-    resolve_catalog_size_memoized(&catalog, get_root(), &mut sizes);
+    resolve_catalog_size_memoized(catalog, get_root(), &mut sizes);
     sizes
 }
 
@@ -124,7 +123,7 @@ fn resolve_catalog_size_memoized(
             .map(|e| match e {
                 Elem::Dir(name, _) =>
                     {
-                        resolve_catalog_size_memoized(&directories, dir.join(name), sizes)
+                        resolve_catalog_size_memoized(directories, dir.join(name), sizes)
                     }
                 Elem::File(_, size) => *size
             }
