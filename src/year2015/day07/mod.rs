@@ -4,7 +4,7 @@ use anyhow::Result;
 use fancy_regex::Regex;
 use itertools::Itertools;
 
-use crate::utils::get_input;
+use crate::utils::{get_input, string};
 
 pub fn solve_1(filename: &str) -> Result<String> {
     let symbols: Vec<CircuitSymbol> = get_input(filename);
@@ -120,7 +120,7 @@ impl FromStr for CircuitValue {
     type Err = ();
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let value = if is_numeric(s) {
+        let value = if string::is_numeric(s) {
             CircuitValue::Number(s.parse().unwrap())
         } else {
             CircuitValue::Variable(s.to_string())
@@ -128,11 +128,6 @@ impl FromStr for CircuitValue {
 
         Ok(value)
     }
-}
-
-// fixme: utility
-fn is_numeric(s: &str) -> bool {
-    s.trim().chars().all(|c| c.is_numeric())
 }
 
 pub fn solve_2(filename: &str) -> Result<String> {
@@ -203,7 +198,7 @@ impl FromStr for CircuitSymbol {
                 operator: unary_captures.get(1).unwrap().as_str().parse().unwrap(),
                 operand: unary_captures.get(2).unwrap().as_str().parse().unwrap(),
             }
-        } else if is_numeric(symbol) {
+        } else if string::is_numeric(symbol) {
             CircuitSymbol::Value { name: name.to_string(), value: symbol.parse().unwrap() }
         } else {
             CircuitSymbol::Unary { name: name.to_string(), operator: CircuitOperator::Assignment, operand: symbol.parse().unwrap() }

@@ -4,7 +4,7 @@ use std::str::FromStr;
 use strum_macros::{EnumIter};
 
 pub mod solution;
-mod string;
+pub(crate) mod string;
 
 use anyhow::Result;
 use rusqlite::ToSql;
