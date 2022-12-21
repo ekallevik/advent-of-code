@@ -14,7 +14,7 @@ impl<T: Display> Display for Grid<T> {
             for c in 0..self.col_size {
                 write!(f, " {}", self.get(r, c)).expect("TODO: panic message");
             }
-            write!(f, "\n").expect("TODO: panic message");
+            writeln!(f).expect("TODO: panic message");
         }
 
         Ok(())
@@ -51,7 +51,7 @@ impl<T: Display> Grid<T> {
 
     pub fn get_row(&self, row: usize) -> Vec<&T> {
         let offset = row * self.row_size;
-        self.elements[offset..offset + self.row_size].iter().map(|t| t).collect_vec()
+        self.elements[offset..offset + self.row_size].iter().collect_vec()
     }
 
     pub fn iterate(&self) -> Vec<(usize, usize)> {
