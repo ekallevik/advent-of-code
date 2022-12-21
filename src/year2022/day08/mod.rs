@@ -36,9 +36,9 @@ pub fn solve_1(filename: &str) -> Result<String> {
         }
 
         let left_max = *row[0..j].iter().max().unwrap_or(&row[0]);
-        let right_max = *row[j + 1..size].iter().max().unwrap_or(&row.last().unwrap());
+        let right_max = *row[j + 1..size].iter().max().unwrap_or_else(|| row.last().unwrap());
         let top_max = *col[0..i].iter().max().unwrap_or(&col[0]);
-        let down_max = *col[i + 1..size].iter().max().unwrap_or(&col.last().unwrap());
+        let down_max = *col[i + 1..size].iter().max().unwrap_or_else(|| col.last().unwrap());
 
         if (left_max < value || value > right_max) || (top_max < value || value > down_max) {
             visible += 1;
@@ -103,7 +103,7 @@ pub fn solve_2(filename: &str) -> Result<String> {
     Ok(scenic.to_string())
 }
 
-fn get_vertical<T>(grid: &Vec<Vec<T>>, size: usize, column: usize) -> Vec<&T> {
+fn get_vertical<T>(grid: &[Vec<T>], size: usize, column: usize) -> Vec<&T> {
     (0..size)
         .into_iter()
         .map(|row| &grid[row][column])
