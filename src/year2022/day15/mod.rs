@@ -31,22 +31,6 @@ impl Signal {
     fn get_reach(&self) -> isize {
         self.sensor.get_manhattan(&self.beacon)
     }
-
-    fn get_x_bounds(&self) -> (isize, isize) {
-        if self.beacon.0 > self.sensor.0 {
-            (self.sensor.0, self.beacon.0)
-        } else {
-            (self.beacon.0, self.sensor.0)
-        }
-    }
-
-    fn get_y_bounds(&self) -> (isize, isize) {
-        if self.beacon.1 > self.sensor.1 {
-            (self.sensor.1, self.beacon.1)
-        } else {
-            (self.beacon.1, self.sensor.1)
-        }
-    }
 }
 
 enum Device {
@@ -200,12 +184,6 @@ impl Segment {
         let max = self.1.max(other.1);
         Segment(min, max)
     }
-
-    fn is_complete(&self, upper: isize) -> bool {
-        self.0 == 0 && self.1 >= upper
-    }
-
-
 }
 
 
@@ -217,7 +195,7 @@ impl Line {
     }
 
     fn get_gap(&mut self) -> isize {
-        let mut segments = &mut self.0;
+        let segments = &mut self.0;
         segments.sort();
         segments[0].1 + 1
     }
@@ -246,26 +224,14 @@ impl Line {
         }
     }
 
-    fn is_complete(&mut self, limit: isize) -> bool {
-        let first = &self.0[0];
-        let second = &self.0[1];
-
-        let combined = first.combine(second);
-
-        combined.0 == 0 && combined.1 >= limit
-    }
-
     fn add(&mut self, segment: Segment) {
-
-        //self.0.push(segment);
-        //self.collapse();
 
         let mut has_combined = false;
         self.0.sort();
 
         for (i, existing) in self.0.iter().enumerate() {
-            if segment.connected(&existing) || existing.connected(&segment) {
-                self.0[i] = segment.combine(&existing);
+            if segment.connected(existing) || existing.connected(&segment) {
+                self.0[i] = segment.combine(existing);
 
                 if let Some(next) = self.0.get(i + 1) {
                     if segment.connected(next) {
