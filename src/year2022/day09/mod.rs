@@ -27,7 +27,7 @@ impl FromStr for Move {
     type Err = String;
 
     fn from_str(s: &str) -> std::result::Result<Self, Self::Err> {
-        let (direction, steps) = s.split_once(" ").unwrap();
+        let (direction, steps) = s.split_once(' ').unwrap();
 
         let steps = steps.parse().unwrap();
 
