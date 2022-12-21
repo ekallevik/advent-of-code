@@ -19,7 +19,7 @@ pub fn solve_2(filename: &str) -> Result<String> {
 fn scan_message(signal: &str, message_length: usize) -> Result<String> {
     for i in message_length..signal.len() {
         let message = signal[i-message_length..i].chars();
-        if &message.unique().count() == &message_length {
+        if message.unique().count() == message_length {
             return Ok(i.to_string())
         }
     }
