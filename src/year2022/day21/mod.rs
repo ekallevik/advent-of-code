@@ -118,9 +118,8 @@ fn find_references(open: &HashMap<String, OpenMonkey>) -> HashMap<String, Vec<St
 fn resolve_root(
     mut closed: HashMap<String, usize>,
     mut open: HashMap<String, OpenMonkey>,
-    references: HashMap<String, Vec<String>>
+    references: HashMap<String, Vec<String>>,
 ) -> usize {
-
     while open.len() != 0 {
         for (name, dependants) in &references {
             if closed.contains_key(name) {
@@ -149,30 +148,45 @@ fn resolve_root(
 
 
 fn resolve_root_2(
-    original_closed: HashMap<String, usize>,
-    original_open: HashMap<String, OpenMonkey>,
+    initial_closed: &HashMap<String, usize>,
+    open: &HashMap<String, OpenMonkey>,
     references: &HashMap<String, Vec<String>>,
-    root: &OpenMonkey
+    root: &OpenMonkey,
+    humn: usize,
 ) -> bool {
-
     let mut closed = HashMap::new();
-    let mut open = HashMap::new();
+    closed.insert("humn".to_string(), humn);
 
-    while open.len() != original_closed {
+    while (open.len() + 1) != closed.len() {
 
         for (name, dependants) in references {
 
-            if closed.contains_key(name) {
-                for dependant in dependants {
-                    if let Some(monkey) = open.get(dependant) {
-                        let monkey_name = monkey.name.clone();
-                        if closed.contains_key(&monkey.left) && closed.contains_key(&monkey.right) {
-                            let left = closed.get(&monkey.left).unwrap();
-                            let right = closed.get(&monkey.right).unwrap();
-                            let value = monkey.operation.apply(*left, *right); // todo
+            if closed.contains_key(name) || initial_closed.contains_key(name) {
 
-                            closed.insert(monkey_name.clone(), value);
-                            open.remove(&monkey_name.clone());
+                for dependant in dependants {
+
+                    if !closed.contains_key(dependant) && !initial_closed.contains_key(dependant) {
+                        let monkey = open.get(dependant).unwrap();
+                        let monkey_name = monkey.name.clone();
+
+                        if (closed.contains_key(&monkey.left) || initial_closed.contains_key(&monkey.left))
+                            && (closed.contains_key(&monkey.right) || initial_closed.contains_key(&monkey.right)) {
+
+                            let left = if closed.contains_key(&monkey.left) {
+                                closed.get(&monkey.left).unwrap()
+                            } else {
+                                initial_closed.get(&monkey.left).unwrap()
+                            };
+
+                            let right = if closed.contains_key(&monkey.right) {
+                                closed.get(&monkey.right).unwrap()
+                            } else {
+                                initial_closed.get(&monkey.right).unwrap()
+                            };
+
+                            let value = monkey.operation.apply(*left, *right); // todo: destruct
+
+                            closed.insert(monkey_name, value);
                         }
                     }
                 }
@@ -180,8 +194,17 @@ fn resolve_root_2(
         }
     };
 
-    let left = closed.get(&root.left).unwrap();
-    let right = closed.get(&root.right).unwrap();
+    let left = if closed.contains_key(&root.left) {
+        closed.get(&root.left).unwrap()
+    } else {
+        initial_closed.get(&root.left).unwrap()
+    };
+
+    let right = if closed.contains_key(&root.right) {
+        closed.get(&root.right).unwrap()
+    } else {
+        initial_closed.get(&root.right).unwrap()
+    };
 
     //println!("- left={}, right={}, root={}", left, right, left+right);
     left == right
@@ -196,7 +219,6 @@ pub fn solve_1(filename: &str) -> Result<String> {
 }
 
 pub fn solve_2(filename: &str) -> Result<String> {
-
     let (mut closed, mut open) = parse_monkeys(filename);
     let mut references = find_references(&open);
 
@@ -206,12 +228,10 @@ pub fn solve_2(filename: &str) -> Result<String> {
 
     for _ in 0..10 {
         for (name, dependants) in &references {
-
             let mut retained_references = vec![];
 
             if closed.contains_key(name) {
                 for dependant in dependants {
-
                     if let Some(monkey) = open.get(dependant) {
                         let monkey_name = monkey.name.clone();
 
@@ -251,14 +271,10 @@ pub fn solve_2(filename: &str) -> Result<String> {
     loop {
         println!("humn = {humn}");
 
-        let mut closed_clone = closed.clone();
-        closed_clone.insert("humn".to_string(), humn);
-
-        let open_clone = open.clone();
-        let res = resolve_root_2(closed_clone, open_clone, &references, root);
+        let res = resolve_root_2(&closed, &open, &references, root, humn);
 
         if res {
-            break
+            break;
         }
 
         humn += 1;
