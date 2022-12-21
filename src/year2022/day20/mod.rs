@@ -41,29 +41,30 @@ pub fn solve_1(filename: &str) -> Result<String> {
 
     mix_coordinates(&mut coordinates);
 
-    //println!("{}", coordinates_to_string(&coordinates));
-
-    let c = coordinates.clone();
-
-    let offset = coordinates.iter().find_position(|v| match v {
-        Coordinate::Encrypted(_) => unreachable!("asd"),
-        Coordinate::Decrypted(value) => *value == 0
-    }).unwrap().0;
-
-    let first = c[(1000 + offset) % coordinates.len()].get_value();
-    let second = c[(2000 + offset) % coordinates.len()].get_value();
-    let third = c[(3000 + offset) % coordinates.len()].get_value();
-
-    println!("{first} {second} {third}");
-
-    let res = first + second + third;
+    let res = get_groove_coordinates(&coordinates);
 
     Ok(res.to_string())
 }
 
 
 pub fn solve_2(filename: &str) -> Result<String> {
-    todo!()
+    let mut coordinates: Vec<Coordinate> = get_input(filename);
+
+    const ENCRYPTION_KEY: isize = 811589153;
+
+    let mut applied = coordinates
+        .iter()
+        .map(|coordinate| {
+            let value = coordinate.get_value();
+            Coordinate::Encrypted(value* ENCRYPTION_KEY)
+        })
+        .collect_vec();
+
+    mix_coordinates(&mut applied);
+
+    let res = get_groove_coordinates(&applied);
+
+    Ok(res.to_string())
 }
 
 fn mix_coordinates(coordinates: &mut Vec<Coordinate>) {
@@ -100,12 +101,9 @@ fn mix_coordinates(coordinates: &mut Vec<Coordinate>) {
 
 fn decrypt_value(value: isize, index: usize, coordinates: &mut Vec<Coordinate>) -> IndexUpdate {
     let decrypted = Coordinate::Decrypted(value);
-
     let pos = get_new_index(index, value, coordinates.len() as isize);
 
-    //println!("Moving {value} from {index} to {pos}");
     coordinates.insert(pos as usize, decrypted);
-    //println!("{}\n", coordinates_to_string(coordinates));
 
     if pos <= index {
         IndexUpdate::Increment
@@ -139,8 +137,21 @@ enum IndexUpdate {
     Decrement,
 }
 
-fn coordinates_to_string(coordinates: &[Coordinate]) -> String {
-    coordinates.iter().join(", ")
+fn get_groove_coordinates(coordinates: &[Coordinate]) -> isize {
+
+    let offset = coordinates.iter().find_position(|v| match v {
+        Coordinate::Encrypted(_) => unreachable!("asd"),
+        Coordinate::Decrypted(value) => *value == 0
+    }).unwrap().0;
+
+    let size = coordinates.len();
+    let first = coordinates[(1000 + offset) % size].get_value();
+    let second = coordinates[(2000 + offset) % size].get_value();
+    let third = coordinates[(3000 + offset) % size].get_value();
+
+    println!("{first} {second} {third}");
+
+    first + second + third
 }
 
 #[cfg(test)]
@@ -188,5 +199,4 @@ mod tests {
 
         assert_eq!(new, 0)
     }
-
 }
