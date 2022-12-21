@@ -122,7 +122,6 @@ enum Regolith {
     Rock,
     Sand,
     Source,
-    Void,
 }
 
 impl Display for Regolith {
@@ -132,7 +131,6 @@ impl Display for Regolith {
             Regolith::Rock => write!(f, "#"),
             Regolith::Sand => write!(f, "o"),
             Regolith::Source => write!(f, "+"),
-            Regolith::Void => write!(f, "|"),
         }
     }
 }
@@ -225,7 +223,7 @@ impl RegolithMap {
     fn is_available_space(&self, pos: &Position) -> bool {
         match self.get_value(pos) {
             Regolith::Rock | Regolith::Sand => false,
-            Regolith::Air | Regolith::Source | Regolith::Void => true
+            Regolith::Air | Regolith::Source => true
         }
     }
 
@@ -262,7 +260,6 @@ impl RegolithMap {
                     Regolith::Rock => panic!("Inside rock somehow"),
                     Regolith::Sand => panic!("Inside sand somehow"),
                     Regolith::Source => return false,
-                    Regolith::Void => return false,
                 }
             }
         }
@@ -301,7 +298,7 @@ impl RegolithMap {
                         return previous;
                     }
                     Regolith::Rock => panic!("Inside rock somehow"),
-                    Regolith::Sand | Regolith::Void => return None,
+                    Regolith::Sand => return None,
                 }
             }
         }
