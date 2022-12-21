@@ -38,7 +38,7 @@ impl FromStr for MathOperation {
     type Err = String;
 
     fn from_str(s: &str) -> std::result::Result<Self, Self::Err> {
-        let (first, second) = s.split_once("old ").unwrap().1.split_once(" ").unwrap();
+        let (first, second) = s.split_once("old ").unwrap().1.split_once(' ').unwrap();
 
         let op = if let Ok(number) = second.parse() {
             match first {
@@ -101,7 +101,7 @@ impl FromStr for Monkey {
     type Err = ();
 
     fn from_str(s: &str) -> std::result::Result<Self, Self::Err> {
-        let lines = s.split("\n").collect_vec();
+        let lines = s.split('\n').collect_vec();
 
         let index = scan_fmt!(lines[0], "Monkey {d}:", usize).unwrap();
         let starting_items = lines[1].split_once(": ").unwrap().1.split(", ").map(|c| c.parse().unwrap()).collect();
@@ -167,7 +167,7 @@ pub fn solve_2(filename: &str) -> Result<String> {
     let gcd = monkeys
         .iter()
         .map(|m| m.divisor)
-        .fold(1, |acc, curr| acc * curr);
+        .product();
 
     let reducer = |x| adjust_item(x, &gcd);
 
