@@ -1,7 +1,8 @@
-use std::collections::HashMap;
+use std::collections::{HashMap, VecDeque};
 use std::fmt::{Display, Formatter};
 use std::str::FromStr;
 use anyhow::{bail, Result};
+use itertools::Itertools;
 use scan_fmt::scan_fmt;
 use crate::utils::get_input;
 
@@ -51,13 +52,11 @@ impl FromStr for Operation {
     }
 }
 
-
 #[derive(Clone, Debug)]
 struct ClosedMonkey {
     name: String,
     value: usize,
 }
-
 
 #[derive(Clone, Debug)]
 struct OpenMonkey {
@@ -65,6 +64,12 @@ struct OpenMonkey {
     left: String,
     operation: Operation,
     right: String,
+}
+
+impl Display for OpenMonkey {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{} = {} {} {}", self.name, self.left, self.operation, self.right)
+    }
 }
 
 fn parse_monkeys(filename: &str) -> (HashMap<String, usize>, HashMap<String, OpenMonkey>) {
@@ -146,76 +151,67 @@ fn resolve_root(
     *closed.get("root").unwrap()
 }
 
-
 fn resolve_root_2(
     initial_closed: &HashMap<String, usize>,
-    open: &HashMap<String, OpenMonkey>,
-    references: &HashMap<String, Vec<String>>,
-    root: &OpenMonkey,
+    initial_open: &HashMap<String, OpenMonkey>,
     humn: usize,
-) -> bool {
+) -> (usize, usize) {
+    let root = initial_open.get("root").unwrap();
     let mut closed = HashMap::new();
     closed.insert("humn".to_string(), humn);
+    let mut open: VecDeque<_> = initial_open.values().collect();
 
-    while (open.len() + 1) != closed.len() {
+    let mut iter = 0;
 
-        for (name, dependants) in references {
+    while let Some(next) = open.pop_front() {
+        iter += 1;
+        let OpenMonkey { name, left, operation, right } = next;
 
-            if closed.contains_key(name) || initial_closed.contains_key(name) {
+        if is_closed(&closed, &initial_closed, left) && is_closed(&closed, &initial_closed, right) {
+            let left_value = get_closed(&closed, &initial_closed, left);
+            let right_value = get_closed(&closed, &initial_closed, right);
 
-                for dependant in dependants {
-
-                    if !closed.contains_key(dependant) && !initial_closed.contains_key(dependant) {
-                        let monkey = open.get(dependant).unwrap();
-                        let monkey_name = monkey.name.clone();
-
-                        if (closed.contains_key(&monkey.left) || initial_closed.contains_key(&monkey.left))
-                            && (closed.contains_key(&monkey.right) || initial_closed.contains_key(&monkey.right)) {
-
-                            let left = if closed.contains_key(&monkey.left) {
-                                closed.get(&monkey.left).unwrap()
-                            } else {
-                                initial_closed.get(&monkey.left).unwrap()
-                            };
-
-                            let right = if closed.contains_key(&monkey.right) {
-                                closed.get(&monkey.right).unwrap()
-                            } else {
-                                initial_closed.get(&monkey.right).unwrap()
-                            };
-
-                            let value = monkey.operation.apply(*left, *right); // todo: destruct
-
-                            closed.insert(monkey_name, value);
-                        }
-                    }
-                }
-            }
+            let value = operation.apply(left_value, right_value);
+            closed.insert(name.clone(), value);
+        } else {
+            open.push_back(next)
         }
-    };
+    }
 
-    let left = if closed.contains_key(&root.left) {
-        closed.get(&root.left).unwrap()
+    let left = get_closed(&closed, &initial_closed, &root.left);
+    let right = get_closed(&closed, &initial_closed, &root.right);
+
+    (left, right)
+}
+
+fn is_closed(
+    closed: &HashMap<String, usize>,
+    initial_closed: &HashMap<String, usize>,
+    reference: &str,
+) -> bool {
+    initial_closed.contains_key(reference) || closed.contains_key(reference)
+}
+
+fn get_closed(
+    closed: &HashMap<String, usize>,
+    initial_closed: &HashMap<String, usize>,
+    reference: &str,
+) -> usize {
+    if initial_closed.contains_key(reference) {
+        *initial_closed.get(reference).unwrap()
     } else {
-        initial_closed.get(&root.left).unwrap()
-    };
-
-    let right = if closed.contains_key(&root.right) {
-        closed.get(&root.right).unwrap()
-    } else {
-        initial_closed.get(&root.right).unwrap()
-    };
-
-    //println!("- left={}, right={}, root={}", left, right, left+right);
-    left == right
+        *closed.get(reference).unwrap()
+    }
 }
 
 pub fn solve_1(filename: &str) -> Result<String> {
     let (mut closed, mut open) = parse_monkeys(filename);
-    let references = find_references(&open);
 
-    let root = resolve_root(closed, open, references);
-    Ok(root.to_string())
+    let humn = closed.get("humn").unwrap();
+    let (left, right) = resolve_root_2(&closed, &open, *humn);
+    let answer = left + right;
+
+    Ok(answer.to_string())
 }
 
 pub fn solve_2(filename: &str) -> Result<String> {
@@ -224,12 +220,8 @@ pub fn solve_2(filename: &str) -> Result<String> {
 
     closed.remove("humn");
 
-    let mut min_refs = HashMap::new();
-
     for _ in 0..10 {
         for (name, dependants) in &references {
-            let mut retained_references = vec![];
-
             if closed.contains_key(name) {
                 for dependant in dependants {
                     if let Some(monkey) = open.get(dependant) {
@@ -242,22 +234,13 @@ pub fn solve_2(filename: &str) -> Result<String> {
 
                             closed.insert(monkey_name.clone(), value);
                             open.remove(&monkey_name.clone());
-                        } else {
-                            retained_references.push(monkey_name);
                         }
                     }
                 }
             }
-
-            if retained_references.is_empty() {
-                min_refs.remove(name);
-            } else {
-                min_refs.insert(name, retained_references);
-            };
         }
     }
 
-    println!("refs={}, min={}", references.len(), min_refs.len());
     println!("closed={}, open={}", closed.len(), open.len());
 
     let mut humn = if filename.contains("real") {
@@ -266,14 +249,11 @@ pub fn solve_2(filename: &str) -> Result<String> {
         4
     };
 
-    let root = open.get("root").unwrap();
-
     loop {
+        let (left, right) = resolve_root_2(&closed, &open, humn);
         println!("humn = {humn}");
 
-        let res = resolve_root_2(&closed, &open, &references, root, humn);
-
-        if res {
+        if left == right {
             break;
         }
 
