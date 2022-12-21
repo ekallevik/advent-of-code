@@ -1,5 +1,4 @@
 use std::fmt::{Display, Formatter};
-use std::str::FromStr;
 use anyhow::{Result};
 use itertools::Itertools;
 use crate::utils::get_input;
@@ -68,7 +67,7 @@ fn mix_grove_coordinates(coordinates: &mut Vec<GrooveCoordinate>) {
 fn get_new_index(index: usize, value: isize, size: isize) -> usize {
     let mut new_index = (index as isize + value) % size;
     if new_index < 0 {
-        new_index = size + new_index
+        new_index += size
     };
 
     new_index as usize
