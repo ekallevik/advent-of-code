@@ -183,32 +183,6 @@ struct RegolithMap {
 
 impl RegolithMap {
 
-    fn new_1(lines: Vec<Line>, source: Position) -> Self {
-        let (left_bound, _, right_bound, lower_bound) = get_grid_size(&lines);
-
-        let mut values: HashMap<Position, Regolith> = HashMap::new();
-        values.insert(source.clone(), Regolith::Source);
-
-        for line in lines {
-            let (min_y, max_y) = line.get_y_bounds();
-            let (min_x, max_x) = line.get_x_bounds();
-
-            for y in min_y..=max_y {
-                for x in min_x..=max_x {
-                    values.insert(Position(x, y), Regolith::Rock);
-                }
-            }
-        }
-
-        RegolithMap {
-            values,
-            source,
-            lower_bound,
-            left_bound,
-            right_bound,
-        }
-    }
-
     fn new(lines: Vec<Line>, source: Position) -> Self {
         let (left_bound, _, right_bound, lowest_rock) = get_grid_size(&lines);
         let lower_bound = lowest_rock + 2;
@@ -241,7 +215,7 @@ impl RegolithMap {
     }
 
     fn get_value(&self, pos: &Position) -> &Regolith {
-        self.values.get(&pos).unwrap_or(&Regolith::Air)
+        self.values.get(pos).unwrap_or(&Regolith::Air)
     }
 
     fn set(&mut self, pos: Position, value: Regolith) {
@@ -343,7 +317,7 @@ impl Display for RegolithMap {
                 let value = self.get_value(&Position(x, y));
                 write!(f, "{value}").expect("");
             }
-            writeln!(f, "").expect("");
+            writeln!(f).expect("");
         }
 
         Ok(())
