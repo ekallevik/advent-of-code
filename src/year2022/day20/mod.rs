@@ -4,6 +4,18 @@ use anyhow::{Result};
 use itertools::Itertools;
 use crate::utils::get_input;
 
+#[derive(Debug)]
+struct GrooveCoordinate {
+    id: usize,
+    value: isize,
+}
+
+impl Display for GrooveCoordinate {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{:12}", self.value)
+    }
+}
+
 #[derive(Debug, Clone, Copy)]
 enum Coordinate {
     Encrypted(isize),
@@ -37,34 +49,55 @@ impl FromStr for Coordinate {
 }
 
 pub fn solve_1(filename: &str) -> Result<String> {
-    let mut coordinates: Vec<Coordinate> = get_input(filename);
+    let values: Vec<isize> = get_input(filename);
 
-    mix_coordinates(&mut coordinates);
+    let mut coordinates = values
+        .into_iter()
+        .enumerate()
+        .map(|(id, value)| GrooveCoordinate { id, value })
+        .collect_vec();
 
-    let res = get_groove_coordinates(&coordinates);
+    mix_grove_coordinates(&mut coordinates);
+
+    let res = get_groove_coordinates_2(&coordinates);
 
     Ok(res.to_string())
 }
 
-
 pub fn solve_2(filename: &str) -> Result<String> {
-    let mut coordinates: Vec<Coordinate> = get_input(filename);
+    let values: Vec<isize> = get_input(filename);
 
     const ENCRYPTION_KEY: isize = 811589153;
 
-    let mut applied = coordinates
-        .iter()
-        .map(|coordinate| {
-            let value = coordinate.get_value();
-            Coordinate::Encrypted(value* ENCRYPTION_KEY)
-        })
+    let mut coordinates = values
+        .into_iter()
+        .enumerate()
+        .map(|(id, value)| GrooveCoordinate { id, value: value * ENCRYPTION_KEY })
         .collect_vec();
 
-    mix_coordinates(&mut applied);
+    for _ in 0..10 {
+        mix_grove_coordinates(&mut coordinates);
+    }
 
-    let res = get_groove_coordinates(&applied);
+    let res = get_groove_coordinates_2(&coordinates);
 
     Ok(res.to_string())
+}
+
+fn mix_grove_coordinates(coordinates: &mut Vec<GrooveCoordinate>) {
+    let size = coordinates.len();
+    for i in 0..size {
+        let (c_i, _) = coordinates
+            .iter()
+            .find_position(|c| c.id == i)
+            .unwrap();
+
+        let coordinate = coordinates.remove(c_i);
+        let pos = get_new_index(c_i, coordinate.value, (size-1) as isize);
+
+        coordinates.insert(pos, coordinate);
+    }
+    println!("\n")
 }
 
 fn mix_coordinates(coordinates: &mut Vec<Coordinate>) {
@@ -113,23 +146,12 @@ fn decrypt_value(value: isize, index: usize, coordinates: &mut Vec<Coordinate>) 
 }
 
 fn get_new_index(index: usize, value: isize, size: isize) -> usize {
+    let mut new_index = (index as isize + value) % size;
+    if new_index < 0 {
+        new_index = size + new_index
+    };
 
-    let inx = index as isize;
-
-    if value == 0 {
-        index
-    } else if value > 0 {
-        ((inx + value) % size) as usize
-    } else {
-        let mut current = inx + value;
-
-        while current < 0 {
-            current += size;
-        };
-
-        current as usize
-    }
-
+    new_index as usize
 }
 
 enum IndexUpdate {
@@ -138,7 +160,6 @@ enum IndexUpdate {
 }
 
 fn get_groove_coordinates(coordinates: &[Coordinate]) -> isize {
-
     let offset = coordinates.iter().find_position(|v| match v {
         Coordinate::Encrypted(_) => unreachable!("asd"),
         Coordinate::Decrypted(value) => *value == 0
@@ -149,7 +170,17 @@ fn get_groove_coordinates(coordinates: &[Coordinate]) -> isize {
     let second = coordinates[(2000 + offset) % size].get_value();
     let third = coordinates[(3000 + offset) % size].get_value();
 
-    println!("{first} {second} {third}");
+    first + second + third
+}
+
+fn get_groove_coordinates_2(coordinates: &[GrooveCoordinate]) -> isize {
+    let (offset, _) = coordinates.iter().find_position(|v| v.value == 0).unwrap();
+
+    let size = coordinates.len();
+    let first = coordinates[(1000 + offset) % size].value;
+    let second = coordinates[(2000 + offset) % size].value;
+    let third = coordinates[(3000 + offset) % size].value;
+
 
     first + second + third
 }
@@ -163,6 +194,13 @@ mod tests {
         let new = get_new_index(4, 4, 12);
 
         assert_eq!(new, 8)
+    }
+
+    #[test]
+    fn test_forward_8k() {
+        let new = get_new_index(0, 811589153, 7);
+
+        assert_eq!(new, 6)
     }
 
     #[test]
