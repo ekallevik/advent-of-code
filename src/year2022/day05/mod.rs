@@ -25,14 +25,14 @@ impl FromStr for State {
     type Err = ();
 
     fn from_str(s: &str) -> std::result::Result<Self, Self::Err> {
-        let lines: Vec<_> = s.split("\n").collect();
+        let lines: Vec<_> = s.split('\n').collect();
 
         let cargo_width = (lines.first().unwrap().len() + 1) / 4 + 1;
         let mut stacks = vec![VecDeque::new(); cargo_width];
 
         for line in lines {
             for (index, char) in line.chars().enumerate() {
-                if 'A' <= char && char <= 'Z' {
+                if ('A'..='Z').contains(&char) {
                     let position = (index as f64 / 4.0).floor() as usize;
                     stacks[position].push_back(char);
                 }
@@ -70,7 +70,7 @@ fn parse_input(filename: &str) -> Result<(State, Vec<Instruction>)> {
     let state: State = state.parse().unwrap();
 
     let instructions: Vec<Instruction> = instructions
-        .split("\n")
+        .split('\n')
         .map(|i| i.parse().unwrap())
         .collect();
 
