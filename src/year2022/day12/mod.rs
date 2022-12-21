@@ -39,28 +39,28 @@ impl Node {
 
         if self.position.0 > 0 {
             let new = Position(self.position.0 - 1, self.position.1);
-            if is_walkable_neighbor(&self.position, &new, &grid) {
+            if is_walkable_neighbor(&self.position, &new, grid) {
                 candidates.push(new)
             }
         }
 
         if self.position.1 > 0 {
             let new = Position(self.position.0, self.position.1 - 1);
-            if is_walkable_neighbor(&self.position, &new, &grid) {
+            if is_walkable_neighbor(&self.position, &new, grid) {
                 candidates.push(new)
             }
         }
 
         if self.position.0 < grid.len() - 1 {
             let new = Position(self.position.0 + 1, self.position.1);
-            if is_walkable_neighbor(&self.position, &new, &grid) {
+            if is_walkable_neighbor(&self.position, &new, grid) {
                 candidates.push(new)
             }
         }
 
         if self.position.1 < grid[0].len() - 1 {
             let new = Position(self.position.0, self.position.1 + 1);
-            if is_walkable_neighbor(&self.position, &new, &grid) {
+            if is_walkable_neighbor(&self.position, &new, grid) {
                 candidates.push(new)
             }
         }
@@ -73,28 +73,28 @@ impl Node {
 
         if self.position.0 > 0 {
             let new = Position(self.position.0 - 1, self.position.1);
-            if is_walkable_neighbor_2(&self.position, &new, &grid) {
+            if is_walkable_neighbor_2(&self.position, &new, grid) {
                 candidates.push(new)
             }
         }
 
         if self.position.1 > 0 {
             let new = Position(self.position.0, self.position.1 - 1);
-            if is_walkable_neighbor_2(&self.position, &new, &grid) {
+            if is_walkable_neighbor_2(&self.position, &new, grid) {
                 candidates.push(new)
             }
         }
 
         if self.position.0 < grid.len() - 1 {
             let new = Position(self.position.0 + 1, self.position.1);
-            if is_walkable_neighbor_2(&self.position, &new, &grid) {
+            if is_walkable_neighbor_2(&self.position, &new, grid) {
                 candidates.push(new)
             }
         }
 
         if self.position.1 < grid[0].len() - 1 {
             let new = Position(self.position.0, self.position.1 + 1);
-            if is_walkable_neighbor_2(&self.position, &new, &grid) {
+            if is_walkable_neighbor_2(&self.position, &new, grid) {
                 candidates.push(new)
             }
         }
@@ -103,11 +103,11 @@ impl Node {
     }
 }
 
-fn is_walkable_neighbor(from: &Position, to: &Position, grid: &Vec<Vec<Node>>) -> bool {
+fn is_walkable_neighbor(from: &Position, to: &Position, grid: &[Vec<Node>]) -> bool {
     is_walkable(grid[from.0][from.1].value, grid[to.0][to.1].value)
 }
 
-fn is_walkable_neighbor_2(from: &Position, to: &Position, grid: &Vec<Vec<Node>>) -> bool {
+fn is_walkable_neighbor_2(from: &Position, to: &Position, grid: &[Vec<Node>]) -> bool {
     is_walkable_2(grid[from.0][from.1].value, grid[to.0][to.1].value)
 }
 
@@ -208,7 +208,7 @@ fn find_shortest_path(grid: &Vec<Vec<Node>>, start: Node, goal: Node) -> usize {
             return *current_scores.get(&current).unwrap();
         }
 
-        for neighbor in &current.get_neighbors(&grid) {
+        for neighbor in &current.get_neighbors(grid) {
             let node_cost = 1;
             let neighbor_node = grid[neighbor.0][neighbor.1];
             let candidate_g = current_scores.get(&current).unwrap() + node_cost;
@@ -216,7 +216,7 @@ fn find_shortest_path(grid: &Vec<Vec<Node>>, start: Node, goal: Node) -> usize {
 
             if candidate_g < present_g {
                 current_scores.insert(neighbor_node, candidate_g);
-                estimated_total_scores.insert(neighbor_node, candidate_g + calculate_h(&neighbor, &goal.position));
+                estimated_total_scores.insert(neighbor_node, candidate_g + calculate_h(neighbor, &goal.position));
                 open.push(State {
                     cost: candidate_g,
                     node: neighbor_node,
@@ -253,7 +253,7 @@ fn find_shortest_path_2(grid: &Vec<Vec<Node>>, start: Node) -> usize {
             return *current_scores.get(&current).unwrap();
         }
 
-        for neighbor in &current.get_neighbors_2(&grid) {
+        for neighbor in &current.get_neighbors_2(grid) {
             let node_cost = 1;
             let neighbor_node = grid[neighbor.0][neighbor.1];
             let candidate_g = current_scores.get(&current).unwrap() + node_cost;
