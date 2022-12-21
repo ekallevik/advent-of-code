@@ -5,7 +5,7 @@ use crate::utils::get_input_string;
 
 #[derive(Debug, PartialEq, Eq, Clone)]
 enum Distress {
-    Array(Vec<Box<Distress>>),
+    Array(Vec<Distress>),
     Number(usize)
 }
 
@@ -22,10 +22,10 @@ impl FromStr for Distress {
             println!("s={s}");
             let arr = s
                 .trim()
-                .split(",")
+                .split(',')
                 .into_iter()
                 .map(|a| a.parse::<usize>().unwrap())
-                .map(|u| Box::new(Distress::Number(u)))
+                .map(Distress::Number)
                 .collect_vec();
 
             Distress::Array(arr)
@@ -45,8 +45,6 @@ impl FromStr for Distress {
             let mut openings = 0;
             let mut closings = 0;
             let mut midpoint = 0;
-
-            let length = content.len();
 
             for (i, c) in content.chars().enumerate() {
                 if c == '[' {
@@ -76,8 +74,7 @@ impl FromStr for Distress {
                     println!("c={c}");
                     let distress = c.parse().unwrap();
                     println!("value={distress:?}");
-                    let value = Box::new(distress);
-                    Distress::Array(vec![value])
+                    Distress::Array(vec![distress])
                 } else if content.starts_with('[') {
                     println!("Leading arr");
                     let c = content
@@ -86,8 +83,8 @@ impl FromStr for Distress {
 
                     let (left, right) = c.split_once("],").unwrap();
                     println!("l={left}, r={right}");
-                    let l = Box::new(left.parse().unwrap());
-                    let r = Box::new(right.parse().unwrap());
+                    let l = left.parse().unwrap();
+                    let r = right.parse().unwrap();
                     let arr = vec![l, r];
                     Distress::Array(arr)
                 } else {
@@ -97,8 +94,8 @@ impl FromStr for Distress {
                         .unwrap();
 
                     let (left, right) = c.split_once(",[").unwrap();
-                    let l = Box::new(left.parse().unwrap());
-                    let r = Box::new(right.parse().unwrap());
+                    let l = left.parse().unwrap();
+                    let r = right.parse().unwrap();
                     let arr = vec![l, r];
                     Distress::Array(arr)
                 }
@@ -107,19 +104,19 @@ impl FromStr for Distress {
             } else if openings > 0 {
                 println!("Found pair");
                 let (left, right_a) = content.split_at(midpoint);
-                let right = right_a.strip_prefix(",").unwrap();
+                let right = right_a.strip_prefix(',').unwrap();
                 println!("left={left}, right={right}\n");
 
-                let l = Box::new(left.parse().unwrap());
-                let r = Box::new(right.parse().unwrap());
+                let l = left.parse().unwrap();
+                let r = right.parse().unwrap();
                 let arr = vec![l, r];
                 Distress::Array(arr)
             } else {
                 println!("Found else");
                 let arr = content
-                    .split(",")
+                    .split(',')
                     .into_iter()
-                    .map(|a| Box::new(a.parse().unwrap()))
+                    .map(|a| a.parse().unwrap())
                     .collect_vec();
 
                 Distress::Array(arr)
@@ -134,8 +131,8 @@ impl FromStr for Distress {
 
 fn parse_input(filename: &str) {
 
-    let mut input = get_input_string(filename);
-    let mut lines = input.split_ascii_whitespace().collect_vec();
+    let input = get_input_string(filename);
+    let lines = input.split_ascii_whitespace().collect_vec();
 
     for a in lines.windows(2) {
         let left: Distress = a[0].parse().unwrap();
@@ -158,5 +155,7 @@ pub fn solve_1(filename: &str) -> Result<String> {
 
 
 pub fn solve_2(filename: &str) -> Result<String> {
+    parse_input(filename);
+
     todo!()
 }
