@@ -15,7 +15,7 @@ impl FromStr for Operation {
         let operation = if s == "noop" {
             Operation::Noop
         } else {
-            let (_, value) = s.split_once(" ").unwrap();
+            let (_, value) = s.split_once(' ').unwrap();
             Operation::Add(value.parse().unwrap())
         };
 
