@@ -1,4 +1,4 @@
-use std::collections::{HashMap, HashSet};
+use std::collections::HashSet;
 use std::str::FromStr;
 use anyhow::{bail, Result};
 use indicatif::{ProgressBar, ProgressStyle};
