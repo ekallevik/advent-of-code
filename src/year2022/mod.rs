@@ -19,6 +19,7 @@ mod day15;
 mod day16;
 mod day17;
 mod day18;
+mod day19;
 mod day20;
 mod day21;
 mod day22;
@@ -45,6 +46,7 @@ pub fn get_solvers(day: u32) -> (SolverFn, SolverFn) {
         16 => (day16::solve_1, day16::solve_2),
         17 => (day17::solve_1, day17::solve_2),
         18 => (day18::solve_1, day18::solve_2),
+        19 => (day19::solve_1, day19::solve_2),
         20 => (day20::solve_1, day20::solve_2),
         21 => (day21::solve_1, day21::solve_2),
         22 => (day22::solve_1, day22::solve_2),
