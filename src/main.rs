@@ -81,7 +81,7 @@ fn main() -> Result<()> {
 
         let solution = if let Some(correct) = get_correct_solution(&conn, date, &part) {
             if correct.result != result {
-                error!("The solution was not correct. Try again...\n");
+                error!("The solution was not correct for {part}. Try again...\n");
                 std::process::exit(1);
             }
 
@@ -101,10 +101,10 @@ fn main() -> Result<()> {
             std::io::stdin().read_line(&mut is_correct_solution).unwrap();
 
             if is_correct_solution.trim() != "y" {
-                error!("The solution was not correct. Try again...\n");
+                error!("The solution was not correct for {part}. Try again...\n");
                 Solution { date, part, result, is_correct: false, duration }
             } else {
-                info!("<green>You found the correct solution!\n");
+                info!("<green>You found the correct solution for {part}!\n");
                 Solution { date, part, result, is_correct: true, duration }
             }
         };

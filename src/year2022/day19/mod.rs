@@ -98,7 +98,6 @@ impl Material {
     }
 }
 
-
 pub fn solve_1(filename: &str) -> Result<String> {
     let blueprints: Vec<Blueprint> = get_input(filename);
 
@@ -114,7 +113,11 @@ pub fn solve_1(filename: &str) -> Result<String> {
             obsidian: 0,
         };
 
-        let blueprint_quality = search(&blueprint, robots, &inventory, 0, 0, 0);
+        // todo: test also with ore
+        let clay_quality = search(&blueprint, robots.clone(), &inventory, 1, 0, 0, Robot::Clay);
+        let ore_quality = search(&blueprint, robots, &inventory, 1, 0, clay_quality, Robot::Ore);
+
+        let blueprint_quality = clay_quality.max(ore_quality);
         println!("Blueprint {} => {}", blueprint.id, blueprint_quality);
         quality.push(blueprint_quality * blueprint.id);
     };
@@ -137,15 +140,60 @@ fn search(
     minute: isize,
     current_score: usize,
     best_score: usize,
+    target: Robot,
 ) -> usize {
-
-    //println!("- inventory: {}", inventory);
-    //println!("- robots: {:?}", robots);
 
     if minute == 24 {
         return current_score;
     }
 
+    let mut best_branch = best_score;
+
+    println!("\n{minute:>2} - score: {current_score:>2} -> {best_score:>2}, target: {target:?}");
+    //println!("start robots     : {:?}", robots);
+    //println!("start inventory  : {}", inventory);
+
+    let target_cost = match target {
+        Robot::Ore => &blueprint.ore,
+        Robot::Clay => &blueprint.clay,
+        Robot::Obsidian => &blueprint.obsidian,
+        Robot::Geode => &blueprint.geode,
+    };
+
+    let can_afford_target = inventory.is_larger(&target_cost);
+
+    /*
+    println!("robots: {:?}", robots);
+    println!("target: {target:?}");
+    println!("inventory  : {}", inventory);
+    println!("current_inv: {next_inventory}");
+    println!("target_cost: {target_cost}");
+    println!("affordable : {can_afford_target}");
+     */
+
+    let mut next_score = current_score + robots.get(&Robot::Geode).unwrap();
+    let mut next_inventory = inventory.clone();
+    next_inventory.ore += robots.get(&Robot::Ore).unwrap();
+    next_inventory.clay += robots.get(&Robot::Clay).unwrap();
+    next_inventory.obsidian += robots.get(&Robot::Obsidian).unwrap();
+
+    let mut next_robots = robots.clone();
+
+    if !can_afford_target {
+        //println!("next inventory   : {}", next_inventory);
+        //println!("Could not afford. Skipping...");
+        // todo: update values and skip time steps...
+        return search(blueprint, robots, &next_inventory, minute + 1, next_score, best_branch, target);
+    }
+
+    let mut robot_entry = next_robots.get_mut(&target).unwrap();
+    *robot_entry += 1;
+
+    let next_material = next_inventory.subtract(target_cost);
+    //println!("next robots      : {:?}", next_robots);
+    //println!("next inventory   : {next_material}");
+
+    // todo: make sure if target
     let mut estimated_score = current_score;
     let mut geode_production = robots[&Robot::Geode];
     let mut afford_geode = inventory.is_larger(&blueprint.geode);
@@ -162,88 +210,25 @@ fn search(
     //println!("{:>2} - score={:>2}, best={:>2}, estimate={:>2}", minute, current_score, best_score, estimated_score);
 
     if estimated_score <= best_score {
-        //print!("️⚠️ Pruned! ⚠️");
+        print!("️⚠️ Pruned! ⚠️");
         return current_score;
     }
 
-    let mut next_score = current_score;
-    let mut next_inventory = inventory.clone();
 
-    for (robot, value) in &robots {
-        match robot {
-            Robot::Ore => next_inventory.ore += value,
-            Robot::Clay => next_inventory.clay += value,
-            Robot::Obsidian => next_inventory.obsidian += value,
-            Robot::Geode => next_score += value,
-        }
-    }
 
     // generate new states
     let mut candidates = VecDeque::new();
-    let mut can_afford_geode = false;
+    candidates.push_front(Robot::Ore);
+    candidates.push_front(Robot::Clay);
+    candidates.push_front(Robot::Obsidian);
+    candidates.push_front(Robot::Geode);
 
-    if inventory.is_larger(&blueprint.ore) && minute != 23 {
-        let next_material = next_inventory.subtract(&blueprint.ore);
-
-        let mut next_robots = robots.clone();
-        next_robots.entry(Robot::Ore).and_modify(|value| *value += 1).or_insert(1);
-
-        candidates.push_front((next_material, next_robots));
-    }
-
-    if inventory.is_larger(&blueprint.clay) && minute != 23 {
-        let next_material = next_inventory.subtract(&blueprint.clay);
-
-        let mut next_robots = robots.clone();
-
-        let mut v = next_robots.get_mut(&Robot::Clay).unwrap();
-        *v += 1;
-
-        candidates.push_front((next_material, next_robots));
-    }
-
-    if inventory.is_larger(&blueprint.obsidian) && minute != 23 {
-        let next_material = next_inventory.subtract(&blueprint.obsidian);
-        let mut next_robots = robots.clone();
-
-        let mut v = next_robots.get_mut(&Robot::Obsidian).unwrap();
-        *v += 1;
-
-        candidates.push_front((next_material, next_robots));
-    }
-
-    if inventory.is_larger(&blueprint.geode) {
-        let next_material = next_inventory.subtract(&blueprint.geode);
-
-        let mut next_robots = robots.clone();
-        next_robots.entry(Robot::Geode).and_modify(|value| *value += 1).or_insert(1);
-
-        afford_geode = true;
-
-        candidates.push_front((next_material, next_robots));
-    }
-
-    if !can_afford_geode {
-        let next_material = next_inventory.clone();
-        let mut next_robots = robots.clone();
-        candidates.push_front((next_material, next_robots));
-    }
-
-    let mut best_branch = best_score;
-
-    // iterate over states
-    /*
-    for (i, (candidate_inventory, candidate_robots)) in candidates.iter().enumerate() {
-        println!("- Candidate {i} -> {} - {:?}", candidate_inventory, candidate_robots);
-    }
-    println!();
-     */
-
-    for (candidate_inventory, candidate_robots) in candidates {
-        let candidate_score = search(blueprint, candidate_robots, &candidate_inventory, minute + 1, next_score, best_branch);
+    for candidate in candidates {
+        // todo: cleanup ref and clones
+        let candidate_score = search(blueprint, next_robots.clone(), &next_material, minute + 1, next_score, best_branch, candidate);
 
         if candidate_score > best_branch {
-            println!("Found new best! Previous: {best_branch}, Next: {candidate_score}");
+            println!("{minute:>2} - Found new best! {best_branch} -> {candidate_score}");
             best_branch = candidate_score;
         }
     };
